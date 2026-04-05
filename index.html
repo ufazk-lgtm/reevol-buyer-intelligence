@@ -323,7 +323,7 @@ td:first-child{padding-left:20px;}
     <h2 class="howto-title">A single workspace to manage your buyers net terms and credit limits</h2>
     <p class="howto-subtitle">From configuration to real-time management</p>
     <div class="howto-steps">
-      <div class="howto-step" onclick="goToScene('config')"><div class="howto-step-num">Step 01</div><div class="howto-step-icon">⚙️</div><h3>You Configure Trust Levels</h3><p>Using ReeVi, our AI assistance, and our recommended methodology we set your 4 Trust Levels in minutes.</p><div class="howto-step-arrow">›</div></div>
+      <div class="howto-step" onclick="goToScene('config')"><div class="howto-step-num">Step 01</div><div class="howto-step-icon">⚙️</div><h3>You Configure Trust Levels</h3><p>Using ReeVi, our AI assistance, and our recommended methodology we set your 3 Trust Levels in minutes.</p><div class="howto-step-arrow">›</div></div>
       <div class="howto-step" onclick="goToScene('enrich')"><div class="howto-step-num">Step 02</div><div class="howto-step-icon">🔍</div><h3>Calibrating the framework and your buyers</h3><p>Upload your existing buyers and we automatically query multiple data vendors to enrich their profiles.</p><div class="howto-step-arrow">›</div></div>
       <div class="howto-step" onclick="goToScene('table')"><div class="howto-step-num">Step 03</div><div class="howto-step-icon">📊</div><h3>Manage your buyers' credit</h3><p>Every buyer gets a complete profile, trust level, approval status, risk score, and net terms eligibility.</p></div>
     </div>
@@ -343,10 +343,9 @@ td:first-child{padding-left:20px;}
       <div style="padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);">
         <div style="font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;">Configure in order ›</div>
         <div style="display:flex;align-items:center;gap:8px;flex:1;">
-          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Low Trust</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div></div>
-          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Moderate Trust</div><div style="font-size:9.5px;color:var(--muted);">25–49 pts</div></div>
-          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟠</div><div style="font-size:11px;font-weight:700;color:var(--ink);">High Trust</div><div style="font-size:9.5px;color:var(--muted);">50–74 pts</div></div>
-          <div id="cfg-step-3" onclick="selectTemplate(3)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Maximum Trust</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div></div>
+          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Introduced</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div></div>
+          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Qualified</div><div style="font-size:9.5px;color:var(--muted);">25–74 pts</div></div>
+          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Established</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div></div>
         </div>
         <div id="cfg-next-btn"><button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Profile →</button></div>
       </div>
@@ -358,22 +357,22 @@ td:first-child{padding-left:20px;}
     <span id="liveTrustScore" style="display:none;">0</span>
     <span id="liveTrustBar" style="display:none;"></span>
     <span id="liveTrustLabel" style="display:none;"></span>
-    <input type="hidden" id="tplNameInput" value="Low Trust Profile">
+    <input type="hidden" id="tplNameInput" value="Introduced Profile">
     <div class="req-preview-title" style="max-width:900px;margin:0 auto 14px;padding:0;">
-      <span>📋</span><span id="tplTitleLabel">Low Trust Template</span>
+      <span>📋</span><span id="tplTitleLabel">Introduced Template</span>
       <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:8px;" id="reqCountLabel">Requirements across 5 pillars</span>
     </div>
     <div class="req-preview-grid" style="max-width:900px;margin:0 auto;">
       <div class="req-sections" id="reqSectionsContainer"></div>
       <div class="req-sidebar">
-        <h4 id="sidebarTplName">Low Trust Template</h4>
-        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Score bands: 0–39 · 40–59 · 60–79 · 80–100</div>
+        <h4 id="sidebarTplName">Introduced Template</h4>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Score bands: 0–24 · 25–74 · 75–100</div>
         <div style="text-align:center;padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;margin-bottom:12px;">
           <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:5px;">Trust Score</div>
           <div style="font-size:38px;font-weight:800;line-height:1;transition:color 0.35s;" id="sidebarScore">0</div>
           <div style="font-size:11px;color:rgba(255,255,255,0.35);">/100</div>
           <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:8px 0 4px;"><div id="sidebarScoreBar" style="height:100%;border-radius:3px;background:#dc2626;width:0%;transition:width 0.4s ease,background 0.35s;"></div></div>
-          <div id="sidebarScoreLabel" style="font-size:12px;font-weight:700;color:#dc2626;transition:color 0.35s;">🔴 Low Trust</div>
+          <div id="sidebarScoreLabel" style="font-size:12px;font-weight:700;color:#dc2626;transition:color 0.35s;">🔴 Introduced</div>
         </div>
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:6px;">Score by Pillar</div>
         <div id="sidebarPillarBreakdown" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;"></div>
@@ -457,13 +456,13 @@ td:first-child{padding-left:20px;}
     <div style="text-align:center;margin-bottom:36px;">
       <div class="howto-eyebrow" style="color:var(--gold);font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;">Step Three — Assign Trust Levels</div>
       <h2 style="font-size:34px;font-weight:700;color:var(--ink);margin-bottom:8px;">Assign a Trust Level to Each Buyer</h2>
-      <p style="font-size:15px;color:var(--muted);">Net Terms will be pre-filled based on your configuration.</p>
+      <p style="font-size:15px;color:var(--muted);">Net terms eligibility is set by trust level. Duration is configured per buyer in the dashboard.</p>
     </div>
     <div style="background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:24px;">
       <div style="padding:12px 22px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:2fr 1.4fr 1fr 80px;gap:12px;">
         <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Buyer</div>
         <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Trust Level</div>
-        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms Eligibility</div>
         <div></div>
       </div>
       <div id="assign-buyer-rows"></div>
@@ -486,7 +485,7 @@ td:first-child{padding-left:20px;}
     <div class="engine-buyer-card">
       <div class="engine-buyer-avatar">HB</div>
       <div class="engine-buyer-info"><h3>Harbor Build Supply Co.</h3><p>Imported via ERP · Just now · 66 requirements across 5 pillars</p></div>
-      <div class="engine-buyer-tl">Trust Level: Maximum Trust</div>
+      <div class="engine-buyer-tl">Trust Level: Established</div>
     </div>
     <div class="engine-flow">
       <div class="engine-step" style="border-left:3px solid #7c5cfc;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#7c5cfc,#4f46e5);">🏢</div><div class="engine-step-info"><h4>Pillar 1 — Business Identity &amp; Legitimacy</h4><p>Entity name, registration, KYC · Sanctions (OFAC, EU, UN, FATF) — 31 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
@@ -518,10 +517,10 @@ td:first-child{padding-left:20px;}
       <div class="engine-buyer-avatar" style="background:linear-gradient(135deg,#7c5cfc,#4f46e5);">NT</div>
       <div class="engine-buyer-info">
         <h3 style="color:var(--ink);">Nexus Tile &amp; Stone</h3>
-        <p style="color:var(--muted);">nexustile.com · Imported via CSV · Moderate Trust · 17 requirements</p>
+        <p style="color:var(--muted);">nexustile.com · Imported via CSV · Qualified · 17 requirements</p>
       </div>
       <div style="margin-left:auto;">
-        <div style="background:rgba(217,119,6,0.08);color:#d97706;border:1px solid rgba(217,119,6,0.2);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;">🟡 Moderate Trust</div>
+        <div style="background:rgba(217,119,6,0.08);color:#d97706;border:1px solid rgba(217,119,6,0.2);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;">🟡 Qualified</div>
       </div>
     </div>
 
@@ -673,10 +672,9 @@ td:first-child{padding-left:20px;}
     <div class="filter-strip">
       <div class="search-box"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" opacity="0.4"><circle cx="7" cy="7" r="5" stroke="#0a0d14" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#0a0d14" stroke-width="1.5" stroke-linecap="round"/></svg><input type="text" placeholder="Search buyers..."/></div>
       <button class="filter-chip active">All Buyers</button>
-      <button class="filter-chip">🟢 Maximum Trust</button>
-      <button class="filter-chip">🟠 High Trust</button>
-      <button class="filter-chip">🟡 Moderate Trust</button>
-      <button class="filter-chip">🔴 Low Trust</button>
+      <button class="filter-chip">🟢 Established</button>
+      <button class="filter-chip">🟡 Qualified</button>
+      <button class="filter-chip">🔴 Introduced</button>
       <button class="filter-chip">✓ Approved</button>
       <button class="filter-chip">⏳ Pending</button>
     </div>
@@ -764,17 +762,15 @@ td:first-child{padding-left:20px;}
 <script>
 // ── BUYER PROFILE ────────────────────────────────────────────
 var tlColorMap = {
-  maximum: { color:'#16a34a', bg:'rgba(22,163,74,0.08)',  emoji:'🟢', label:'Maximum Trust' },
-  high:    { color:'#ea580c', bg:'rgba(234,88,12,0.08)',  emoji:'🟠', label:'High Trust'    },
-  moderate:{ color:'#d97706', bg:'rgba(217,119,6,0.08)',  emoji:'🟡', label:'Moderate Trust'},
-  low:     { color:'#dc2626', bg:'rgba(220,38,38,0.08)',  emoji:'🔴', label:'Low Trust'     }
+  established: { color:'#16a34a', bg:'rgba(22,163,74,0.08)',  emoji:'🟢', label:'Established' },
+  qualified:   { color:'#d97706', bg:'rgba(217,119,6,0.08)',  emoji:'🟡', label:'Qualified'   },
+  introduced:  { color:'#dc2626', bg:'rgba(220,38,38,0.08)',  emoji:'🔴', label:'Introduced'  }
 };
 
 function scoreToLevel(s) {
-  if (s >= 75) return 'maximum';
-  if (s >= 50) return 'high';
-  if (s >= 25) return 'moderate';
-  return 'low';
+  if (s >= 75) return 'established';
+  if (s >= 25) return 'qualified';
+  return 'introduced';
 }
 
 // ── BUYERS ───────────────────────────────────────────────────
@@ -794,18 +790,18 @@ var buyerMeta = [
 ];
 
 var buyers = [
-  { name:"Harbor Build Supply Co.", domain:"harborbuild.com",        color:"#f97316", initials:"HB", trustScore:83, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:null, limit:"$120,000", creditUsed:"$34,200", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
-  { name:"GreenFields Materials",   domain:"greenfields.io",         color:"#16a34a", initials:"GF", trustScore:92, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:7,    limit:"$150,000", creditUsed:"$91,000", creditDue:"$12,400", insured:true,  monitor:true,  portalEmail:null       },
-  { name:"Nexus Tile & Stone",      domain:"nexustile.com",          color:"#7c5cfc", initials:"NT", trustScore:38, assignedLevel:"high",    assessmentStatus:"in-progress",buyerStatus:"pending-assessment",terms:"Net-14", termsDueDays:null, limit:"$8,500",   creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:"required" },
-  { name:"Pacific Lumber Co.",      domain:"pacificlumber.net",      color:"#0891b2", initials:"PL", trustScore:61, assignedLevel:"high",    assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-30", termsDueDays:2,    limit:"$28,000",  creditUsed:"$0",      creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
-  { name:"Ironclad Fasteners Inc.", domain:"ironcladfasteners.com",  color:"#dc2626", initials:"IF", trustScore:12, assignedLevel:"low",     assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
-  { name:"SunRise HVAC Supply",     domain:"sunrisehvac.com",        color:"#d97706", initials:"SR", trustScore:71, assignedLevel:"high",    assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$42,000",  creditUsed:"$12,500", creditDue:null,      insured:true,  monitor:false, portalEmail:null       },
-  { name:"Metro Plumbing Dist.",    domain:"metroplumbing.net",      color:"#0f766e", initials:"MP", trustScore:0,  assignedLevel:"low",     assessmentStatus:"pending",    buyerStatus:"pending-assessment",terms:"—",      termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
-  { name:"Delta Roofing Group",     domain:"deltaroofing.com",       color:"#5b5bd6", initials:"DR", trustScore:79, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-60", termsDueDays:null, limit:"$95,000",  creditUsed:"$47,000", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
-  { name:"CoreSteel Wholesale",     domain:"coresteelwholesale.com", color:"#9f1239", initials:"CS", trustScore:8,  assignedLevel:"low",     assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:null       },
-  { name:"Skyline Glass Works",     domain:"skylineglass.com",       color:"#0369a1", initials:"SG", trustScore:54, assignedLevel:"high",    assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$22,000",  creditUsed:"$5,200",  creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
-  { name:"Rockwall Masonry Ltd.",   domain:"rockwallmasonry.com",    color:"#92400e", initials:"RM", trustScore:31, assignedLevel:"maximum", assessmentStatus:"in-progress",buyerStatus:"pending-assessment",terms:"Net-14", termsDueDays:null, limit:"$4,500",   creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
-  { name:"AllStar Electrical Dist.",domain:"allstarelectrical.us",   color:"#1e40af", initials:"AE", trustScore:76, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-60", termsDueDays:0,    limit:"$80,000",  creditUsed:"$80,000", creditDue:"$80,000", insured:true,  monitor:true,  portalEmail:null       }
+  { name:"Harbor Build Supply Co.", domain:"harborbuild.com",        color:"#f97316", initials:"HB", trustScore:83, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:null, limit:"$120,000", creditUsed:"$34,200", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
+  { name:"GreenFields Materials",   domain:"greenfields.io",         color:"#16a34a", initials:"GF", trustScore:92, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:7,    limit:"$150,000", creditUsed:"$91,000", creditDue:"$12,400", insured:true,  monitor:true,  portalEmail:null       },
+  { name:"Nexus Tile & Stone",      domain:"nexustile.com",          color:"#7c5cfc", initials:"NT", trustScore:38, assignedLevel:"qualified",   assessmentStatus:"in-progress",buyerStatus:"pending-assessment",terms:"Net-30", termsDueDays:null, limit:"$8,500",   creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:"required" },
+  { name:"Pacific Lumber Co.",      domain:"pacificlumber.net",      color:"#0891b2", initials:"PL", trustScore:61, assignedLevel:"qualified",   assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-30", termsDueDays:2,    limit:"$28,000",  creditUsed:"$0",      creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
+  { name:"Ironclad Fasteners Inc.", domain:"ironcladfasteners.com",  color:"#dc2626", initials:"IF", trustScore:12, assignedLevel:"introduced",  assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
+  { name:"SunRise HVAC Supply",     domain:"sunrisehvac.com",        color:"#d97706", initials:"SR", trustScore:71, assignedLevel:"qualified",   assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$42,000",  creditUsed:"$12,500", creditDue:null,      insured:true,  monitor:false, portalEmail:null       },
+  { name:"Metro Plumbing Dist.",    domain:"metroplumbing.net",      color:"#0f766e", initials:"MP", trustScore:0,  assignedLevel:"introduced",  assessmentStatus:"pending",    buyerStatus:"pending-assessment",terms:"—",      termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
+  { name:"Delta Roofing Group",     domain:"deltaroofing.com",       color:"#5b5bd6", initials:"DR", trustScore:79, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-60", termsDueDays:null, limit:"$95,000",  creditUsed:"$47,000", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
+  { name:"CoreSteel Wholesale",     domain:"coresteelwholesale.com", color:"#9f1239", initials:"CS", trustScore:8,  assignedLevel:"introduced",  assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:null       },
+  { name:"Skyline Glass Works",     domain:"skylineglass.com",       color:"#0369a1", initials:"SG", trustScore:54, assignedLevel:"qualified",   assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$22,000",  creditUsed:"$5,200",  creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
+  { name:"Rockwall Masonry Ltd.",   domain:"rockwallmasonry.com",    color:"#92400e", initials:"RM", trustScore:31, assignedLevel:"qualified",   assessmentStatus:"in-progress",buyerStatus:"pending-assessment",terms:"Net-30", termsDueDays:null, limit:"$4,500",   creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
+  { name:"AllStar Electrical Dist.",domain:"allstarelectrical.us",   color:"#1e40af", initials:"AE", trustScore:76, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-60", termsDueDays:0,    limit:"$80,000",  creditUsed:"$80,000", creditDue:"$80,000", insured:true,  monitor:true,  portalEmail:null       }
 ];
 
 // ── RENDER TABLE ─────────────────────────────────────────────
@@ -826,7 +822,7 @@ function renderBuyerTable() {
   for (var i = 0; i < buyers.length; i++) {
     var b = buyers[i];
     var actualLevel = (b.trustScore > 0) ? scoreToLevel(b.trustScore) : b.assignedLevel;
-    var tl = tlColorMap[actualLevel] || tlColorMap.low;
+    var tl = tlColorMap[actualLevel] || tlColorMap.introduced;
     var warn = (i === 2 || i === 10)
       ? '<div style="margin-top:3px;font-size:11px;color:#c0132a;font-weight:500;">⚠ Didn\'t meet target score</div>'
       : '';
@@ -944,10 +940,9 @@ function calcTrustScore() {
   return Math.round(total);
 }
 function getTLBand(score) {
-  if (score >= 75) return { color:'#16a34a', emoji:'🟢', label:'Maximum Trust' };
-  if (score >= 50) return { color:'#ea580c', emoji:'🟠', label:'High Trust' };
-  if (score >= 25) return { color:'#d97706', emoji:'🟡', label:'Moderate Trust' };
-  return { color:'#dc2626', emoji:'🔴', label:'Low Trust' };
+  if (score >= 75) return { color:'#16a34a', emoji:'🟢', label:'Established' };
+  if (score >= 25) return { color:'#d97706', emoji:'🟡', label:'Qualified' };
+  return { color:'#dc2626', emoji:'🔴', label:'Introduced' };
 }
 
 function renderReqSections() {
@@ -1014,13 +1009,11 @@ function updateReqSidebar() {
 
 // ── TRUST LEVEL TEMPLATES ────────────────────────────────────
 var tlTemplates = [
-  { name:'Low Trust Profile', emoji:'🔴', color:'#dc2626',
+  { name:'Introduced Profile', emoji:'🔴', color:'#dc2626',
     unchecked:['Director / Owner KYC (ID + Selfie)','Director & UBO Sanctions Match','Bankruptcy / Liquidation Proceedings','Fraud Allegations & Regulatory Violations','Latest Filed Accounts / Financial Statements','Revenue Trend (Growing / Stable / Declining)','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Evidence of Consistent Cash Flow','Credit Bureau Score (CreditSafe / Experian / D&B)','County Court Judgements (CCJs) / Disputes','Trade References from Suppliers','Payment History on Reevol Platform','Days Beyond Terms (DBT) Average','Number of Employees','Industry Sector Risk Classification','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months','Order Size Relative to Prior Orders','Order Frequency & Consistency','Goods / Services Risk Category','Order Size Relative to Buyer Revenue','First vs. Repeat Order on Platform']},
-  { name:'Moderate Trust Profile', emoji:'🟡', color:'#d97706',
-    unchecked:['Fraud Allegations & Regulatory Violations','Latest Filed Accounts / Financial Statements','Revenue Trend (Growing / Stable / Declining)','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Evidence of Consistent Cash Flow','Trade References from Suppliers','Payment History on Reevol Platform','Days Beyond Terms (DBT) Average','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months']},
-  { name:'High Trust Profile', emoji:'🟠', color:'#ea580c',
-    unchecked:['Fraud Allegations & Regulatory Violations','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Evidence of Consistent Cash Flow','Payment History on Reevol Platform','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months']},
-  { name:'Maximum Trust Profile', emoji:'🟢', color:'#16a34a', unchecked:[]}
+  { name:'Qualified Profile', emoji:'🟡', color:'#d97706',
+    unchecked:['Latest Filed Accounts / Financial Statements','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Trade References from Suppliers','Existing Supplier / Customer Relationships','Ownership Changes in Last 12 Months','Order Size Relative to Buyer Revenue','First vs. Repeat Order on Platform']},
+  { name:'Established Profile', emoji:'🟢', color:'#16a34a', unchecked:[]}
 ];
 
 var activeTplIndex = 0;
@@ -1038,9 +1031,9 @@ function selectTemplate(idx) {
     }
   }
   renderReqSections();
-  var cfgColors = ['#dc2626','#d97706','#ea580c','#16a34a'];
-  var names = ['Low Trust','Moderate Trust','High Trust','Maximum Trust'];
-  for (var i=0;i<4;i++) {
+  var cfgColors = ['#dc2626','#d97706','#16a34a'];
+  var names = ['Introduced','Qualified','Established'];
+  for (var i=0;i<3;i++) {
     var el = document.getElementById('cfg-step-'+i); if(!el) continue;
     var nd = el.querySelector('div:nth-child(2)'), sub = el.querySelector('div:last-child');
     if (i === idx) { el.style.opacity='1'; el.style.border='2px solid '+cfgColors[i]; el.style.background='rgba(0,0,0,0.02)'; if(nd){nd.textContent=(confirmedProfiles[i]?'✓ ':'')+names[i];nd.style.color=cfgColors[i];} if(sub)sub.style.color=cfgColors[i]; }
@@ -1048,29 +1041,30 @@ function selectTemplate(idx) {
     else { el.style.opacity='0.45'; el.style.border='2px solid var(--line)'; el.style.background='white'; if(nd){nd.textContent=names[i];nd.style.color='var(--ink)';} if(sub)sub.style.color='var(--muted)'; }
   }
   var recs = [
-    { color:'#dc2626', terms:0,  validationLevel:'KYB',               cost:'Basic · Lowest cost per buyer' },
-    { color:'#d97706', terms:14, validationLevel:'Verification + KYC', cost:'Standard · Moderate cost per buyer' },
-    { color:'#ea580c', terms:30, validationLevel:'+ Credit Insights',  cost:'Enhanced · Higher cost per buyer' },
-    { color:'#16a34a', terms:90, validationLevel:'+ Full DD',           cost:'Premium · Comprehensive cost per buyer' }
+    { color:'#dc2626', termsEnabled:false, validationLevel:'KYB + Identity',     cost:'Basic · Instant Payment available' },
+    { color:'#d97706', termsEnabled:true,  validationLevel:'+ Credit Enrichment', cost:'Standard · Duration set per buyer' },
+    { color:'#16a34a', termsEnabled:true,  validationLevel:'+ Full DD',           cost:'Full · Max credit + insurance facilitation' }
   ];
   var rec = recs[idx];
   if (!window.cfgPS) window.cfgPS = {};
-  if (!window.cfgPS[idx]) window.cfgPS[idx] = { terms: rec.terms };
-  var saved = window.cfgPS[idx];
+  if (!window.cfgPS[idx]) window.cfgPS[idx] = {};
   var ri = document.getElementById('cfg-rec-inner');
+  var termsBadge = rec.termsEnabled
+    ? '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(22,163,74,0.06);border:1.5px solid #16a34a;border-radius:7px;"><span style="font-size:15px;">✅</span><div><div style="font-size:12px;font-weight:700;color:#16a34a;">Eligible</div><div style="font-size:10px;color:var(--muted);">Duration set per buyer in dashboard</div></div></div>'
+    : '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(220,38,38,0.06);border:1.5px solid #dc2626;border-radius:7px;"><span style="font-size:15px;">⛔</span><div><div style="font-size:12px;font-weight:700;color:#dc2626;">Not eligible</div><div style="font-size:10px;color:var(--muted);">Instant Payment available</div></div></div>';
   if (ri) ri.innerHTML = '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0;"><div style="width:9px;height:9px;border-radius:50%;background:'+rec.color+';"></div><div style="font-size:11px;font-weight:700;color:'+rec.color+';text-transform:uppercase;letter-spacing:0.06em;">Reevol Recommendation</div></div>'
     +'<div style="display:flex;align-items:flex-end;gap:18px;flex:1;flex-wrap:wrap;">'
-    +'<div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms</div><div style="display:flex;align-items:center;border:1.5px solid '+rec.color+';border-radius:7px;overflow:hidden;background:white;"><input type="number" min="0" value="'+saved.terms+'" style="width:56px;padding:6px 8px;border:none;font-size:13px;font-weight:700;color:'+rec.color+';font-family:inherit;outline:none;background:white;text-align:center;"><div style="padding:6px 10px;background:#f8f8f8;border-left:1px solid '+rec.color+';font-size:12px;font-weight:600;color:var(--muted);">days</div></div><div style="font-size:9.5px;color:var(--muted);">0 = Instant only</div></div>'
+    +'<div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms</div>'+termsBadge+'</div>'
     +'<div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Validation Level</div><div style="padding:7px 0;"><span style="font-size:13px;font-weight:700;color:var(--ink);">'+rec.validationLevel+'</span></div><div style="font-size:9.5px;color:var(--muted);">Defined by Trust Level</div></div>'
     +'</div><div style="align-self:flex-start;font-size:11px;color:var(--muted);white-space:nowrap;">'+rec.cost+'</div>';
   var nb = document.getElementById('cfg-next-btn');
-  if (nb) nb.innerHTML = idx < 3
+  if (nb) nb.innerHTML = idx < 2
     ? '<button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Template →</button>'
-    : '<button onclick="confirmedProfiles[3]=true;goToScene(\'import\')" style="background:#16a34a;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">All Profiles Ready →</button>';
+    : '<button onclick="confirmedProfiles[2]=true;goToScene(\'import\')" style="background:#16a34a;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">All Profiles Ready →</button>';
   var tn = document.getElementById('tplTitleLabel'); if(tn) tn.textContent = tpl.name;
   var sb = document.getElementById('sidebarTplName'); if(sb) sb.textContent = tpl.name;
 }
-function advanceCfgTemplate() { confirmedProfiles[activeTplIndex] = true; if (activeTplIndex < 3) selectTemplate(activeTplIndex + 1); }
+function advanceCfgTemplate() { confirmedProfiles[activeTplIndex] = true; if (activeTplIndex < 2) selectTemplate(activeTplIndex + 1); }
 
 // ── IMPORT ───────────────────────────────────────────────────
 var importSamples = {
@@ -1212,19 +1206,18 @@ function addManualBuyer() {
 
 // ── ASSIGN ───────────────────────────────────────────────────
 var tlAssignOptions = [
-  {value:'low',     label:'🔴 Low Trust',     color:'#dc2626',termsDays:0},
-  {value:'moderate',label:'🟡 Moderate Trust', color:'#d97706',termsDays:14},
-  {value:'high',    label:'🟠 High Trust',     color:'#ea580c',termsDays:30},
-  {value:'maximum', label:'🟢 Maximum Trust',  color:'#16a34a',termsDays:90}
+  {value:'introduced', label:'🔴 Introduced',  color:'#dc2626',termsDays:0},
+  {value:'qualified',  label:'🟡 Qualified',    color:'#d97706',termsDays:30},
+  {value:'established',label:'🟢 Established',  color:'#16a34a',termsDays:90}
 ];
 var assignBuyers = [
-  {initials:'HB',color:'#f97316',name:'Harbor Build Supply Co.',domain:'harborbuild.com',      tl:'maximum',terms:'90'},
-  {initials:'GF',color:'#16a34a',name:'GreenFields Materials',  domain:'greenfields.io',        tl:'maximum',terms:'90'},
-  {initials:'NT',color:'#7c5cfc',name:'Nexus Tile & Stone',     domain:'nexustile.com',         tl:'moderate',terms:'14'},
-  {initials:'PL',color:'#0891b2',name:'Pacific Lumber Co.',     domain:'pacificlumber.net',     tl:'high',   terms:'30'},
-  {initials:'IF',color:'#dc2626',name:'Ironclad Fasteners Inc.',domain:'ironcladfasteners.com', tl:'low',    terms:'0'},
-  {initials:'SR',color:'#d97706',name:'SunRise HVAC Supply',    domain:'sunrisehvac.com',       tl:'high',   terms:'30'},
-  {initials:'MP',color:'#0f766e',name:'Metro Plumbing Dist.',   domain:'metroplumbing.net',     tl:'low',    terms:'0'}
+  {initials:'HB',color:'#f97316',name:'Harbor Build Supply Co.',domain:'harborbuild.com',      tl:'established',terms:'90'},
+  {initials:'GF',color:'#16a34a',name:'GreenFields Materials',  domain:'greenfields.io',        tl:'established',terms:'90'},
+  {initials:'NT',color:'#7c5cfc',name:'Nexus Tile & Stone',     domain:'nexustile.com',         tl:'qualified',  terms:'30'},
+  {initials:'PL',color:'#0891b2',name:'Pacific Lumber Co.',     domain:'pacificlumber.net',     tl:'qualified',  terms:'30'},
+  {initials:'IF',color:'#dc2626',name:'Ironclad Fasteners Inc.',domain:'ironcladfasteners.com', tl:'introduced', terms:'0'},
+  {initials:'SR',color:'#d97706',name:'SunRise HVAC Supply',    domain:'sunrisehvac.com',       tl:'qualified',  terms:'30'},
+  {initials:'MP',color:'#0f766e',name:'Metro Plumbing Dist.',   domain:'metroplumbing.net',     tl:'introduced', terms:'0'}
 ];
 function renderAssignRows() {
   var c=document.getElementById('assign-buyer-rows'); if(!c) return;
@@ -1236,7 +1229,7 @@ function renderAssignRows() {
     h+='<div style="display:grid;grid-template-columns:2fr 1.4fr 1fr 80px;gap:12px;align-items:center;padding:12px 22px;border-bottom:1px solid var(--line);">'
       +'<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div>'
       +'<select onchange="onAssignTlChange('+idx+',this.value)" style="padding:6px 10px;border:1.5px solid '+opt.color+';border-radius:7px;font-size:12px;font-weight:600;color:'+opt.color+';background:white;font-family:inherit;cursor:pointer;outline:none;" id="assign-tl-'+idx+'">'+tlAssignOptions.map(function(o){return'<option value="'+o.value+'"'+(o.value===b.tl?' selected':'')+'>'+o.label+'</option>';}).join('')+'</select>'
-      +'<input type="text" id="assign-terms-'+idx+'" value="'+(b.tl==='low'?'—':b.terms+' days')+'" style="padding:6px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;font-family:inherit;outline:none;width:100%;background:'+(b.tl==='low'?'var(--surface)':'white')+'" '+(b.tl==='low'?'disabled':'')+'>'
+      +'<div id="assign-terms-'+idx+'">'+( b.tl==='introduced' ? '<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#dc2626;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);padding:5px 10px;border-radius:6px;">⛔ Not eligible</span>' : '<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.18);padding:5px 10px;border-radius:6px;">✅ Eligible</span>' )+'</div>'
       +'<span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:3px 7px;border-radius:5px;">⏳ Pending</span>'
       +'</div>';
   }
@@ -1246,7 +1239,7 @@ function onAssignTlChange(idx,val) {
   var opt=null; for(var j=0;j<tlAssignOptions.length;j++) if(tlAssignOptions[j].value===val){opt=tlAssignOptions[j];break;} if(!opt) opt=tlAssignOptions[0];
   assignBuyers[idx].tl=val;
   var sel=document.getElementById('assign-tl-'+idx); if(sel){sel.style.borderColor=opt.color;sel.style.color=opt.color;}
-  var te=document.getElementById('assign-terms-'+idx); if(te){te.value=val==='low'?'—':opt.termsDays+' days';te.disabled=val==='low';te.style.background=val==='low'?'var(--surface)':'white';}
+  var te=document.getElementById('assign-terms-'+idx); if(te){te.innerHTML=val==='introduced'?'<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#dc2626;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);padding:5px 10px;border-radius:6px;">⛔ Not eligible</span>':'<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.18);padding:5px 10px;border-radius:6px;">✅ Eligible</span>';}
 }
 function startAssessment() {
   var btn=document.querySelector('[onclick="startAssessment()"]');
@@ -1494,7 +1487,7 @@ document.addEventListener('click',function(e){
 // ── BUYER PROFILE ─────────────────────────────────────────────
 function openBuyerProfile(idx) {
   var b = buyers[idx];
-  var tl = tlColorMap[scoreToLevel(b.trustScore)] || tlColorMap.low;
+  var tl = tlColorMap[scoreToLevel(b.trustScore)] || tlColorMap.introduced;
 
   document.getElementById('bp-tb-name').textContent = b.name;
   var tbTl = document.getElementById('bp-tb-tl');
