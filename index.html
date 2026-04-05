@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reevol — Buyer Intelligence Module</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#111827;--ink-2:#1f2937;--muted:#6b7280;--muted-2:#9ca3af;--subtle:#d1d5db;--line:#e5e7eb;--surface:#f9fafb;--surface-2:#f3f4f6;--white:#ffffff;
+  --gold:#5b5bd6;--gold-light:#8b5cf6;--gold-pale:rgba(79,70,229,0.08);
+  --teal:#059669;--teal-light:#10b981;--teal-pale:rgba(5,150,105,0.08);
+  --rose:#dc2626;--rose-pale:rgba(220,38,38,0.08);
+  --amber:#d97706;--amber-pale:rgba(217,119,6,0.08);
+  --violet:#5b5bd6;--violet-pale:rgba(79,70,229,0.08);
+  --green:#16a34a;--green-pale:rgba(22,163,74,0.08);
+  --sidebar-bg:#13151f;--font-ui:'Inter','DM Sans',sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-ui);background:var(--white);color:var(--ink);overflow-x:hidden;}
+.scene{min-height:100vh;position:relative;display:none;}
+.scene.active{display:block;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes splashIn{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@keyframes journeyIn{from{opacity:0;transform:translateX(-50%) translateY(12px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+@keyframes live-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.7}}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes new-blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* SPLASH */
+#scene-splash{background:var(--sidebar-bg);align-items:center;justify-content:center;overflow:hidden;}
+#scene-splash.active{display:flex;}
+.splash-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(79,70,229,0.15) 0%,transparent 70%),radial-gradient(ellipse 60% 40% at 80% 20%,rgba(79,70,229,0.08) 0%,transparent 60%);}
+.splash-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;}
+.splash-content{position:relative;z-index:2;text-align:center;padding:40px;animation:splashIn 1s cubic-bezier(0.22,1,0.36,1) both;}
+.splash-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#facc15;margin-bottom:32px;}
+.splash-eyebrow::before,.splash-eyebrow::after{content:'';flex:1;min-width:40px;height:1px;background:rgba(250,204,21,0.4);}
+.splash-title{font-size:clamp(52px,8vw,96px);font-weight:300;line-height:1.0;color:var(--white);margin-bottom:8px;}
+.splash-title strong{font-weight:700;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.splash-subtitle{font-size:18px;color:rgba(255,255,255,0.65);font-weight:300;margin-bottom:56px;letter-spacing:0.02em;}
+.splash-btn{display:inline-flex;align-items:center;gap:12px;background:white;color:#4f46e5;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:16px 40px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 32px rgba(0,0,0,0.25);transition:all 0.3s ease;}
+.splash-btn:hover{background:#f0f0ff;transform:translateY(-2px);}
+
+/* NAV */
+.demo-nav{background:#fff;border-bottom:1px solid var(--line);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.nav-brand{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:700;color:var(--ink);}
+.nav-brand-mark{width:28px;height:28px;background:#13151f;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:white;letter-spacing:-0.5px;}
+.nav-pill{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:3px 10px;border-radius:6px;background:rgba(79,70,229,0.08);color:#5b5bd6;border:1px solid rgba(91,91,214,0.18);}
+.nav-actions{display:flex;align-items:center;gap:12px;}
+.nav-user{width:32px;height:32px;border-radius:8px;background:#5b5bd6;font-size:12px;font-weight:600;color:white;display:flex;align-items:center;justify-content:center;}
+.nav-btn{font-size:12px;font-weight:600;padding:7px 16px;border-radius:6px;border:1px solid var(--line);background:white;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.nav-btn:hover{border-color:var(--gold);color:var(--gold);}
+.nav-btn.primary{background:#5b5bd6;color:white;border-color:#5b5bd6;}
+.nav-btn.primary:hover{background:#4848c2;}
+
+/* JOURNEY BAR */
+.journey-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#13151f;color:white;border-radius:10px;padding:8px 8px 8px 16px;display:none;align-items:center;gap:8px;box-shadow:0 4px 24px rgba(0,0,0,0.2);z-index:999;white-space:nowrap;max-width:calc(100vw - 40px);}
+.journey-label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);margin-right:4px;}
+.journey-steps{display:flex;align-items:center;gap:2px;}
+.journey-step{padding:5px 11px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;border:none;font-family:inherit;color:rgba(255,255,255,0.45);background:transparent;}
+.journey-step:hover{color:white;background:rgba(255,255,255,0.07);}
+.journey-step.active{background:#5b5bd6;color:white;}
+.journey-step.done{color:rgba(255,255,255,0.55)!important;}
+.journey-sep{color:rgba(255,255,255,0.18);font-size:12px;padding:0 1px;}
+.journey-next{background:#5b5bd6;color:white;border:none;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:4px;flex-shrink:0;}
+.journey-next:hover{background:#4848c2;}
+
+/* TABLE SCENE */
+#scene-table{background:var(--surface);padding-bottom:60px;}
+.table-header-zone{padding:28px 32px 20px;}
+.table-headline{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;}
+.table-headline-left h1{font-size:22px;font-weight:600;margin-bottom:4px;}
+.table-headline-left p{font-size:13px;color:var(--muted);}
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px;padding:0 32px;}
+.kpi-card{background:white;border:1px solid var(--line);border-radius:10px;padding:16px 20px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
+.kpi-label{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+.kpi-value{font-size:26px;font-weight:700;line-height:1;margin-bottom:4px;}
+.kpi-sub{font-size:12px;color:var(--muted-2);}
+.kpi-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;}
+.filter-strip{padding:0 32px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;border:1px solid var(--line);background:white;color:var(--muted);cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.filter-chip:hover{border-color:var(--gold);color:var(--ink);}
+.filter-chip.active{background:#5b5bd6;color:white;border-color:#5b5bd6;}
+.search-box{flex:1;min-width:200px;max-width:300px;display:flex;align-items:center;gap:8px;background:white;border:1px solid var(--line);border-radius:8px;padding:8px 16px;}
+.search-box input{border:none;outline:none;font-family:inherit;font-size:13px;color:var(--ink);background:transparent;flex:1;}
+.search-box input::placeholder{color:var(--muted-2);}
+.table-wrap{margin:0 32px;background:white;border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:1100px;}
+thead tr{background:var(--surface-2);border-bottom:2px solid var(--line);}
+th{padding:10px 16px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);white-space:nowrap;}
+th:first-child{padding-left:20px;}
+tbody tr{border-bottom:1px solid var(--line);transition:background 0.15s;cursor:pointer;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:#fafafa;}
+td{padding:12px 16px;font-size:13px;color:var(--ink);white-space:nowrap;vertical-align:middle;}
+td:first-child{padding-left:20px;}
+.buyer-cell{display:flex;align-items:center;gap:12px;}
+.buyer-avatar{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;}
+.buyer-name{font-weight:500;font-size:13px;color:var(--ink);}
+.buyer-domain{font-size:11px;color:var(--muted);}
+.table-footer{padding:12px 16px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:var(--surface);}
+.table-footer-left{font-size:13px;color:var(--muted);}
+.table-footer-right{display:flex;align-items:center;gap:8px;}
+.page-btn{width:30px;height:30px;border-radius:6px;border:1px solid var(--line);background:white;font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;transition:all 0.2s;}
+.page-btn:hover,.page-btn.active{background:#5b5bd6;color:white;border-color:#5b5bd6;}
+.anim-num{display:inline-block;}
+
+/* HOW IT WORKS */
+#scene-howto{background:var(--sidebar-bg);align-items:center;justify-content:center;overflow:hidden;}
+#scene-howto.active{display:flex;}
+.howto-bg{position:absolute;inset:0;background:radial-gradient(ellipse 100% 80% at 50% 100%,rgba(91,91,214,0.07) 0%,transparent 70%);}
+.howto-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;}
+.howto-content{position:relative;z-index:2;max-width:100%;padding:80px 40px;text-align:center;}
+.howto-eyebrow{font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#facc15;margin-bottom:20px;}
+.howto-title{font-size:clamp(32px,5vw,56px);font-weight:300;color:white;line-height:1.1;margin-bottom:16px;}
+.howto-subtitle{font-size:17px;color:rgba(255,255,255,0.45);margin-bottom:60px;}
+.howto-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:left;max-width:860px;margin:0 auto 50px;}
+.howto-step{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px;position:relative;overflow:hidden;transition:all 0.3s ease;cursor:pointer;}
+.howto-step:hover{background:rgba(255,255,255,0.07);border-color:rgba(91,91,214,0.3);}
+.howto-step-num{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#facc15;margin-bottom:12px;}
+.howto-step-icon{font-size:28px;margin-bottom:14px;}
+.howto-step h3{font-size:15px;font-weight:600;color:white;margin-bottom:10px;}
+.howto-step p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.6;}
+.howto-step-arrow{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:26px;background:rgba(91,91,214,0.2);border:1px solid rgba(91,91,214,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#5b5bd6;font-size:13px;z-index:2;}
+.howto-step:last-child .howto-step-arrow{display:none;}
+.howto-cta{display:inline-flex;align-items:center;gap:10px;background:white;color:#5b5bd6;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:14px 32px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 32px rgba(0,0,0,0.25);transition:all 0.3s ease;}
+.howto-cta:hover{background:#f0f0ff;transform:translateY(-2px);}
+
+/* CONFIG */
+#scene-config{background:var(--surface);padding-bottom:80px;}
+.scene-header{text-align:center;padding:60px 40px 50px;}
+.scene-header h2{font-size:36px;font-weight:700;margin-bottom:10px;}
+.scene-header p{font-size:16px;color:var(--muted);}
+.req-preview{max-width:900px;margin:0 auto;padding:0 32px;}
+.req-preview-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.req-preview-grid{display:grid;grid-template-columns:1fr 280px;gap:20px;}
+.req-sections{background:white;border-radius:10px;border:1px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,0.05);overflow:hidden;}
+.req-section-row{cursor:pointer;}
+.req-section-row .expand-caret{font-size:12px;color:var(--muted);transition:transform 0.25s ease;margin-left:8px;display:inline-block;}
+.req-section-row.open .expand-caret{transform:rotate(180deg);}
+.req-section-row-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;cursor:pointer;width:100%;border-bottom:1px solid var(--line);}
+.req-section-row:last-child .req-section-row-header{border-bottom:none;}
+.req-section-row.open .req-section-row-header{border-bottom:1px solid var(--line);}
+.req-section-row-header:hover{background:var(--surface);}
+.req-section-left{display:flex;align-items:center;gap:12px;}
+.req-sect-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.req-sect-name{font-size:13.5px;font-weight:600;}
+.req-sect-count{font-size:11.5px;color:var(--muted);}
+.req-toggle{width:38px;height:22px;border-radius:11px;position:relative;cursor:pointer;background:#5b5bd6;}
+.req-toggle::after{content:'';position:absolute;width:16px;height:16px;background:white;border-radius:50%;right:3px;top:3px;transition:right 0.2s;}
+.req-toggle.off{background:var(--line);}
+.req-toggle.off::after{right:auto;left:3px;}
+.req-items-panel{max-height:0;overflow:hidden;transition:max-height 0.35s ease;background:#fafbfd;}
+.req-items-panel.open{max-height:1000px;}
+.req-item-row{display:flex;align-items:center;gap:10px;padding:10px 20px;border-bottom:1px solid var(--line);cursor:pointer;transition:background 0.15s;user-select:none;}
+.req-item-row:last-child{border-bottom:none;}
+.req-item-row:hover{background:rgba(99,102,241,0.03);}
+.req-item-cb{width:16px;height:16px;border-radius:4px;flex-shrink:0;border:2px solid #d1d5db;background:#f9fafb;display:flex;align-items:center;justify-content:center;transition:all 0.18s;font-size:10px;color:transparent;}
+.req-item-row.checked .req-item-cb{background:#16a34a;border-color:#16a34a;color:white;}
+.req-item-row.checked{background:rgba(22,163,74,0.03);}
+.req-item-label{font-size:13px;color:var(--muted);flex:1;line-height:1.4;}
+.req-item-row.checked .req-item-label{color:var(--ink);}
+.req-sidebar{background:var(--ink);border-radius:10px;padding:24px;color:white;}
+.req-sidebar h4{font-size:15px;font-weight:700;margin-bottom:4px;}
+.req-stat-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07);}
+.req-stat-row:last-of-type{border-bottom:none;}
+.req-stat-label{font-size:12px;color:rgba(255,255,255,0.5);}
+.req-stat-val{font-size:14px;font-weight:700;color:white;}
+.req-save-btn{width:100%;margin-top:10px;padding:12px;border-radius:8px;background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;border:none;cursor:pointer;}
+.req-save-btn:hover{background:#4848c2;}
+
+/* ENGINE */
+#scene-engine{background:var(--surface);padding-bottom:80px;}
+.engine-content{max-width:860px;margin:0 auto;padding:48px 32px 0;}
+.engine-header{text-align:center;margin-bottom:40px;}
+.engine-header h2{font-size:28px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+.engine-header p{font-size:14px;color:var(--muted);}
+.engine-buyer-card{background:white;border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+.engine-buyer-avatar{width:52px;height:52px;border-radius:13px;background:linear-gradient(135deg,#f97316,#dc2626);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:white;flex-shrink:0;}
+.engine-buyer-info h3{font-size:18px;font-weight:700;color:var(--ink);}
+.engine-buyer-info p{font-size:13px;color:var(--muted);}
+.engine-buyer-tl{margin-left:auto;background:rgba(79,70,229,0.08);border:1px solid rgba(91,91,214,0.2);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;color:#5b5bd6;}
+.engine-flow{display:grid;grid-template-columns:1fr;gap:10px;}
+.engine-step{background:white;border:1px solid var(--line);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 2px rgba(0,0,0,0.04);}
+.engine-step-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--surface);}
+.engine-step-info h4{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.engine-step-info p{font-size:12px;color:var(--muted);}
+.engine-badge-wait{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:3px 10px;}
+.engine-badge-buyer{font-size:11px;font-weight:600;color:#5b5bd6;background:rgba(91,91,214,0.08);border:1px solid rgba(91,91,214,0.2);border-radius:5px;padding:3px 10px;}
+.engine-result-banner{margin-top:24px;background:white;border:1px solid var(--line);border-radius:10px;padding:18px 22px;display:flex;align-items:center;gap:14px;margin-bottom:80px;}
+.engine-result-icon{font-size:26px;}
+.engine-result-text h4{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.engine-result-text p{font-size:13px;color:var(--muted);}
+.engine-result-cta{margin-left:auto;background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;padding:10px 20px;border-radius:8px;border:none;cursor:pointer;}
+.engine-result-cta:hover{background:#4848c2;}
+
+/* PORTAL */
+#scene-portal{background:var(--surface);padding-bottom:80px;display:none;}
+#scene-portal.active{display:block;}
+.portal-wrap{max-width:700px;margin:0 auto;padding:0 40px;}
+.portal-window{background:white;border-radius:12px;overflow:hidden;border:1px solid var(--line);box-shadow:0 4px 24px rgba(0,0,0,0.1);}
+.portal-topbar{background:#13151f;border-radius:12px 12px 0 0;padding:16px 20px;display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.5);}
+.portal-dot{width:12px;height:12px;border-radius:50%;}
+.portal-url{flex:1;background:rgba(255,255,255,0.07);border-radius:100px;padding:4px 14px;font-size:12px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;text-align:center;}
+.portal-body{padding:32px;background:white;border-radius:0 0 12px 12px;}
+.portal-supplier-logo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#7c5cfc,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;}
+.portal-title{font-size:20px;font-weight:700;text-align:center;color:var(--ink);margin-bottom:6px;}
+.portal-subtitle{font-size:13.5px;color:var(--muted);text-align:center;margin-bottom:20px;line-height:1.5;}
+.portal-trust-points{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.portal-tp{background:var(--surface-2);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--line);}
+.portal-tp-icon{font-size:20px;margin-bottom:6px;}
+.portal-tp h4{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.portal-tp p{font-size:11px;color:var(--muted);}
+.portal-field{margin-bottom:14px;}
+.portal-field label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.06em;}
+.portal-input{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:8px;font-size:13px;font-family:inherit;color:var(--ink);background:var(--surface);transition:border-color 0.2s;}
+.portal-input:focus{outline:none;border-color:#5b5bd6;background:white;}
+.portal-input.filled{border-color:#16a34a;}
+.portal-input.required-field{border-color:#5b5bd6;background:rgba(91,91,214,0.02);}
+.portal-submit{width:100%;padding:13px;border-radius:8px;background:#5b5bd6;color:white;font-family:inherit;font-size:14px;font-weight:700;border:none;cursor:pointer;transition:background 0.2s;}
+.portal-submit:hover{background:#4848c2;}
+.required-star{color:#5b5bd6;font-weight:700;margin-left:3px;}
+.required-note{font-size:10.5px;color:#5b5bd6;font-weight:600;display:inline-flex;align-items:center;gap:3px;margin-left:6px;text-transform:none;letter-spacing:0;}
+.portal-incentive-banner{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid rgba(22,163,74,0.3);border-radius:12px;padding:14px 20px;margin-bottom:22px;display:flex;align-items:center;gap:14px;}
+.portal-incentive-icon{font-size:28px;flex-shrink:0;}
+.portal-incentive-title{font-size:14px;font-weight:700;color:#15803d;margin-bottom:3px;}
+.portal-incentive-sub{font-size:12px;color:#166534;line-height:1.45;}
+.portal-incentive-badge{margin-left:auto;background:#16a34a;color:white;font-size:11px;font-weight:700;padding:5px 12px;border-radius:100px;white-space:nowrap;flex-shrink:0;}
+
+/* ENRICH */
+#scene-enrich{background:var(--surface);padding-bottom:80px;}
+.enrich-vendor-panel{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:border-color 0.4s;}
+.enrich-vendor-panel.ev-done{border-color:rgba(22,163,74,0.3);}
+.enrich-vendor-header{display:flex;align-items:center;gap:12px;padding:14px 20px 8px;}
+.enrich-vendor-logo{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.enrich-vendor-name{font-size:14px;font-weight:700;color:var(--ink);flex:1;}
+.enrich-vendor-status{font-size:11px;font-weight:600;padding:3px 10px;border-radius:5px;}
+.evs-loading{background:var(--surface);color:var(--muted);}
+.evs-done{background:rgba(22,163,74,0.08);color:#16a34a;border:1px solid rgba(22,163,74,0.2);}
+.enrich-progress-wrap{padding:0 20px 10px;}
+.enrich-progress-track{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:4px;}
+.enrich-progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,#5b5bd6,#16a34a);width:0%;transition:width 0.12s linear;}
+.enrich-progress-label{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;}
+.enrich-req-list{border-top:1px solid var(--line);padding:10px 20px 14px;display:flex;flex-direction:column;gap:8px;}
+.enrich-req-row{display:flex;align-items:center;gap:10px;}
+.enrich-req-name{font-size:12.5px;color:var(--ink);flex:1;}
+.enrich-req-bar-wrap{width:120px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;flex-shrink:0;}
+.enrich-req-bar-fill{height:100%;border-radius:2px;background:#d1d5db;width:0%;transition:width 0.35s ease;}
+.enrich-req-bar-fill.done{background:#16a34a;width:100%;}
+.enrich-req-bar-fill.fail{background:#dc2626;width:100%;}
+.enrich-req-tick{font-size:13px;font-weight:700;width:16px;text-align:center;flex-shrink:0;opacity:0;transition:opacity 0.3s;}
+.enrich-req-tick.visible{opacity:1;}
+.enrich-more-hint{text-align:center;padding:4px 0 16px;font-size:12px;color:var(--muted-2);font-style:italic;}
+.v-loader{display:inline-block;width:13px;height:13px;border:2px solid rgba(91,91,214,0.15);border-top-color:#5b5bd6;border-radius:50%;animation:spin 0.8s linear infinite;}
+
+/* MONITOR */
+#scene-monitor{background:var(--surface);}
+.monitor-content{max-width:1020px;margin:0 auto;padding:56px 32px 100px;}
+.monitor-card{background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.monitor-card-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
+.monitor-card-head h4{font-size:13.5px;font-weight:700;color:var(--ink);flex:1;}
+.alert-feed{display:flex;flex-direction:column;}
+.alert-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);}
+.alert-item:last-child{border-bottom:none;}
+.alert-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+.alert-dot.red{background:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,0.15);}
+.alert-dot.amber{background:#d97706;box-shadow:0 0 0 3px rgba(217,119,6,0.15);}
+.alert-dot.blue{background:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.15);}
+.alert-dot.green{background:#16a34a;box-shadow:0 0 0 3px rgba(22,163,74,0.15);}
+.alert-meta{flex:1;}
+.alert-title{font-size:12.5px;font-weight:600;color:var(--ink);}
+.alert-desc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.alert-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0;}
+.badge-red{background:rgba(220,38,38,0.08);color:#dc2626;}
+.badge-amber{background:rgba(217,119,6,0.08);color:#d97706;}
+.badge-blue{background:rgba(59,130,246,0.08);color:#3b82f6;}
+.badge-green{background:rgba(22,163,74,0.08);color:#16a34a;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:#dc2626;display:inline-block;margin-right:6px;animation:live-pulse 1.5s infinite;}
+
+/* CLOSING */
+#scene-closing{background:var(--sidebar-bg);align-items:center;justify-content:center;overflow:hidden;}
+#scene-closing.active{display:flex;}
+.closing-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(91,91,214,0.15) 0%,transparent 70%);}
+.closing-content{position:relative;z-index:2;text-align:center;padding:60px 40px;max-width:800px;}
+.closing-title{font-size:clamp(36px,6vw,72px);font-weight:300;color:white;line-height:1.05;margin-bottom:20px;}
+.closing-title strong{font-weight:800;}
+.closing-tagline{font-size:18px;color:rgba(255,255,255,0.4);margin-bottom:50px;}
+.closing-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:50px;}
+.closing-pillar{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:24px 20px;text-align:center;}
+.closing-pillar-icon{font-size:32px;margin-bottom:12px;}
+.closing-pillar h3{font-size:15px;font-weight:600;color:white;margin-bottom:8px;}
+.closing-pillar p{font-size:12.5px;color:rgba(255,255,255,0.45);line-height:1.6;}
+
+/* IMPORT / ASSIGN */
+#scene-import,#scene-assign{background:var(--surface);padding-bottom:120px;}
+.import-card{background:white;border:2px solid var(--line);border-radius:14px;padding:24px;cursor:pointer;transition:all 0.25s;}
+.import-card:hover{border-color:rgba(91,91,214,0.3);}
+.buyer-tl-select{border:1.5px solid var(--line);border-radius:7px;padding:5px 28px 5px 10px;font-size:12px;font-family:inherit;color:var(--ink);background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;-webkit-appearance:none;appearance:none;cursor:pointer;outline:none;min-width:165px;}
+.buyer-tl-select:focus{border-color:#5b5bd6;}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="scene-splash" class="scene active">
+  <div class="splash-bg"></div><div class="splash-grid"></div>
+  <div class="splash-content">
+    <div class="splash-eyebrow">Reevol · Platform Preview</div>
+    <h1 class="splash-title">Global Buyer Intelligence.<br><strong>Extend Credit with Confidence.</strong></h1>
+    <p class="splash-subtitle">Automated buyer on-boarding, credit assessment and management. AI powered data and process to extend and manage credit.</p>
+    <button class="splash-btn" onclick="goToScene('howto')">Start Demo <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="scene-howto" class="scene">
+  <div class="howto-bg"></div><div class="howto-grid"></div>
+  <div class="howto-content">
+    <div class="howto-eyebrow">The process behind every verified buyer</div>
+    <h2 class="howto-title">A single workspace to manage your buyers net terms and credit limits</h2>
+    <p class="howto-subtitle">From configuration to real-time management</p>
+    <div class="howto-steps">
+      <div class="howto-step" onclick="goToScene('config')"><div class="howto-step-num">Step 01</div><div class="howto-step-icon">⚙️</div><h3>You Configure Trust Levels</h3><p>Using ReeVi, our AI assistance, and our recommended methodology we set your 4 Trust Levels in minutes.</p><div class="howto-step-arrow">›</div></div>
+      <div class="howto-step" onclick="goToScene('enrich')"><div class="howto-step-num">Step 02</div><div class="howto-step-icon">🔍</div><h3>Calibrating the framework and your buyers</h3><p>Upload your existing buyers and we automatically query multiple data vendors to enrich their profiles.</p><div class="howto-step-arrow">›</div></div>
+      <div class="howto-step" onclick="goToScene('table')"><div class="howto-step-num">Step 03</div><div class="howto-step-icon">📊</div><h3>Manage your buyers' credit</h3><p>Every buyer gets a complete profile, trust level, approval status, risk score, and net terms eligibility.</p></div>
+    </div>
+    <button class="howto-cta" onclick="goToScene('config')">Walk Me Through It →</button>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div id="scene-config" class="scene">
+  <div class="scene-header">
+    <div class="howto-eyebrow" style="color:var(--gold)">Step One — Trust Level Configuration</div>
+    <h2>Your Credit Policy,<br>Turned Into Automated Rules</h2>
+    <p>Configure once, apply to every buyer automatically.</p>
+  </div>
+  <div style="max-width:900px;margin:0 auto 24px;padding:0 32px;">
+    <div style="background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+      <div style="padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);">
+        <div style="font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;">Configure in order ›</div>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;">
+          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Low Trust</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div></div>
+          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Moderate Trust</div><div style="font-size:9.5px;color:var(--muted);">25–49 pts</div></div>
+          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟠</div><div style="font-size:11px;font-weight:700;color:var(--ink);">High Trust</div><div style="font-size:9.5px;color:var(--muted);">50–74 pts</div></div>
+          <div id="cfg-step-3" onclick="selectTemplate(3)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Maximum Trust</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div></div>
+        </div>
+        <div id="cfg-next-btn"><button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Profile →</button></div>
+      </div>
+      <div id="cfg-rec-inner" style="padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#fafafa;"></div>
+    </div>
+  </div>
+  <div id="cfg-recommendation" style="display:none;"></div>
+  <div class="req-preview" id="reqPreview">
+    <span id="liveTrustScore" style="display:none;">0</span>
+    <span id="liveTrustBar" style="display:none;"></span>
+    <span id="liveTrustLabel" style="display:none;"></span>
+    <input type="hidden" id="tplNameInput" value="Low Trust Profile">
+    <div class="req-preview-title" style="max-width:900px;margin:0 auto 14px;padding:0;">
+      <span>📋</span><span id="tplTitleLabel">Low Trust Template</span>
+      <span style="font-size:12px;color:var(--muted);font-weight:400;margin-left:8px;" id="reqCountLabel">Requirements across 5 pillars</span>
+    </div>
+    <div class="req-preview-grid" style="max-width:900px;margin:0 auto;">
+      <div class="req-sections" id="reqSectionsContainer"></div>
+      <div class="req-sidebar">
+        <h4 id="sidebarTplName">Low Trust Template</h4>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:14px;">Score bands: 0–39 · 40–59 · 60–79 · 80–100</div>
+        <div style="text-align:center;padding:12px;background:rgba(255,255,255,0.05);border-radius:10px;margin-bottom:12px;">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:5px;">Trust Score</div>
+          <div style="font-size:38px;font-weight:800;line-height:1;transition:color 0.35s;" id="sidebarScore">0</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.35);">/100</div>
+          <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:8px 0 4px;"><div id="sidebarScoreBar" style="height:100%;border-radius:3px;background:#dc2626;width:0%;transition:width 0.4s ease,background 0.35s;"></div></div>
+          <div id="sidebarScoreLabel" style="font-size:12px;font-weight:700;color:#dc2626;transition:color 0.35s;">🔴 Low Trust</div>
+        </div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:6px;">Score by Pillar</div>
+        <div id="sidebarPillarBreakdown" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;"></div>
+        <div class="req-stat-row"><div class="req-stat-label">Active Requirements</div><div class="req-stat-val" id="sidebarTotal">—</div></div>
+        <div class="req-stat-row"><div class="req-stat-label">Auto-Enriched</div><div class="req-stat-val" style="color:#4ade80;">~80%</div></div>
+        <button class="req-save-btn" onclick="goToScene('import')">Save &amp; Activate →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT -->
+<div id="scene-import" class="scene">
+  <div style="max-width:860px;margin:0 auto;padding:56px 40px 0;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div class="howto-eyebrow" style="color:var(--gold);font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;">Step Two — Import Buyers</div>
+      <h2 style="font-size:36px;font-weight:700;color:var(--ink);margin-bottom:10px;">Import Your Buyers</h2>
+      <p style="font-size:16px;color:var(--muted);">Bring in your existing buyers or add new ones.</p>
+    </div>
+    <div id="import-question-block" style="background:white;border:1px solid var(--line);border-radius:16px;padding:28px 32px;margin-bottom:28px;">
+      <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;">How would you like to get started?</div>
+      <div style="font-size:13.5px;color:var(--muted);margin-bottom:20px;">Choose how you want to onboard your buyers.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div onclick="selectImportMode('targeted')" id="import-mode-targeted" style="border:2px solid var(--line);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all 0.2s;"><div style="font-size:20px;margin-bottom:8px;">🎯</div><div style="font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:5px;">Assess against a specific Trust Level</div><div style="font-size:12px;color:var(--muted);line-height:1.5;">Upload buyers and assign them to a Trust Level during import.</div></div>
+        <div onclick="selectImportMode('bulk')" id="import-mode-bulk" style="border:2px solid var(--line);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all 0.2s;"><div style="font-size:20px;margin-bottom:8px;">📦</div><div style="font-size:13.5px;font-weight:700;color:var(--ink);margin-bottom:5px;">Import all buyers, assign Trust Levels later</div><div style="font-size:12px;color:var(--muted);line-height:1.5;">Upload your full buyer list first.</div></div>
+      </div>
+    </div>
+    <div id="import-method-block" style="display:none;">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+        <div id="import-card-erp" class="import-card" onclick="selectImportMethod('erp')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#7c5cfc,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">🔗</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">ERP Integration</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Sync from SAP, Xero, QuickBooks or any ERP.</div></div>
+        <div id="import-card-csv" class="import-card" onclick="selectImportMethod('csv')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#10b981,#047857);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">📂</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">CSV / Excel Upload</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Upload a spreadsheet with your buyer list.</div></div>
+        <div id="import-card-manual" class="import-card" onclick="selectImportMethod('manual')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#c9a227,#7a5e10);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">✏️</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">Manual Entry</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Add buyers one by one.</div></div>
+      </div>
+
+      <!-- CSV UPLOAD ZONE -->
+      <div id="csv-upload-zone" style="display:none;margin-bottom:24px;">
+        <div id="csv-drop-area"
+          ondrop="csvHandleDrop(event)"
+          ondragover="csvHandleDragOver(event)"
+          ondragleave="csvHandleDragLeave()"
+          style="border:2px dashed var(--line);border-radius:14px;padding:36px 24px;text-align:center;background:white;cursor:pointer;transition:all 0.2s;"
+          onclick="document.getElementById('csv-file-input').click()">
+          <div style="font-size:36px;margin-bottom:12px;">📂</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;" id="csv-drop-label">Drag &amp; drop your CSV or Excel file here</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:20px;" id="csv-drop-sublabel">.CSV, .XLS, .XLSX · Max 10MB</div>
+          <input type="file" id="csv-file-input" accept=".csv,.xls,.xlsx" style="display:none;" onchange="csvHandleFileChange(this)">
+          <button id="csv-upload-btn" onclick="event.stopPropagation();csvSimulateUpload()" style="display:inline-flex;align-items:center;gap:8px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:13px;font-weight:600;padding:10px 24px;border-radius:8px;border:none;cursor:pointer;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M3 5l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 10v2a1 1 0 001 1h10a1 1 0 001-1v-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Upload &amp; Import
+          </button>
+        </div>
+        <div id="csv-upload-progress" style="display:none;margin-top:14px;">
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px;"><span>Processing file…</span><span id="csv-progress-pct"></span></div>
+          <div style="height:5px;background:var(--line);border-radius:3px;overflow:hidden;"><div id="csv-progress-fill" style="height:100%;width:0%;background:linear-gradient(90deg,#5b5bd6,#10b981);border-radius:3px;transition:width 0.1s linear;"></div></div>
+        </div>
+        <div style="margin-top:12px;display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;">
+          <span style="font-size:14px;">💡</span>
+          <div style="font-size:12px;color:var(--muted);">Need a template? <a href="#" style="color:#5b5bd6;font-weight:600;text-decoration:none;" onclick="return false;">Download the Reevol CSV template →</a></div>
+        </div>
+      </div>
+      <div id="manual-entry-row" style="display:none;background:white;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:20px;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+        <div style="flex:2;min-width:140px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Company Name *</div><input type="text" id="manual-buyer-input" placeholder="e.g. Harbor Build Supply Co." style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')addManualBuyer()"></div>
+        <div style="flex:1;min-width:110px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Country *</div><input type="text" id="manual-buyer-country" placeholder="e.g. United States" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;"></div>
+        <button onclick="addManualBuyer()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Add Buyer</button>
+      </div>
+      <div id="import-result" style="display:none;opacity:0;transition:opacity 0.4s ease;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div><div style="font-size:17px;font-weight:700;color:var(--ink);">Buyers Ready for Import</div><div style="font-size:13px;color:var(--muted);margin-top:2px;" id="import-result-subtitle">0 buyers ready</div></div><span id="import-method-badge" style="background:var(--amber-pale);color:var(--amber);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:0.07em;"></span></div>
+        <div style="background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;">
+          <div style="padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;gap:14px;"><div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;flex:1;">Company</div><div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;width:110px;">Country</div><div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;width:80px;">Status</div></div>
+          <div id="import-buyer-rows"></div>
+        </div>
+        <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button onclick="goToScene('assign')" style="background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Assign Trust Levels →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN -->
+<div id="scene-assign" class="scene">
+  <div style="max-width:900px;margin:0 auto;padding:56px 40px 0;">
+    <div style="text-align:center;margin-bottom:36px;">
+      <div class="howto-eyebrow" style="color:var(--gold);font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;">Step Three — Assign Trust Levels</div>
+      <h2 style="font-size:34px;font-weight:700;color:var(--ink);margin-bottom:8px;">Assign a Trust Level to Each Buyer</h2>
+      <p style="font-size:15px;color:var(--muted);">Net Terms will be pre-filled based on your configuration.</p>
+    </div>
+    <div style="background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:24px;">
+      <div style="padding:12px 22px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:2fr 1.4fr 1fr 80px;gap:12px;">
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Buyer</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Trust Level</div>
+        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms</div>
+        <div></div>
+      </div>
+      <div id="assign-buyer-rows"></div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;background:white;border:1px solid var(--line);border-radius:12px;padding:18px 24px;">
+      <div><div style="font-size:14px;font-weight:700;color:var(--ink);">Ready to start Buyer Intelligence?</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Assessment starts immediately.</div></div>
+      <button onclick="startAssessment()" style="background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">⚡ Process Buyer Intelligence</button>
+    </div>
+  </div>
+</div>
+
+<!-- ENGINE (kept but not in journey) -->
+<div id="scene-engine" class="scene">
+  <div class="engine-content">
+    <div class="engine-header">
+      <div class="howto-eyebrow" style="color:var(--gold)">Assessment Plan</div>
+      <h2>Here's What We're About to Check — Automatically</h2>
+      <p>The engine will run every check below across 40+ data vendors.</p>
+    </div>
+    <div class="engine-buyer-card">
+      <div class="engine-buyer-avatar">HB</div>
+      <div class="engine-buyer-info"><h3>Harbor Build Supply Co.</h3><p>Imported via ERP · Just now · 66 requirements across 5 pillars</p></div>
+      <div class="engine-buyer-tl">Trust Level: Maximum Trust</div>
+    </div>
+    <div class="engine-flow">
+      <div class="engine-step" style="border-left:3px solid #7c5cfc;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#7c5cfc,#4f46e5);">🏢</div><div class="engine-step-info"><h4>Pillar 1 — Business Identity &amp; Legitimacy</h4><p>Entity name, registration, KYC · Sanctions (OFAC, EU, UN, FATF) — 31 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
+      <div class="engine-step" style="border-left:3px solid #c9a227;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#c9a227,#7a5e10);">💰</div><div class="engine-step-info"><h4>Pillar 2 — Financial Health</h4><p>Filed accounts, revenue trend, bank statements — 8 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
+      <div class="engine-step" style="border-left:3px solid #10b981;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#10b981,#047857);">📈</div><div class="engine-step-info"><h4>Pillar 3 — Payment Behaviour &amp; Credit History</h4><p>Credit bureau score, CCJs, trade references — 6 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
+      <div class="engine-step" style="border-left:3px solid #3b82f6;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">📡</div><div class="engine-step-info"><h4>Pillar 4 — Business Stability &amp; Operational Signals</h4><p>Employees, sector risk, ownership changes — 16 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
+      <div class="engine-step" style="border-left:3px solid #f97316;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#f97316,#c2410c);">📦</div><div class="engine-step-info"><h4>Pillar 5 — Transaction Context</h4><p>Order size vs revenue, frequency, goods risk — 5 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
+      <div class="engine-step" style="border:1px dashed rgba(91,91,214,0.3);background:rgba(91,91,214,0.03);"><div class="engine-step-icon">📬</div><div class="engine-step-info"><h4>Buyer Portal — For Anything We Can't Enrich</h4><p>A secure personalised request is sent to the buyer — only as a last resort</p></div><div><span class="engine-badge-buyer">If needed</span></div></div>
+    </div>
+    <div class="engine-result-banner" id="engineResult" style="opacity:0;transition:opacity 0.6s ease;">
+      <div class="engine-result-icon">🚀</div>
+      <div class="engine-result-text"><h4>Assessment queued for Harbor Build Supply Co.</h4><p>The enrichment engine will now run all checks automatically</p></div>
+      <button class="engine-result-cta" onclick="goToScene('enrich')">See Enrichment →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ENRICH -->
+<div id="scene-enrich" class="scene">
+  <div class="engine-content" style="padding-bottom:80px;max-width:960px;">
+    <div class="scene-header" style="padding:50px 40px 36px;">
+      <div class="howto-eyebrow" style="color:#5b5bd6;">Step Four — Autonomous Enrichment</div>
+      <h2 style="color:var(--ink);">Fulfilling Every Requirement.<br><strong style="color:#5b5bd6;">Automatically.</strong></h2>
+      <p style="color:var(--muted);">The moment a buyer is imported, Reevol's intelligence engine begins working through every requirement — silently, in the background, at speed.</p>
+    </div>
+
+    <!-- Buyer strip -->
+    <div class="engine-buyer-card" style="margin:0 40px 32px;">
+      <div class="engine-buyer-avatar" style="background:linear-gradient(135deg,#7c5cfc,#4f46e5);">NT</div>
+      <div class="engine-buyer-info">
+        <h3 style="color:var(--ink);">Nexus Tile &amp; Stone</h3>
+        <p style="color:var(--muted);">nexustile.com · Imported via CSV · Moderate Trust · 17 requirements</p>
+      </div>
+      <div style="margin-left:auto;">
+        <div style="background:rgba(217,119,6,0.08);color:#d97706;border:1px solid rgba(217,119,6,0.2);padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;">🟡 Moderate Trust</div>
+      </div>
+    </div>
+
+    <!-- Live scan demo for one requirement -->
+    <div style="margin:0 40px 28px;background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;">
+      <div style="padding:13px 20px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;">
+        <span style="font-size:13px;">⚡</span>
+        <span style="font-size:13px;font-weight:700;color:var(--ink);">Live — Watch how one requirement gets fulfilled</span>
+        <span id="enrichLiveTag" style="margin-left:auto;font-size:10.5px;font-weight:600;color:#5b5bd6;background:rgba(91,91,214,0.08);padding:2px 10px;border-radius:100px;border:1px solid rgba(91,91,214,0.15);">Scanning…</span>
+      </div>
+      <!-- Requirement label -->
+      <div style="padding:16px 20px 12px;border-bottom:1px solid var(--line);">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:6px;">Requirement</div>
+        <div style="font-size:15px;font-weight:700;color:var(--ink);">Business Registration Number</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Pillar 1 — Business Identity &amp; Legitimacy · No-Go check</div>
+      </div>
+      <!-- Scan stages -->
+      <div style="padding:16px 20px;display:flex;flex-direction:column;gap:10px;" id="enrichScanStages"></div>
+    </div>
+
+    <!-- All requirements by pillar -->
+    <div id="enrichReqPillars" style="margin:0 40px;"></div>
+
+    <!-- Summary -->
+    <div id="enrichSummaryBanner" style="display:none;margin:20px 40px 0;opacity:0;transition:opacity 0.6s ease;">
+      <div style="background:white;border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;">Enrichment Complete — Here's What Happened</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+          <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:14px 16px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#16a34a;line-height:1;">14</div>
+            <div style="font-size:11.5px;font-weight:600;color:#16a34a;margin-top:4px;">Auto-Fulfilled</div>
+            <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">No manual work required</div>
+          </div>
+          <div style="background:rgba(217,119,6,0.06);border:1px solid rgba(217,119,6,0.2);border-radius:10px;padding:14px 16px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#d97706;line-height:1;">3</div>
+            <div style="font-size:11.5px;font-weight:600;color:#d97706;margin-top:4px;">Sent to Buyer Portal</div>
+            <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">With your approval</div>
+          </div>
+          <div style="background:rgba(91,91,214,0.06);border:1px solid rgba(91,91,214,0.2);border-radius:10px;padding:14px 16px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#5b5bd6;line-height:1;">85%</div>
+            <div style="font-size:11.5px;font-weight:600;color:#5b5bd6;margin-top:4px;">Auto-Enriched</div>
+            <div style="font-size:10.5px;color:var(--muted);margin-top:2px;">Across 40+ data sources</div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;padding:8px 0 40px;">
+        <button onclick="goToScene('portal')" style="display:inline-flex;align-items:center;gap:10px;background:#5b5bd6;color:white;font-family:inherit;font-size:14px;font-weight:700;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 14px rgba(91,91,214,0.3);">See Buyer Portal — 3 items pending →</button>
+        <div style="font-size:12px;color:var(--muted);margin-top:8px;">You'll review and approve before anything is sent to the buyer</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PORTAL -->
+<div id="scene-portal" class="scene">
+  <div class="scene-header">
+    <div class="howto-eyebrow" style="color:var(--gold)">Step Five — Buyer-Facing Portal</div>
+    <h2>The Buyer Portal —<br>Sent Only With Your Approval</h2>
+    <p>You decide when and whether to send a branded verification email.</p>
+    <div style="display:flex;gap:12px;margin-top:18px;justify-content:center;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.15);border-radius:8px;padding:8px 14px;"><span>🔔</span><span style="font-size:12.5px;font-weight:600;color:#dc2626;">You are notified first — no auto-send</span></div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(201,162,39,0.07);border:1px solid rgba(201,162,39,0.2);border-radius:8px;padding:8px 14px;"><span>✅</span><span style="font-size:12.5px;font-weight:600;color:#a07820;">You approve before any email is sent</span></div>
+      <div style="display:flex;align-items:center;gap:8px;background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.15);border-radius:8px;padding:8px 14px;"><span>🏢</span><span style="font-size:12.5px;font-weight:600;color:#16a34a;">Branded as your company, powered by Reevol</span></div>
+    </div>
+  </div>
+  <div class="portal-wrap">
+    <div class="portal-window">
+      <div class="portal-topbar"><div class="portal-dot" style="background:#ff5f57"></div><div class="portal-dot" style="background:#febc2e;margin-left:6px"></div><div class="portal-dot" style="background:#28c840;margin-left:6px"></div><div class="portal-url">🔒 verify.reevol.com/harbor-build-supply</div><span style="font-size:11px;color:#4ade80;">🔒 Secured</span></div>
+      <div class="portal-body">
+        <div style="position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:6px;">
+          <div class="portal-supplier-logo" style="margin-bottom:0;">🏢</div>
+          <div style="position:absolute;right:0;display:flex;align-items:center;gap:5px;background:rgba(91,91,214,0.06);border:1px solid rgba(91,91,214,0.15);border-radius:6px;padding:4px 10px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#5b5bd6" stroke-width="2"/><path d="M7 10l2 2 4-4" stroke="#5b5bd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="font-size:10.5px;font-weight:700;color:#5b5bd6;">Powered by Reevol</span></div>
+        </div>
+        <div class="portal-title">One Quick Step to Unlock Your Terms</div>
+        <div class="portal-subtitle">ACME Corp is ready to extend credit to <strong>Harbor Build Supply Co.</strong> — just a few details to confirm and you're set.</div>
+        <div class="portal-incentive-banner">
+          <div class="portal-incentive-icon">🎁</div>
+          <div>
+            <div class="portal-incentive-title">You're eligible for Net-30 Payment Terms</div>
+            <div class="portal-incentive-sub">Complete this short verification and ACME Corp will activate Net-30 terms — buy now, pay in 30 days, no upfront payment required.</div>
+          </div>
+          <div class="portal-incentive-badge">Net-30 Ready</div>
+        </div>
+        <div style="display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:18px;overflow-x:auto;">
+          <button onclick="portalStep(0)" id="ptab-0" style="flex:1;min-width:80px;padding:9px 6px;border:none;background:none;font-size:10.5px;font-weight:700;color:#5b5bd6;border-bottom:2px solid #5b5bd6;margin-bottom:-2px;cursor:pointer;font-family:inherit;">🏛 Identity</button>
+          <button onclick="portalStep(1)" id="ptab-1" style="flex:1;min-width:80px;padding:9px 6px;border:none;background:none;font-size:10.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-family:inherit;">💰 Financial</button>
+          <button onclick="portalStep(2)" id="ptab-2" style="flex:1;min-width:80px;padding:9px 6px;border:none;background:none;font-size:10.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-family:inherit;">📊 Payment</button>
+          <button onclick="portalStep(3)" id="ptab-3" style="flex:1;min-width:80px;padding:9px 6px;border:none;background:none;font-size:10.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-family:inherit;">🏢 Stability</button>
+          <button onclick="portalStep(4)" id="ptab-4" style="flex:1;min-width:80px;padding:9px 6px;border:none;background:none;font-size:10.5px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-family:inherit;">📦 Transaction</button>
+        </div>
+        <div id="pstep-0" class="portal-fields">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:14px;padding:6px 10px;background:var(--surface);border-radius:6px;">Business Identity &amp; Legitimacy</div>
+          <div class="portal-field"><label>Business Registration Number <span class="required-star">★</span> <span class="required-note">Required</span></label><input type="text" class="portal-input required-field" placeholder="e.g. 12-3456789 or Company No. 01234567" required><div style="font-size:10.5px;color:var(--muted);margin-top:4px;">Enter your government-issued company registration or incorporation number.</div></div>
+          <div class="portal-field"><label>Business Registration Certificate <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><div style="border:2px dashed var(--line);border-radius:10px;padding:20px;text-align:center;background:var(--surface);cursor:pointer;" onmouseenter="this.style.borderColor='#5b5bd6'" onmouseleave="this.style.borderColor='var(--line)'"><div style="font-size:24px;margin-bottom:6px">📁</div><div style="font-size:12px;color:var(--muted)">Click to upload or drag and drop</div><div style="font-size:10px;color:var(--muted);margin-top:3px">PDF, JPG, PNG · Max 10MB</div></div></div>
+          <div class="portal-field"><label>Director / Owner Full Name <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input" placeholder="Legal name as on ID"></div>
+          <div class="portal-field"><label>Business Email <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input" placeholder="contact@harborbuild.com"></div>
+        </div>
+        <div id="pstep-1" class="portal-fields" style="display:none;">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:12px;padding:6px 10px;background:var(--surface);border-radius:6px;">Financial Health — all fields optional</div>
+          <div class="portal-field"><label>Latest Filed Accounts <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><div style="border:2px dashed var(--line);border-radius:10px;padding:20px;text-align:center;background:var(--surface);cursor:pointer;"><div style="font-size:24px;margin-bottom:6px">📄</div><div style="font-size:12px;color:var(--muted)">Upload annual accounts or financial statements</div></div></div>
+          <div class="portal-field"><label>Bank Statements (last 3–6 months) <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><div style="border:2px dashed var(--line);border-radius:10px;padding:20px;text-align:center;background:var(--surface);cursor:pointer;"><div style="font-size:24px;margin-bottom:6px">🏦</div><div style="font-size:12px;color:var(--muted)">Upload or connect via Open Banking</div></div></div>
+        </div>
+        <div id="pstep-2" class="portal-fields" style="display:none;">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:12px;padding:6px 10px;background:var(--surface);border-radius:6px;">Payment Behaviour &amp; Credit History — all fields optional</div>
+          <div class="portal-field"><label>Trade References <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><textarea class="portal-input" style="height:70px;resize:none;" placeholder="e.g. ABC Supplies — john@abcsupplies.com"></textarea></div>
+          <div class="portal-field"><label>Credit Bureau Consent <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><div style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;cursor:pointer;" onclick="this.querySelector('input').click()"><input type="checkbox" style="margin-top:2px;accent-color:#5b5bd6;width:15px;height:15px;flex-shrink:0;"><span style="font-size:12px;color:var(--muted);line-height:1.5;">I authorise ACME Corp and Reevol to query my business credit report from authorised credit bureaus.</span></div></div>
+        </div>
+        <div id="pstep-3" class="portal-fields" style="display:none;">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:12px;padding:6px 10px;background:var(--surface);border-radius:6px;">Business Stability — all fields optional</div>
+          <div class="portal-field"><label>Number of Employees <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><select class="portal-input" style="cursor:pointer;"><option value="">Select range...</option><option>1–10</option><option>11–50</option><option>51–200</option><option>201–500</option><option>500+</option></select></div>
+          <div class="portal-field"><label>Key Customers or Partners <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><textarea class="portal-input" style="height:60px;resize:none;" placeholder="List any notable customers or supplier partnerships"></textarea></div>
+        </div>
+        <div id="pstep-4" class="portal-fields" style="display:none;">
+          <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:12px;padding:6px 10px;background:var(--surface);border-radius:6px;">Transaction Context — all fields optional</div>
+          <div class="portal-field"><label>Estimated Monthly Order Value <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input" placeholder="e.g. $20,000 – $50,000"></div>
+          <div class="portal-field"><label>Primary Goods / Services Category <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input filled" value="Building Materials &amp; Construction Supplies" readonly></div>
+        </div>
+        <button class="portal-submit" onclick="showPortalSuccess()">Submit &amp; Unlock Net-30 →</button>
+        <div id="portal-success" style="display:none;margin-top:18px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:22px;text-align:center;"><div style="font-size:30px;margin-bottom:8px">✅</div><div style="font-weight:700;color:#16a34a;margin-bottom:5px">Net-30 Terms Activated!</div><div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Your Net-30 terms will be live within 1–2 business hours.</div><button onclick="goToScene('table')" style="background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;">Go to Dashboard →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="scene-table" class="scene">
+  <nav class="demo-nav">
+    <div class="nav-brand"><div class="nav-brand-mark">R</div>Reevol<span class="nav-pill">● Buyer Business Intelligence</span></div>
+    <div class="nav-actions"><button class="nav-btn" onclick="goToScene('config')">Trust Config</button><div class="nav-user">AC</div></div>
+  </nav>
+  <div class="table-header-zone">
+    <div class="table-headline">
+      <div class="table-headline-left">
+        <h1>Buyer Business Intelligence</h1>
+        <p>Your live buyer registry — trust levels, assessment status, credit terms, due amounts, and risk signals, all in one place.</p>
+      </div>
+      <button onclick="goToScene('import')" style="display:inline-flex;align-items:center;gap:8px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:13px;font-weight:600;padding:9px 20px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 10px rgba(91,91,214,0.25);flex-shrink:0;align-self:flex-start;" onmouseover="this.style.background='#4848c2'" onmouseout="this.style.background='#5b5bd6'">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>New Buyer
+      </button>
+    </div>
+    <div class="kpi-strip">
+      <div class="kpi-card"><div class="kpi-label">Total Buyers</div><div class="kpi-value anim-num" data-target="142">0</div><div class="kpi-sub">Active in system</div></div>
+      <div class="kpi-card"><div class="kpi-label">Approved</div><div class="kpi-value anim-num" data-target="97" style="color:#16a34a">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:#16a34a"></span>68% approval rate</div></div>
+      <div class="kpi-card"><div class="kpi-label">Net Terms Enabled</div><div class="kpi-value anim-num" data-target="63" style="color:var(--teal)">0</div><div class="kpi-sub">Across trust tiers</div></div>
+      <div class="kpi-card"><div class="kpi-label">Insured</div><div class="kpi-value anim-num" data-target="58" style="color:var(--violet)">0</div><div class="kpi-sub">Credit insurance active</div></div>
+      <div class="kpi-card"><div class="kpi-label">Pending Review</div><div class="kpi-value anim-num" data-target="18" style="color:var(--amber)">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:var(--amber)"></span>Awaiting your review</div></div>
+    </div>
+    <div class="filter-strip">
+      <div class="search-box"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" opacity="0.4"><circle cx="7" cy="7" r="5" stroke="#0a0d14" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#0a0d14" stroke-width="1.5" stroke-linecap="round"/></svg><input type="text" placeholder="Search buyers..."/></div>
+      <button class="filter-chip active">All Buyers</button>
+      <button class="filter-chip">🟢 Maximum Trust</button>
+      <button class="filter-chip">🟠 High Trust</button>
+      <button class="filter-chip">🟡 Moderate Trust</button>
+      <button class="filter-chip">🔴 Low Trust</button>
+      <button class="filter-chip">✓ Approved</button>
+      <button class="filter-chip">⏳ Pending</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>BUYER STATUS</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th><th></th></tr></thead>
+        <tbody id="buyerTableBody"></tbody>
+      </table>
+    </div>
+    <div class="table-footer"><div class="table-footer-left">Showing 12 of 142 buyers</div><div class="table-footer-right"><button class="page-btn">←</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">→</button></div></div>
+  </div>
+  <div style="text-align:center;padding:48px 40px 80px;">
+    <button onclick="goToScene('monitor')" style="display:inline-flex;align-items:center;gap:10px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 14px rgba(91,91,214,0.3);">🔔 Set Up Real-Time Monitoring →</button>
+  </div>
+</div>
+
+<!-- MONITOR -->
+<div id="scene-monitor" class="scene" style="background:var(--surface);">
+  <nav class="demo-nav"><div class="nav-brand"><div class="nav-brand-mark">R</div>Reevol<span class="nav-pill">● Monitoring</span></div><div class="nav-actions"><button class="nav-btn" onclick="goToScene('table')">← Dashboard</button><div class="nav-user">AC</div></div></nav>
+  <div class="monitor-content">
+    <div class="scene-header" style="padding-bottom:32px;">
+      <div class="howto-eyebrow" style="color:var(--gold)">Continuous Monitoring</div>
+      <h2>Buyers Don't Stand Still.<br><strong style="color:var(--gold)">Neither Does Reevol.</strong></h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+      <div style="background:white;border:1px solid var(--line);border-radius:12px;padding:20px 22px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="width:34px;height:34px;border-radius:8px;background:rgba(220,38,38,0.1);display:flex;align-items:center;justify-content:center;font-size:17px;">🛡</div><div><div style="font-size:13.5px;font-weight:700;color:var(--ink);">Sanctions Screening</div><div style="font-size:11px;color:var(--muted);">OFAC · EU · UN · FATF</div></div><span style="margin-left:auto;font-size:10px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);padding:3px 8px;border-radius:5px;">Active</span></div><div style="display:flex;flex-direction:column;gap:8px;"><div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:8px;"><span>🔁</span><div><div style="font-size:12px;font-weight:600;color:var(--ink);">Re-checked weekly</div><div style="font-size:11px;color:var(--muted);">Every monitored buyer, every week</div></div></div><div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:8px;"><span>📦</span><div><div style="font-size:12px;font-weight:600;color:var(--ink);">Re-checked on every new order</div><div style="font-size:11px;color:var(--muted);">Before any new order is processed</div></div></div></div></div>
+      <div style="background:white;border:1px solid var(--line);border-radius:12px;padding:20px 22px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;"><div style="width:34px;height:34px;border-radius:8px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;font-size:17px;">📰</div><div><div style="font-size:13.5px;font-weight:700;color:var(--ink);">Press &amp; Social Monitoring</div><div style="font-size:11px;color:var(--muted);">Real-time · Automated</div></div><span style="margin-left:auto;font-size:10px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);padding:3px 8px;border-radius:5px;">Active</span></div><div style="display:flex;flex-direction:column;gap:8px;"><div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:8px;"><span>⚡</span><div><div style="font-size:12px;font-weight:600;color:var(--ink);">Real-time adverse media detection</div><div style="font-size:11px;color:var(--muted);">Fraud, violations, legal proceedings</div></div></div><div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border-radius:8px;"><span>📣</span><div><div style="font-size:12px;font-weight:600;color:var(--ink);">Social signals &amp; press mentions</div><div style="font-size:11px;color:var(--muted);">Negative sentiment flagged in minutes</div></div></div></div></div>
+    </div>
+    <div class="monitor-card">
+      <div class="monitor-card-head"><span class="live-dot" id="monitorLiveDot"></span><h4>Live Alert Feed</h4><span style="font-size:11px;color:var(--muted);">Monitoring-enabled buyers only</span></div>
+      <div class="alert-feed" id="alertFeed">
+        <div class="alert-item static-alert"><div class="alert-dot red"></div><div class="alert-meta"><div class="alert-title">Ironclad Fasteners Inc.</div><div class="alert-desc">OFAC SDN list match — sanctions hit on Director · Manual review required</div></div><span class="alert-badge badge-red">Critical</span></div>
+        <div class="alert-item static-alert"><div class="alert-dot amber"></div><div class="alert-meta"><div class="alert-title">Nexus Tile &amp; Stone</div><div class="alert-desc">Adverse media: regulatory violation reported in regional press</div></div><span class="alert-badge badge-amber">Warning</span></div>
+        <div class="alert-item static-alert"><div class="alert-dot blue"></div><div class="alert-meta"><div class="alert-title">GreenFields Materials</div><div class="alert-desc">Negative press mention detected — flagged for review, no sanctions match</div></div><span class="alert-badge badge-blue">Info</span></div>
+        <div class="alert-item static-alert"><div class="alert-dot green"></div><div class="alert-meta"><div class="alert-title">Harbor Build Supply Co.</div><div class="alert-desc">Weekly sanctions re-check complete — no flags found</div></div><span class="alert-badge badge-green">Clear</span></div>
+      </div>
+    </div>
+    <div style="text-align:center;padding:40px 0 60px;">
+      <button onclick="goToScene('closing')" style="display:inline-flex;align-items:center;gap:10px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;">✦ See What Reevol Can Do For You →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div id="scene-closing" class="scene">
+  <div class="closing-bg"></div>
+  <div class="closing-content">
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#facc15;margin-bottom:24px;">✦ Buyer Intelligence Module</div>
+    <h1 class="closing-title">Full Control.<br><strong>Zero Manual Work.</strong></h1>
+    <p class="closing-tagline">Your buyers, verified and monitored — automatically, continuously, and at scale.</p>
+    <div class="closing-pillars">
+      <div class="closing-pillar"><div class="closing-pillar-icon">🔗</div><h3>40+ Data Vendors</h3><p>D&amp;B, Experian, Companies House, OFAC, EU lists — queried automatically for every buyer.</p></div>
+      <div class="closing-pillar"><div class="closing-pillar-icon">⚡</div><h3>~80% Auto-Enriched</h3><p>Most buyer data is fulfilled without any input from your team or the buyer.</p></div>
+      <div class="closing-pillar"><div class="closing-pillar-icon">🛡️</div><h3>Continuous Monitoring</h3><p>Any risk signal triggers an instant alert — sanctions, credit changes, adverse media.</p></div>
+    </div>
+    <button style="background:white;color:#4f46e5;font-family:var(--font-ui);font-size:14px;font-weight:700;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 4px 28px rgba(0,0,0,0.25);" onclick="goToScene('splash')">Replay Demo</button>
+  </div>
+</div>
+
+<!-- JOURNEY BAR -->
+<div class="journey-bar" id="sharedJourneyBar">
+  <span class="journey-label">Demo:</span>
+  <div class="journey-steps">
+    <button class="journey-step" id="jstep-howto" onclick="goToScene('howto')">① Overview</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-config" onclick="goToScene('config')">② Trust Config</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-import" onclick="goToScene('import')">③ Import</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-assign" onclick="goToScene('assign')">④ Assign Levels</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-enrich" onclick="goToScene('enrich')">⑤ Enrichment</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-portal" onclick="goToScene('portal')">⑥ Buyer Portal</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-table" onclick="goToScene('table')">⑦ Dashboard</button>
+    <span class="journey-sep">›</span>
+    <button class="journey-step" id="jstep-monitor" onclick="goToScene('monitor')">⑧ Monitoring</button>
+  </div>
+  <button class="journey-next" id="journeyNextBtn">Next →</button>
+</div>
+
+<script>
+// ── BUYER PROFILE ────────────────────────────────────────────
+var tlColorMap = {
+  maximum: { color:'#16a34a', bg:'rgba(22,163,74,0.08)',  emoji:'🟢', label:'Maximum Trust' },
+  high:    { color:'#ea580c', bg:'rgba(234,88,12,0.08)',  emoji:'🟠', label:'High Trust'    },
+  moderate:{ color:'#d97706', bg:'rgba(217,119,6,0.08)',  emoji:'🟡', label:'Moderate Trust'},
+  low:     { color:'#dc2626', bg:'rgba(220,38,38,0.08)',  emoji:'🔴', label:'Low Trust'     }
+};
+
+function scoreToLevel(s) {
+  if (s >= 75) return 'maximum';
+  if (s >= 50) return 'high';
+  if (s >= 25) return 'moderate';
+  return 'low';
+}
+
+// ── BUYERS ───────────────────────────────────────────────────
+var buyerMeta = [
+  ['Jan 12, 2025','Mar 10, 2025','Li Wei'],
+  ['Feb 3, 2025', 'Mar 11, 2025','Zhang Min'],
+  ['Feb 18, 2025','Mar 12, 2025','Li Wei'],
+  ['Jan 28, 2025','Mar 9, 2025', 'Wang Fang'],
+  ['Mar 1, 2025', 'Mar 8, 2025', 'Zhang Min'],
+  ['Feb 10, 2025','Mar 7, 2025', 'Li Wei'],
+  ['Mar 13, 2025','Mar 13, 2025','Wang Fang'],
+  ['Jan 5, 2025', 'Mar 10, 2025','Zhang Min'],
+  ['Feb 22, 2025','Mar 5, 2025', 'Li Wei'],
+  ['Jan 19, 2025','Mar 11, 2025','Wang Fang'],
+  ['Mar 6, 2025', 'Mar 12, 2025','Zhang Min'],
+  ['Feb 14, 2025','Mar 14, 2025','Li Wei']
+];
+
+var buyers = [
+  { name:"Harbor Build Supply Co.", domain:"harborbuild.com",        color:"#f97316", initials:"HB", trustScore:83, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:null, limit:"$120,000", creditUsed:"$34,200", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
+  { name:"GreenFields Materials",   domain:"greenfields.io",         color:"#16a34a", initials:"GF", trustScore:92, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:7,    limit:"$150,000", creditUsed:"$91,000", creditDue:"$12,400", insured:true,  monitor:true,  portalEmail:null       },
+  { name:"Nexus Tile & Stone",      domain:"nexustile.com",          color:"#7c5cfc", initials:"NT", trustScore:38, assignedLevel:"high",    assessmentStatus:"in-progress",buyerStatus:"pending-assessment",terms:"Net-14", termsDueDays:null, limit:"$8,500",   creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:"required" },
+  { name:"Pacific Lumber Co.",      domain:"pacificlumber.net",      color:"#0891b2", initials:"PL", trustScore:61, assignedLevel:"high",    assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-30", termsDueDays:2,    limit:"$28,000",  creditUsed:"$0",      creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
+  { name:"Ironclad Fasteners Inc.", domain:"ironcladfasteners.com",  color:"#dc2626", initials:"IF", trustScore:12, assignedLevel:"low",     assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
+  { name:"SunRise HVAC Supply",     domain:"sunrisehvac.com",        color:"#d97706", initials:"SR", trustScore:71, assignedLevel:"high",    assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$42,000",  creditUsed:"$12,500", creditDue:null,      insured:true,  monitor:false, portalEmail:null       },
+  { name:"Metro Plumbing Dist.",    domain:"metroplumbing.net",      color:"#0f766e", initials:"MP", trustScore:0,  assignedLevel:"low",     assessmentStatus:"pending",    buyerStatus:"pending-assessment",terms:"—",      termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
+  { name:"Delta Roofing Group",     domain:"deltaroofing.com",       color:"#5b5bd6", initials:"DR", trustScore:79, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-60", termsDueDays:null, limit:"$95,000",  creditUsed:"$47,000", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
+  { name:"CoreSteel Wholesale",     domain:"coresteelwholesale.com", color:"#9f1239", initials:"CS", trustScore:8,  assignedLevel:"low",     assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:null       },
+  { name:"Skyline Glass Works",     domain:"skylineglass.com",       color:"#0369a1", initials:"SG", trustScore:54, assignedLevel:"high",    assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$22,000",  creditUsed:"$5,200",  creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
+  { name:"Rockwall Masonry Ltd.",   domain:"rockwallmasonry.com",    color:"#92400e", initials:"RM", trustScore:31, assignedLevel:"maximum", assessmentStatus:"in-progress",buyerStatus:"pending-assessment",terms:"Net-14", termsDueDays:null, limit:"$4,500",   creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
+  { name:"AllStar Electrical Dist.",domain:"allstarelectrical.us",   color:"#1e40af", initials:"AE", trustScore:76, assignedLevel:"maximum", assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-60", termsDueDays:0,    limit:"$80,000",  creditUsed:"$80,000", creditDue:"$80,000", insured:true,  monitor:true,  portalEmail:null       }
+];
+
+// ── RENDER TABLE ─────────────────────────────────────────────
+function renderBuyerTable() {
+  var tbody = document.getElementById('buyerTableBody');
+  var assessMap = {
+    'pending':     '<span style="background:rgba(217,119,6,0.08);color:#d97706;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;">⏳ Pending</span>',
+    'in-progress': '<span style="background:rgba(59,130,246,0.08);color:#3b82f6;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;">🔄 In Progress</span>',
+    'completed':   '<span style="background:rgba(22,163,74,0.08);color:#16a34a;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;">✓ Completed</span>'
+  };
+  var statusMap = {
+    'pending-assessment': '<span style="font-size:10.5px;color:var(--muted);padding:3px 8px;border:1px solid var(--line);border-radius:5px;">Pending Assessment</span>',
+    'pending-review':     '<span style="font-size:10.5px;font-weight:600;color:#d97706;background:rgba(217,119,6,0.08);padding:3px 8px;border-radius:5px;">⚠ Pending Review</span>',
+    'approved':           '<span style="font-size:10.5px;font-weight:700;color:#16a34a;background:rgba(22,163,74,0.08);padding:3px 8px;border-radius:5px;">✓ Approved</span>',
+    'rejected':           '<span style="font-size:10.5px;font-weight:700;color:#dc2626;background:rgba(220,38,38,0.08);padding:3px 8px;border-radius:5px;">✕ Rejected</span>'
+  };
+  var html = '';
+  for (var i = 0; i < buyers.length; i++) {
+    var b = buyers[i];
+    var actualLevel = (b.trustScore > 0) ? scoreToLevel(b.trustScore) : b.assignedLevel;
+    var tl = tlColorMap[actualLevel] || tlColorMap.low;
+    var warn = (i === 2 || i === 10)
+      ? '<div style="margin-top:3px;font-size:11px;color:#c0132a;font-weight:500;">⚠ Didn\'t meet target score</div>'
+      : '';
+    var tlCell = '<div><span style="display:inline-flex;align-items:center;gap:5px;background:' + tl.bg + ';color:' + tl.color + ';font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">' + tl.emoji + ' ' + tl.label + '</span>' + warn + '</div>';
+
+    var scoreCell = b.trustScore > 0
+      ? '<div style="display:flex;align-items:center;gap:7px;"><div style="width:48px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + b.trustScore + '%;background:' + tl.color + ';border-radius:2px;"></div></div><span style="font-size:12.5px;font-weight:700;color:' + tl.color + ';">' + b.trustScore + '</span><span style="font-size:10.5px;color:var(--muted);">/100</span></div>'
+      : '<span style="color:var(--muted-2);">—</span>';
+
+    var dueHtml = '';
+    if (b.termsDueDays !== null && b.terms !== '—' && b.terms !== 'Upfront') {
+      if (b.termsDueDays === 0) dueHtml = '<div style="margin-top:3px;font-size:10px;font-weight:700;color:#dc2626;background:rgba(220,38,38,0.08);padding:2px 6px;border-radius:4px;display:inline-block;">🔴 Due Today</div>';
+      else if (b.termsDueDays <= 7) dueHtml = '<div style="margin-top:3px;font-size:10px;font-weight:700;color:#d97706;background:rgba(217,119,6,0.08);padding:2px 6px;border-radius:4px;display:inline-block;">⚠ Due in ' + b.termsDueDays + 'd</div>';
+    }
+    var termsCell = (b.terms && b.terms !== '—')
+      ? '<div><span style="font-size:12.5px;font-weight:600;color:var(--ink);">' + b.terms + '</span><button onclick="editTerms(' + i + ')" style="display:block;font-size:10px;color:var(--violet);background:none;border:none;cursor:pointer;padding:0;font-family:inherit;">Edit</button>' + dueHtml + '</div>'
+      : '<span style="color:var(--muted-2);">—</span>';
+
+    var cdHtml = b.creditDue ? '<div style="margin-top:3px;font-size:10px;font-weight:700;color:#dc2626;background:rgba(220,38,38,0.08);padding:2px 6px;border-radius:4px;display:inline-block;">🔴 ' + b.creditDue + ' overdue</div>' : '';
+    var limitCell = (b.limit && b.limit !== '—')
+      ? '<div><div style="font-size:12.5px;font-weight:600;">' + b.limit + '</div>' + (b.creditUsed && b.creditUsed !== '—' ? '<div style="font-size:10.5px;color:var(--muted);">Used: ' + b.creditUsed + '</div>' : '') + cdHtml + '</div>'
+      : '<span style="color:var(--muted-2);">—</span>';
+
+    var insCell = b.insured
+      ? '<span style="font-size:10.5px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);padding:2px 8px;border-radius:5px;">✓ Active</span>'
+      : '<span style="font-size:10.5px;color:var(--muted);">—</span>';
+
+    var monCell = '<div onclick="toggleMonitor(' + i + ')" style="width:36px;height:20px;border-radius:10px;background:' + (b.monitor ? '#16a34a' : '#d1d5db') + ';cursor:pointer;position:relative;"><div style="width:16px;height:16px;border-radius:50%;background:white;position:absolute;top:2px;left:' + (b.monitor ? '18' : '2') + 'px;transition:left 0.2s;"></div></div>';
+
+    var portalCell = b.portalEmail === 'required'
+      ? '<button onclick="askBuyerInfo(' + i + ')" style="font-size:10.5px;font-weight:700;color:white;background:#d97706;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;">📋 Ask Buyer Info</button>'
+      : '<span style="font-size:10.5px;color:var(--muted);">—</span>';
+
+    var actHtml = (b.buyerStatus !== 'approved' && b.buyerStatus !== 'rejected')
+      ? '<button onclick="approveBuyer(' + i + ')" style="font-size:10px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:inherit;">Approve</button><button onclick="rejectBuyer(' + i + ')" style="font-size:10px;font-weight:600;color:#dc2626;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:inherit;">Reject</button>'
+      : '';
+
+    var rh = (i === 2 || i === 10) ? 'background:rgba(220,38,38,0.02);' : (b.portalEmail === 'required' ? 'background:rgba(217,119,6,0.03);' : '');
+
+    html += '<tr style="' + rh + 'cursor:pointer;" onclick="openBuyerProfile(' + i + ')">'
+      + '<td><div class="buyer-cell"><div class="buyer-avatar" style="background:' + b.color + '">' + b.initials + '</div><div><div class="buyer-name">' + b.name + '</div><div class="buyer-domain">' + b.domain + '</div></div></div></td>'
+      + '<td>' + tlCell + '</td>'
+      + '<td>' + scoreCell + '</td>'
+      + '<td>' + (assessMap[b.assessmentStatus] || '—') + '</td>'
+      + '<td>' + (statusMap[b.buyerStatus] || '—') + '</td>'
+      + '<td>' + termsCell + '</td>'
+      + '<td>' + limitCell + '</td>'
+      + '<td>' + insCell + '</td>'
+      + '<td>' + monCell + '</td>'
+      + '<td>' + portalCell + '</td>'
+      + '<td><div style="font-size:11px;color:var(--muted);white-space:nowrap;">' + buyerMeta[i][0] + '</div></td>'
+      + '<td><div style="font-size:11px;color:var(--muted);white-space:nowrap;">' + buyerMeta[i][1] + '</div></td>'
+      + '<td><div style="font-size:11px;color:var(--muted);white-space:nowrap;">' + buyerMeta[i][2] + '</div></td>'
+      + '<td><div style="display:flex;flex-direction:column;gap:4px;">' + actHtml + '</div></td>'
+      + '</tr>';
+  }
+  tbody.innerHTML = html;
+}
+
+function toggleMonitor(i)      { event.stopPropagation(); buyers[i].monitor = !buyers[i].monitor; renderBuyerTable(); }
+function approveBuyer(i)       { event.stopPropagation(); buyers[i].buyerStatus = 'approved'; renderBuyerTable(); }
+function rejectBuyer(i)        { event.stopPropagation(); buyers[i].buyerStatus = 'rejected'; renderBuyerTable(); }
+function approvePortalEmail(i) { event.stopPropagation(); buyers[i].portalEmail = 'sent'; renderBuyerTable(); }
+function editTerms(i)          { event.stopPropagation(); var v = prompt('Edit Net Terms for ' + buyers[i].name + ':', buyers[i].terms); if (v !== null) { buyers[i].terms = v; renderBuyerTable(); } }
+
+// ── ANIMATED COUNTERS ────────────────────────────────────────
+function animateNumbers() {
+  var els = document.querySelectorAll('.anim-num');
+  for (var i = 0; i < els.length; i++) {
+    (function(el) {
+      var target = parseInt(el.getAttribute('data-target'));
+      var start = performance.now();
+      function update(now) {
+        var p = Math.min((now - start) / 1200, 1);
+        var e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(e * target);
+        if (p < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    })(els[i]);
+  }
+}
+
+// ── REQUIREMENTS ─────────────────────────────────────────────
+var PILLARS = [
+  { name:'Business Identity & Legitimacy',          icon:'🏢', maxPts:20, weight:'20%', color:'#7c5cfc', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)' },
+  { name:'Financial Health',                         icon:'💰', maxPts:30, weight:'30%', color:'#c9a227', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)' },
+  { name:'Payment Behaviour & Credit History',       icon:'📈', maxPts:25, weight:'25%', color:'#10b981', gradient:'linear-gradient(135deg,#10b981,#047857)' },
+  { name:'Business Stability & Operational Signals', icon:'📡', maxPts:15, weight:'15%', color:'#3b82f6', gradient:'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
+  { name:'Transaction Context & Order Behaviour',    icon:'📦', maxPts:10, weight:'10%', color:'#f97316', gradient:'linear-gradient(135deg,#f97316,#c2410c)' }
+];
+
+var requirementSections = [
+  { name:'Business Identity & Legitimacy', icon:'🏢', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)',
+    items:[{name:'Business Registration Number',checked:true,w:18,noGo:true},{name:'Years in Operation',checked:true,w:14,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:14,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:10,noGo:false},{name:'Director / Owner KYC (ID + Selfie)',checked:true,w:14,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:12,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:10,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
+  { name:'Financial Health', icon:'💰', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)',
+    items:[{name:'Latest Filed Accounts / Financial Statements',checked:true,w:24,noGo:true},{name:'Revenue Trend (Growing / Stable / Declining)',checked:true,w:17,noGo:false},{name:'Profit Margin / Gross Margin',checked:true,w:13,noGo:false},{name:'Bank Statements (3–6 months)',checked:true,w:20,noGo:false},{name:'Outstanding Debt or Liabilities',checked:true,w:13,noGo:false},{name:'Evidence of Consistent Cash Flow',checked:true,w:13,noGo:false}]},
+  { name:'Payment Behaviour & Credit History', icon:'📈', gradient:'linear-gradient(135deg,#10b981,#047857)',
+    items:[{name:'Credit Bureau Score (CreditSafe / Experian / D&B)',checked:true,w:28,noGo:true},{name:'County Court Judgements (CCJs) / Disputes',checked:true,w:20,noGo:false},{name:'Trade References from Suppliers',checked:true,w:20,noGo:false},{name:'Payment History on Reevol Platform',checked:true,w:20,noGo:false},{name:'Days Beyond Terms (DBT) Average',checked:true,w:12,noGo:false}]},
+  { name:'Business Stability & Operational Signals', icon:'📡', gradient:'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+    items:[{name:'Number of Employees',checked:true,w:20,noGo:false},{name:'Industry Sector Risk Classification',checked:true,w:20,noGo:false},{name:'Existing Supplier / Customer Relationships',checked:true,w:20,noGo:false},{name:'Social Proof (Reviews, Partnerships, Press)',checked:true,w:20,noGo:false},{name:'Ownership Changes in Last 12 Months',checked:true,w:20,noGo:false}]},
+  { name:'Transaction Context & Order Behaviour', icon:'📦', gradient:'linear-gradient(135deg,#f97316,#c2410c)',
+    items:[{name:'Order Size Relative to Buyer Revenue',checked:true,w:25,noGo:false},{name:'Order Size Relative to Prior Orders',checked:true,w:17,noGo:false},{name:'First vs. Repeat Order on Platform',checked:true,w:25,noGo:false},{name:'Order Frequency & Consistency',checked:true,w:17,noGo:false},{name:'Goods / Services Risk Category',checked:true,w:16,noGo:false}]}
+];
+
+function getPillarScore(si) {
+  var s = requirementSections[si];
+  var tw = 0; var cw = 0;
+  for (var i = 0; i < s.items.length; i++) { tw += s.items[i].w; if (s.items[i].checked) cw += s.items[i].w; }
+  return tw > 0 ? (cw / tw) * PILLARS[si].maxPts : 0;
+}
+function calcTrustScore() {
+  var total = 0;
+  for (var i = 0; i < PILLARS.length; i++) total += getPillarScore(i);
+  return Math.round(total);
+}
+function getTLBand(score) {
+  if (score >= 75) return { color:'#16a34a', emoji:'🟢', label:'Maximum Trust' };
+  if (score >= 50) return { color:'#ea580c', emoji:'🟠', label:'High Trust' };
+  if (score >= 25) return { color:'#d97706', emoji:'🟡', label:'Moderate Trust' };
+  return { color:'#dc2626', emoji:'🔴', label:'Low Trust' };
+}
+
+function renderReqSections() {
+  var container = document.getElementById('reqSectionsContainer');
+  if (!container) return;
+  var html = '';
+  for (var si = 0; si < requirementSections.length; si++) {
+    var section = requirementSections[si];
+    var checkedCount = 0;
+    for (var ii = 0; ii < section.items.length; ii++) if (section.items[ii].checked) checkedCount++;
+    var isOpen = section._open || false;
+    var ps = Math.round(getPillarScore(si));
+    var pmax = PILLARS[si].maxPts;
+    var pct = Math.round((ps / pmax) * 100);
+    var itemsHtml = '';
+    for (var ii = 0; ii < section.items.length; ii++) {
+      var item = section.items[ii];
+      itemsHtml += '<div class="req-item-row ' + (item.checked ? 'checked' : '') + '" onclick="toggleReqItem(' + si + ',' + ii + ')">'
+        + '<div class="req-item-cb">' + (item.checked ? '✓' : '') + '</div>'
+        + '<div class="req-item-label">' + item.name + (item.noGo ? '<span onclick="toggleNoGo(' + si + ',' + ii + ',event)" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#dc2626;color:white;font-size:7px;font-weight:800;margin-left:5px;vertical-align:middle;cursor:pointer;">!</span>' : '') + '</div>'
+        + '<div style="font-size:10px;color:var(--muted);flex-shrink:0;">' + item.w + '%</div>'
+        + '</div>';
+    }
+    html += '<div class="req-section-row ' + (isOpen ? 'open' : '') + '">'
+      + '<div class="req-section-row-header" onclick="toggleReqSection(' + si + ')">'
+      + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + '</div><div class="req-sect-count">' + checkedCount + '/' + section.items.length + ' selected</div></div></div>'
+      + '<div style="display:flex;align-items:center;gap:10px;"><div style="text-align:right;"><div style="font-size:13px;font-weight:700;color:var(--ink);">' + ps + '<span style="font-size:11px;font-weight:400;color:var(--muted);">/' + pmax + '</span></div><div style="width:70px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:2px;"><div style="height:100%;width:' + pct + '%;background:' + PILLARS[si].color + ';border-radius:2px;transition:width 0.4s;"></div></div></div>'
+      + '<div class="req-toggle ' + (checkedCount > 0 ? '' : 'off') + '" style="background:' + (checkedCount > 0 ? '#5b5bd6' : 'var(--line)') + ';" onclick="event.stopPropagation();toggleReqSectionAll(' + si + ')"></div>'
+      + '<span class="expand-caret">▼</span></div>'
+      + '</div>'
+      + '<div class="req-items-panel ' + (isOpen ? 'open' : '') + '">' + itemsHtml + '</div>'
+      + '</div>';
+  }
+  container.innerHTML = html;
+  updateReqSidebar();
+}
+
+function toggleReqSection(si) { requirementSections[si]._open = !requirementSections[si]._open; renderReqSections(); }
+function toggleReqItem(si, ii) { requirementSections[si].items[ii].checked = !requirementSections[si].items[ii].checked; renderReqSections(); }
+function toggleNoGo(si, ii, e) { e.stopPropagation(); requirementSections[si].items[ii].noGo = !requirementSections[si].items[ii].noGo; renderReqSections(); }
+function toggleReqSectionAll(si) { var s = requirementSections[si]; var all = true; for (var i=0;i<s.items.length;i++) if (!s.items[i].checked) { all=false; break; } for (var i=0;i<s.items.length;i++) s.items[i].checked = !all; renderReqSections(); }
+
+function updateReqSidebar() {
+  var sc = calcTrustScore();
+  var band = getTLBand(sc);
+  var total = 0;
+  for (var i=0;i<requirementSections.length;i++) for (var j=0;j<requirementSections[i].items.length;j++) if (requirementSections[i].items[j].checked) total++;
+  var e;
+  e = document.getElementById('sidebarScore'); if(e){e.textContent=sc;e.style.color=band.color;}
+  e = document.getElementById('sidebarScoreBar'); if(e){e.style.width=sc+'%';e.style.background=band.color;}
+  e = document.getElementById('sidebarScoreLabel'); if(e){e.textContent=band.emoji+' '+band.label;e.style.color=band.color;}
+  e = document.getElementById('sidebarTotal'); if(e) e.textContent=total;
+  e = document.getElementById('reqCountLabel'); if(e) e.textContent=total+' requirements across 5 pillars';
+  var bd = document.getElementById('sidebarPillarBreakdown');
+  if (bd) {
+    var bhtml = '';
+    for (var si=0;si<requirementSections.length;si++) {
+      var ps=Math.round(getPillarScore(si)), pmax=PILLARS[si].maxPts, pct=Math.round((ps/pmax)*100);
+      bhtml += '<div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:10.5px;color:rgba(255,255,255,0.6);">'+requirementSections[si].icon+' '+['Identity','Financial','Payment','Business','Transaction'][si]+'</span><span style="font-size:10.5px;font-weight:700;color:white;">'+ps+'<span style="color:rgba(255,255,255,0.35);font-weight:400;">/'+pmax+'</span></span></div><div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+PILLARS[si].color+';border-radius:2px;transition:width 0.4s;"></div></div></div>';
+    }
+    bd.innerHTML = bhtml;
+  }
+}
+
+// ── TRUST LEVEL TEMPLATES ────────────────────────────────────
+var tlTemplates = [
+  { name:'Low Trust Profile', emoji:'🔴', color:'#dc2626',
+    unchecked:['Director / Owner KYC (ID + Selfie)','Director & UBO Sanctions Match','Bankruptcy / Liquidation Proceedings','Fraud Allegations & Regulatory Violations','Latest Filed Accounts / Financial Statements','Revenue Trend (Growing / Stable / Declining)','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Evidence of Consistent Cash Flow','Credit Bureau Score (CreditSafe / Experian / D&B)','County Court Judgements (CCJs) / Disputes','Trade References from Suppliers','Payment History on Reevol Platform','Days Beyond Terms (DBT) Average','Number of Employees','Industry Sector Risk Classification','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months','Order Size Relative to Prior Orders','Order Frequency & Consistency','Goods / Services Risk Category','Order Size Relative to Buyer Revenue','First vs. Repeat Order on Platform']},
+  { name:'Moderate Trust Profile', emoji:'🟡', color:'#d97706',
+    unchecked:['Fraud Allegations & Regulatory Violations','Latest Filed Accounts / Financial Statements','Revenue Trend (Growing / Stable / Declining)','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Evidence of Consistent Cash Flow','Trade References from Suppliers','Payment History on Reevol Platform','Days Beyond Terms (DBT) Average','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months']},
+  { name:'High Trust Profile', emoji:'🟠', color:'#ea580c',
+    unchecked:['Fraud Allegations & Regulatory Violations','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Evidence of Consistent Cash Flow','Payment History on Reevol Platform','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months']},
+  { name:'Maximum Trust Profile', emoji:'🟢', color:'#16a34a', unchecked:[]}
+];
+
+var activeTplIndex = 0;
+var confirmedProfiles = {};
+
+function selectTemplate(idx) {
+  activeTplIndex = idx;
+  var tpl = tlTemplates[idx];
+  for (var s=0;s<requirementSections.length;s++) for (var i=0;i<requirementSections[s].items.length;i++) requirementSections[s].items[i].checked = true;
+  for (var u=0;u<tpl.unchecked.length;u++) {
+    for (var s=0;s<requirementSections.length;s++) {
+      for (var i=0;i<requirementSections[s].items.length;i++) {
+        if (requirementSections[s].items[i].name === tpl.unchecked[u]) requirementSections[s].items[i].checked = false;
+      }
+    }
+  }
+  renderReqSections();
+  var cfgColors = ['#dc2626','#d97706','#ea580c','#16a34a'];
+  var names = ['Low Trust','Moderate Trust','High Trust','Maximum Trust'];
+  for (var i=0;i<4;i++) {
+    var el = document.getElementById('cfg-step-'+i); if(!el) continue;
+    var nd = el.querySelector('div:nth-child(2)'), sub = el.querySelector('div:last-child');
+    if (i === idx) { el.style.opacity='1'; el.style.border='2px solid '+cfgColors[i]; el.style.background='rgba(0,0,0,0.02)'; if(nd){nd.textContent=(confirmedProfiles[i]?'✓ ':'')+names[i];nd.style.color=cfgColors[i];} if(sub)sub.style.color=cfgColors[i]; }
+    else if (confirmedProfiles[i]) { el.style.opacity='1'; el.style.border='2px solid transparent'; el.style.background='rgba(22,163,74,0.05)'; if(nd){nd.textContent='✓ '+names[i];nd.style.color='#16a34a';} if(sub)sub.style.color='#16a34a'; }
+    else { el.style.opacity='0.45'; el.style.border='2px solid var(--line)'; el.style.background='white'; if(nd){nd.textContent=names[i];nd.style.color='var(--ink)';} if(sub)sub.style.color='var(--muted)'; }
+  }
+  var recs = [
+    { color:'#dc2626', terms:0,  validationLevel:'KYB',               cost:'Basic · Lowest cost per buyer' },
+    { color:'#d97706', terms:14, validationLevel:'Verification + KYC', cost:'Standard · Moderate cost per buyer' },
+    { color:'#ea580c', terms:30, validationLevel:'+ Credit Insights',  cost:'Enhanced · Higher cost per buyer' },
+    { color:'#16a34a', terms:90, validationLevel:'+ Full DD',           cost:'Premium · Comprehensive cost per buyer' }
+  ];
+  var rec = recs[idx];
+  if (!window.cfgPS) window.cfgPS = {};
+  if (!window.cfgPS[idx]) window.cfgPS[idx] = { terms: rec.terms };
+  var saved = window.cfgPS[idx];
+  var ri = document.getElementById('cfg-rec-inner');
+  if (ri) ri.innerHTML = '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0;"><div style="width:9px;height:9px;border-radius:50%;background:'+rec.color+';"></div><div style="font-size:11px;font-weight:700;color:'+rec.color+';text-transform:uppercase;letter-spacing:0.06em;">Reevol Recommendation</div></div>'
+    +'<div style="display:flex;align-items:flex-end;gap:18px;flex:1;flex-wrap:wrap;">'
+    +'<div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms</div><div style="display:flex;align-items:center;border:1.5px solid '+rec.color+';border-radius:7px;overflow:hidden;background:white;"><input type="number" min="0" value="'+saved.terms+'" style="width:56px;padding:6px 8px;border:none;font-size:13px;font-weight:700;color:'+rec.color+';font-family:inherit;outline:none;background:white;text-align:center;"><div style="padding:6px 10px;background:#f8f8f8;border-left:1px solid '+rec.color+';font-size:12px;font-weight:600;color:var(--muted);">days</div></div><div style="font-size:9.5px;color:var(--muted);">0 = Instant only</div></div>'
+    +'<div style="display:flex;flex-direction:column;gap:4px;"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Validation Level</div><div style="padding:7px 0;"><span style="font-size:13px;font-weight:700;color:var(--ink);">'+rec.validationLevel+'</span></div><div style="font-size:9.5px;color:var(--muted);">Defined by Trust Level</div></div>'
+    +'</div><div style="align-self:flex-start;font-size:11px;color:var(--muted);white-space:nowrap;">'+rec.cost+'</div>';
+  var nb = document.getElementById('cfg-next-btn');
+  if (nb) nb.innerHTML = idx < 3
+    ? '<button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Template →</button>'
+    : '<button onclick="confirmedProfiles[3]=true;goToScene(\'import\')" style="background:#16a34a;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">All Profiles Ready →</button>';
+  var tn = document.getElementById('tplTitleLabel'); if(tn) tn.textContent = tpl.name;
+  var sb = document.getElementById('sidebarTplName'); if(sb) sb.textContent = tpl.name;
+}
+function advanceCfgTemplate() { confirmedProfiles[activeTplIndex] = true; if (activeTplIndex < 3) selectTemplate(activeTplIndex + 1); }
+
+// ── IMPORT ───────────────────────────────────────────────────
+var importSamples = {
+  erp: [{initials:'HB',color:'#f97316',name:'Harbor Build Supply Co.',domain:'harborbuild.com'},{initials:'GF',color:'#16a34a',name:'GreenFields Materials',domain:'greenfields.io'},{initials:'PL',color:'#0891b2',name:'Pacific Lumber Co.',domain:'pacificlumber.net'},{initials:'SR',color:'#d97706',name:'SunRise HVAC Supply',domain:'sunrisehvac.com'}],
+  csv: [{initials:'NT',color:'#7c5cfc',name:'Nexus Tile & Stone',domain:'nexustile.com'},{initials:'DR',color:'#5b5bd6',name:'Delta Roofing Group',domain:'deltaroofing.com'},{initials:'SG',color:'#0369a1',name:'Skyline Glass Works',domain:'skylineglass.com'}],
+  manual: []
+};
+var manualBuyers = [];
+
+function selectImportMode(mode) {
+  var ms = ['targeted','bulk'];
+  for (var i=0;i<ms.length;i++) { var el=document.getElementById('import-mode-'+ms[i]); if(!el) continue; el.style.borderColor=ms[i]===mode?'var(--gold)':'var(--line)'; el.style.background=ms[i]===mode?'rgba(201,162,39,0.04)':'white'; el.style.boxShadow=ms[i]===mode?'0 0 0 3px rgba(201,162,39,0.12)':'none'; }
+  document.getElementById('import-method-block').style.display='block';
+  var r=document.getElementById('import-result'); if(r){r.style.display='none';r.style.opacity='0';}
+  var mr=document.getElementById('manual-entry-row'); if(mr) mr.style.display='none';
+}
+function askBuyerInfo(i) {
+  event.stopPropagation();
+  var b = buyers[i];
+  document.getElementById('askBuyerModal').style.display = 'flex';
+  document.getElementById('askBuyerModal').setAttribute('data-idx', i);
+  document.getElementById('askBuyerModalBuyerName').textContent = b.name;
+}
+function askBuyerConfirm() {
+  var i = parseInt(document.getElementById('askBuyerModal').getAttribute('data-idx'));
+  document.getElementById('askBuyerModal').style.display = 'none';
+  buyers[i].portalEmail = 'sent';
+  renderBuyerTable();
+}
+function askBuyerCancel() {
+  document.getElementById('askBuyerModal').style.display = 'none';
+}
+
+function selectImportMethod(method) {
+  var cards=['erp','csv','manual'];
+  for(var i=0;i<cards.length;i++){var c=document.getElementById('import-card-'+cards[i]);if(!c)continue;c.style.borderColor='var(--line)';c.style.boxShadow='none';c.style.background='white';}
+  var card=document.getElementById('import-card-'+method); if(card){card.style.borderColor='var(--gold)';card.style.boxShadow='0 0 0 3px rgba(201,162,39,0.12)';card.style.background='rgba(201,162,39,0.02)';}
+
+  var mr=document.getElementById('manual-entry-row'); if(mr) mr.style.display='none';
+  var result=document.getElementById('import-result'); if(result){result.style.display='none';result.style.opacity='0';}
+  var csvUpload=document.getElementById('csv-upload-zone'); if(csvUpload) csvUpload.style.display='none';
+
+  if (method === 'csv') {
+    document.getElementById('csv-upload-zone').style.display = 'block';
+    return;
+  }
+
+  if (method === 'manual') {
+    if(mr) mr.style.display='flex';
+    var list = manualBuyers;
+    var c=document.getElementById('import-buyer-rows');
+    if(!list.length){c.innerHTML='<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px;">No buyers added yet.</div>';}
+    else{var h='';for(var i=0;i<list.length;i++){var b=list[i];h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">🇺🇸 United States</div><span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Imported</span></div>';}c.innerHTML=h;}
+    var badge=document.getElementById('import-method-badge'); if(badge) badge.textContent='Manual Entry';
+    var sub=document.getElementById('import-result-subtitle'); if(sub) sub.textContent=list.length+' buyer'+(list.length!==1?'s':'')+' ready';
+    result.style.display='block'; requestAnimationFrame(function(){requestAnimationFrame(function(){result.style.opacity='1';});});
+    return;
+  }
+
+  var list = importSamples[method] || [];
+  var c=document.getElementById('import-buyer-rows');
+  if(!list.length){c.innerHTML='<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px;">No buyers added yet.</div>';}
+  else{var h='';for(var i=0;i<list.length;i++){var b=list[i];h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">🇺🇸 United States</div><span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Imported</span></div>';}c.innerHTML=h;}
+  var badge=document.getElementById('import-method-badge'); if(badge) badge.textContent='ERP Sync';
+  var sub=document.getElementById('import-result-subtitle'); if(sub) sub.textContent=list.length+' buyer'+(list.length!==1?'s':'')+' ready';
+  result.style.display='block'; requestAnimationFrame(function(){requestAnimationFrame(function(){result.style.opacity='1';});});
+}
+
+function csvSimulateUpload() {
+  var btn = document.getElementById('csv-upload-btn');
+  var progress = document.getElementById('csv-upload-progress');
+  var fileInput = document.getElementById('csv-file-input');
+  var fileName = (fileInput && fileInput.files && fileInput.files[0]) ? fileInput.files[0].name : 'buyers_list.csv';
+
+  btn.textContent = 'Processing…';
+  btn.disabled = true;
+  progress.style.display = 'block';
+  document.getElementById('csv-upload-zone').style.opacity = '0.6';
+
+  var fill = document.getElementById('csv-progress-fill');
+  var pct = 0;
+  var interval = setInterval(function() {
+    pct += Math.random() * 18 + 6;
+    if (pct >= 100) { pct = 100; clearInterval(interval); }
+    fill.style.width = pct + '%';
+    if (pct >= 100) {
+      setTimeout(function() {
+        document.getElementById('csv-upload-zone').style.display = 'none';
+        var list = importSamples['csv'];
+        var c = document.getElementById('import-buyer-rows');
+        var h = '';
+        for(var i=0;i<list.length;i++){var b=list[i];h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">🇺🇸 United States</div><span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Imported</span></div>';}
+        c.innerHTML = h;
+        var badge = document.getElementById('import-method-badge'); if(badge) badge.textContent = 'CSV Upload';
+        var sub = document.getElementById('import-result-subtitle'); if(sub) sub.textContent = list.length + ' buyers ready';
+        var result = document.getElementById('import-result');
+        result.style.display = 'block';
+        requestAnimationFrame(function(){ requestAnimationFrame(function(){ result.style.opacity = '1'; }); });
+        btn.textContent = 'Upload & Import';
+        btn.disabled = false;
+        progress.style.display = 'none';
+        fill.style.width = '0%';
+        document.getElementById('csv-upload-zone').style.opacity = '1';
+        var label = document.getElementById('csv-drop-label'); if(label) label.textContent = 'Drag & drop your CSV or Excel file here';
+        var sublabel = document.getElementById('csv-drop-sublabel'); if(sublabel) sublabel.textContent = '.CSV, .XLS, .XLSX · Max 10MB';
+      }, 300);
+    }
+  }, 80);
+}
+
+function csvHandleDrop(e) {
+  e.preventDefault();
+  var zone = document.getElementById('csv-drop-area');
+  zone.style.borderColor = '#16a34a';
+  zone.style.background = 'rgba(22,163,74,0.03)';
+  var file = e.dataTransfer.files[0];
+  if (file) {
+    document.getElementById('csv-drop-label').textContent = '📄 ' + file.name;
+    document.getElementById('csv-drop-sublabel').textContent = (file.size / 1024).toFixed(1) + ' KB — ready to import';
+  }
+  setTimeout(function(){ zone.style.borderColor=''; zone.style.background=''; }, 600);
+}
+function csvHandleDragOver(e) { e.preventDefault(); document.getElementById('csv-drop-area').style.borderColor='#5b5bd6'; }
+function csvHandleDragLeave()  { document.getElementById('csv-drop-area').style.borderColor=''; }
+function csvHandleFileChange(input) {
+  if (input.files && input.files[0]) {
+    document.getElementById('csv-drop-label').textContent = '📄 ' + input.files[0].name;
+    document.getElementById('csv-drop-sublabel').textContent = (input.files[0].size / 1024).toFixed(1) + ' KB — ready to import';
+  }
+}
+function addManualBuyer() {
+  var inp=document.getElementById('manual-buyer-input'), val=inp.value.trim(); if(!val) return;
+  var colors=['#f97316','#16a34a','#7c5cfc','#0891b2','#d97706','#5b5bd6'];
+  var ini=''; var parts=val.split(' '); for(var i=0;i<parts.length&&ini.length<2;i++) if(parts[i]) ini+=parts[i][0].toUpperCase();
+  manualBuyers.push({initials:ini,color:colors[manualBuyers.length%colors.length],name:val,domain:val.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,12)+'.com'});
+  inp.value=''; var cc=document.getElementById('manual-buyer-country'); if(cc) cc.value='';
+  selectImportMethod('manual');
+}
+
+// ── ASSIGN ───────────────────────────────────────────────────
+var tlAssignOptions = [
+  {value:'low',     label:'🔴 Low Trust',     color:'#dc2626',termsDays:0},
+  {value:'moderate',label:'🟡 Moderate Trust', color:'#d97706',termsDays:14},
+  {value:'high',    label:'🟠 High Trust',     color:'#ea580c',termsDays:30},
+  {value:'maximum', label:'🟢 Maximum Trust',  color:'#16a34a',termsDays:90}
+];
+var assignBuyers = [
+  {initials:'HB',color:'#f97316',name:'Harbor Build Supply Co.',domain:'harborbuild.com',      tl:'maximum',terms:'90'},
+  {initials:'GF',color:'#16a34a',name:'GreenFields Materials',  domain:'greenfields.io',        tl:'maximum',terms:'90'},
+  {initials:'NT',color:'#7c5cfc',name:'Nexus Tile & Stone',     domain:'nexustile.com',         tl:'moderate',terms:'14'},
+  {initials:'PL',color:'#0891b2',name:'Pacific Lumber Co.',     domain:'pacificlumber.net',     tl:'high',   terms:'30'},
+  {initials:'IF',color:'#dc2626',name:'Ironclad Fasteners Inc.',domain:'ironcladfasteners.com', tl:'low',    terms:'0'},
+  {initials:'SR',color:'#d97706',name:'SunRise HVAC Supply',    domain:'sunrisehvac.com',       tl:'high',   terms:'30'},
+  {initials:'MP',color:'#0f766e',name:'Metro Plumbing Dist.',   domain:'metroplumbing.net',     tl:'low',    terms:'0'}
+];
+function renderAssignRows() {
+  var c=document.getElementById('assign-buyer-rows'); if(!c) return;
+  var h='';
+  for(var idx=0;idx<assignBuyers.length;idx++){
+    var b=assignBuyers[idx], opt=null;
+    for(var j=0;j<tlAssignOptions.length;j++) if(tlAssignOptions[j].value===b.tl){opt=tlAssignOptions[j];break;}
+    if(!opt) opt=tlAssignOptions[0];
+    h+='<div style="display:grid;grid-template-columns:2fr 1.4fr 1fr 80px;gap:12px;align-items:center;padding:12px 22px;border-bottom:1px solid var(--line);">'
+      +'<div style="display:flex;align-items:center;gap:10px;"><div style="width:32px;height:32px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div>'
+      +'<select onchange="onAssignTlChange('+idx+',this.value)" style="padding:6px 10px;border:1.5px solid '+opt.color+';border-radius:7px;font-size:12px;font-weight:600;color:'+opt.color+';background:white;font-family:inherit;cursor:pointer;outline:none;" id="assign-tl-'+idx+'">'+tlAssignOptions.map(function(o){return'<option value="'+o.value+'"'+(o.value===b.tl?' selected':'')+'>'+o.label+'</option>';}).join('')+'</select>'
+      +'<input type="text" id="assign-terms-'+idx+'" value="'+(b.tl==='low'?'—':b.terms+' days')+'" style="padding:6px 10px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;font-family:inherit;outline:none;width:100%;background:'+(b.tl==='low'?'var(--surface)':'white')+'" '+(b.tl==='low'?'disabled':'')+'>'
+      +'<span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:3px 7px;border-radius:5px;">⏳ Pending</span>'
+      +'</div>';
+  }
+  c.innerHTML=h;
+}
+function onAssignTlChange(idx,val) {
+  var opt=null; for(var j=0;j<tlAssignOptions.length;j++) if(tlAssignOptions[j].value===val){opt=tlAssignOptions[j];break;} if(!opt) opt=tlAssignOptions[0];
+  assignBuyers[idx].tl=val;
+  var sel=document.getElementById('assign-tl-'+idx); if(sel){sel.style.borderColor=opt.color;sel.style.color=opt.color;}
+  var te=document.getElementById('assign-terms-'+idx); if(te){te.value=val==='low'?'—':opt.termsDays+' days';te.disabled=val==='low';te.style.background=val==='low'?'var(--surface)':'white';}
+}
+function startAssessment() {
+  var btn=document.querySelector('[onclick="startAssessment()"]');
+  if(btn){btn.textContent='⚡ Processing...';btn.style.background='#16a34a';btn.disabled=true;}
+  setTimeout(function(){goToScene('enrich');},1200);
+}
+
+// ── ENRICHMENT ────────────────────────────────────────────────
+var enrichPillars = [
+  {
+    icon:'🏢', name:'Business Identity & Legitimacy', color:'#7c5cfc',
+    requirements:[
+      { name:'Business Registration Number',      result:'found',  source:'Reevol Internal' },
+      { name:'Registered Business Address',        result:'found',  source:'Dun & Bradstreet' },
+      { name:'Years in Operation',                 result:'found',  source:'Dun & Bradstreet' },
+      { name:'Active Website / Digital Presence',  result:'found',  source:'Reevol Internal' },
+      { name:'Entity Sanctions Match',             result:'found',  source:'Allianz Trade' },
+      { name:'Director / Owner KYC',               result:'portal', source:null },
+      { name:'Business Registration Certificate',  result:'portal', source:null },
+    ]
+  },
+  {
+    icon:'💰', name:'Financial Health', color:'#c9a227',
+    requirements:[
+      { name:'Outstanding Debt or Liabilities',    result:'found',  source:'CreditSafe' },
+      { name:'Revenue Trend',                      result:'found',  source:'Dun & Bradstreet' },
+      { name:'Bank Statements (3–6 months)',        result:'portal', source:null },
+    ]
+  },
+  {
+    icon:'📈', name:'Payment Behaviour & Credit History', color:'#10b981',
+    requirements:[
+      { name:'Credit Bureau Score',                result:'found',  source:'CreditSafe' },
+      { name:'Days Beyond Terms (DBT)',             result:'found',  source:'Reevol Internal' },
+      { name:'County Court Judgements (CCJs)',      result:'found',  source:'CreditSafe' },
+    ]
+  },
+  {
+    icon:'📡', name:'Business Stability & Operational Signals', color:'#3b82f6',
+    requirements:[
+      { name:'Industry Sector Risk Classification',result:'found',  source:'Reevol Internal' },
+      { name:'Number of Employees',                result:'found',  source:'Dun & Bradstreet' },
+    ]
+  }
+];
+
+var allVendors = [
+  'Reevol Internal','Dun & Bradstreet','CreditSafe','Allianz Trade',
+  'Experian','Moody\'s Analytics','Bureau van Dijk','LexisNexis',
+  'OFAC Sanctions','EU Sanctions List','Companies House','OpenCorporates',
+  'Creditsafe Global','Coface','Atradius','Tinubu Square',
+  'Euler Hermes','CRIF','Equifax Commercial','World-Check'
+];
+
+function renderEnrichReqs() {
+  var container = document.getElementById('enrichReqPillars');
+  if (!container) return;
+  var html = '';
+  for (var pi = 0; pi < enrichPillars.length; pi++) {
+    var pillar = enrichPillars[pi];
+    html += '<div style="background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px;">'
+      + '<div style="padding:11px 20px;background:var(--surface-2);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;">'
+      + '<div style="width:28px;height:28px;border-radius:8px;background:' + pillar.color + '18;display:flex;align-items:center;justify-content:center;font-size:14px;">' + pillar.icon + '</div>'
+      + '<div style="font-size:13px;font-weight:700;color:var(--ink);">' + pillar.name + '</div>'
+      + '<div style="margin-left:auto;font-size:11px;color:var(--muted);">' + pillar.requirements.length + ' requirements</div>'
+      + '</div>';
+    for (var ri = 0; ri < pillar.requirements.length; ri++) {
+      var req = pillar.requirements[ri];
+      var rowBg = req.result === 'portal' ? 'background:rgba(217,119,6,0.025);' : '';
+      html += '<div id="enrich-row-' + pi + '-' + ri + '" style="display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--line);opacity:0;transition:opacity 0.3s ease;' + rowBg + '">'
+        + '<div id="enrich-icon-' + pi + '-' + ri + '" style="width:18px;text-align:center;flex-shrink:0;font-size:14px;"></div>'
+        + '<div style="flex:1;font-size:12.5px;color:var(--ink);">' + req.name + '</div>'
+        + '<div id="enrich-source-' + pi + '-' + ri + '" style="font-size:10.5px;"></div>'
+        + '</div>';
+    }
+    html += '</div>';
+  }
+  container.innerHTML = html;
+}
+
+function runScanDemo(onComplete) {
+  var stagesEl = document.getElementById('enrichScanStages');
+  var liveTag  = document.getElementById('enrichLiveTag');
+  if (!stagesEl) { if (onComplete) onComplete(); return; }
+
+  var s1 = document.createElement('div');
+  s1.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid rgba(91,91,214,0.15);background:rgba(91,91,214,0.04);';
+  s1.innerHTML = '<span class="v-loader"></span><span style="font-size:12.5px;color:var(--ink);font-weight:500;">Checking Reevol internal dataset…</span>';
+  stagesEl.appendChild(s1);
+
+  setTimeout(function() {
+    s1.innerHTML = '<span style="font-size:14px;color:#16a34a;">✓</span><span style="font-size:12.5px;color:var(--ink);font-weight:500;">Reevol internal</span><span style="margin-left:auto;font-size:10.5px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);padding:2px 8px;border-radius:4px;">Not found — escalating</span>';
+    s1.style.borderColor = 'rgba(22,163,74,0.2)';
+
+    var s2 = document.createElement('div');
+    s2.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid rgba(16,185,129,0.15);background:rgba(16,185,129,0.04);';
+    var vendorTicker = document.createElement('span');
+    vendorTicker.style.cssText = 'flex:1;font-size:12px;color:var(--muted);font-family:JetBrains Mono,monospace;';
+    s2.innerHTML = '<span class="v-loader"></span>';
+    var label2 = document.createElement('span');
+    label2.style.cssText = 'font-size:12.5px;color:var(--ink);font-weight:500;white-space:nowrap;';
+    label2.textContent = 'Querying data vendors…';
+    s2.appendChild(label2);
+    s2.appendChild(vendorTicker);
+    stagesEl.appendChild(s2);
+
+    var vi = 0;
+    var tickInterval = setInterval(function() {
+      if (vi >= allVendors.length) { clearInterval(tickInterval); return; }
+      vendorTicker.textContent = allVendors[vi];
+      vi++;
+    }, 90);
+
+    setTimeout(function() {
+      clearInterval(tickInterval);
+      vendorTicker.textContent = '';
+      s2.innerHTML = '<span style="font-size:14px;color:#16a34a;">✓</span><span style="font-size:12.5px;color:var(--ink);font-weight:500;">Queried 40+ data vendors</span><span style="font-size:10px;color:var(--muted);margin-left:6px;">D&amp;B · CreditSafe · Allianz Trade · And many more</span><span style="margin-left:auto;font-size:10.5px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);padding:2px 8px;border-radius:4px;">Found ✓</span>';
+      s2.style.borderColor = 'rgba(22,163,74,0.25)';
+      if (liveTag) { liveTag.textContent = 'Fulfilled'; liveTag.style.color = '#16a34a'; liveTag.style.background = 'rgba(22,163,74,0.08)'; liveTag.style.borderColor = 'rgba(22,163,74,0.2)'; }
+
+      setTimeout(function() {
+        var s3 = document.createElement('div');
+        s3.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1px solid rgba(22,163,74,0.25);background:rgba(22,163,74,0.05);';
+        s3.innerHTML = '<span style="font-size:16px;">✅</span><div><div style="font-size:13px;font-weight:700;color:#15803d;">Business Registration Number — Fulfilled</div><div style="font-size:11.5px;color:#166534;margin-top:2px;">Source: Dun &amp; Bradstreet · Value: 139-056-691 · Verified</div></div>';
+        stagesEl.appendChild(s3);
+        if (onComplete) setTimeout(onComplete, 600);
+      }, 500);
+    }, allVendors.length * 90 + 300);
+  }, 900);
+}
+
+function startEnrichAnimation() {
+  var banner = document.getElementById('enrichSummaryBanner');
+  if (banner) { banner.style.opacity = '0'; banner.style.display = 'none'; }
+  var stagesEl = document.getElementById('enrichScanStages');
+  if (stagesEl) stagesEl.innerHTML = '';
+  var liveTag = document.getElementById('enrichLiveTag');
+  if (liveTag) { liveTag.textContent = 'Scanning…'; liveTag.style.color = '#5b5bd6'; liveTag.style.background = 'rgba(91,91,214,0.08)'; liveTag.style.borderColor = 'rgba(91,91,214,0.15)'; }
+
+  renderEnrichReqs();
+
+  runScanDemo(function() {
+    var allRows = [];
+    for (var pi = 0; pi < enrichPillars.length; pi++) {
+      for (var ri = 0; ri < enrichPillars[pi].requirements.length; ri++) {
+        allRows.push({ pi: pi, ri: ri, req: enrichPillars[pi].requirements[ri] });
+      }
+    }
+    var delay = 0;
+    for (var k = 0; k < allRows.length; k++) {
+      (function(row, d) {
+        setTimeout(function() {
+          var rowEl   = document.getElementById('enrich-row-'   + row.pi + '-' + row.ri);
+          var iconEl  = document.getElementById('enrich-icon-'  + row.pi + '-' + row.ri);
+          var srcEl   = document.getElementById('enrich-source-'+ row.pi + '-' + row.ri);
+          if (!rowEl) return;
+          rowEl.style.opacity = '1';
+          if (row.req.result === 'found') {
+            if (iconEl) iconEl.innerHTML = '<span style="color:#16a34a;">✓</span>';
+            var tagLabel = row.req.source === 'Reevol Internal' ? 'Assessment' : 'Enrichment';
+            if (srcEl)  srcEl.innerHTML  = '<span style="background:rgba(22,163,74,0.07);color:#15803d;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid rgba(22,163,74,0.2);">' + tagLabel + '</span>';
+          } else {
+            if (iconEl) iconEl.innerHTML = '<span style="color:#d97706;">→</span>';
+            if (srcEl)  srcEl.innerHTML  = '<span style="background:rgba(217,119,6,0.08);color:#d97706;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid rgba(217,119,6,0.2);">Buyer Action</span>';
+          }
+        }, d);
+      })(allRows[k], delay);
+      delay += 120;
+    }
+    setTimeout(function() {
+      var b = document.getElementById('enrichSummaryBanner');
+      if (b) { b.style.display = 'block'; requestAnimationFrame(function(){ requestAnimationFrame(function(){ b.style.opacity = '1'; }); }); }
+    }, delay + 400);
+  });
+}
+
+// ── PORTAL ───────────────────────────────────────────────────
+function portalStep(idx) {
+  for(var i=0;i<5;i++){
+    var step=document.getElementById('pstep-'+i),tab=document.getElementById('ptab-'+i);
+    if(!step||!tab) continue;
+    if(i===idx){step.style.display='block';tab.style.color='#5b5bd6';tab.style.fontWeight='700';tab.style.borderBottom='2px solid #5b5bd6';}
+    else{step.style.display='none';tab.style.color='var(--muted)';tab.style.fontWeight='600';tab.style.borderBottom='2px solid transparent';}
+  }
+}
+function showPortalSuccess(){document.getElementById('portal-success').style.display='block';document.querySelector('.portal-submit').style.display='none';}
+
+// ── MONITORING ───────────────────────────────────────────────
+function startMonitorAnimation(){
+  var alerts=document.querySelectorAll('.static-alert');
+  for(var i=0;i<alerts.length;i++){
+    (function(el,delay){el.style.opacity='0';el.style.transform='translateY(-6px)';setTimeout(function(){el.style.transition='opacity 0.4s ease,transform 0.4s ease';el.style.opacity='1';el.style.transform='';},delay);})(alerts[i],300+i*250);
+  }
+  var liveItems=document.querySelectorAll('.live-injected');
+  for(var i=0;i<liveItems.length;i++) liveItems[i].remove();
+  function injectAlert(h){
+    var feed=document.getElementById('alertFeed'); if(!feed) return;
+    var div=document.createElement('div'); div.innerHTML=h; var el=div.firstChild; el.style.opacity='0'; feed.prepend(el);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){el.style.transition='opacity 0.4s ease';el.style.opacity='1';});});
+  }
+  setTimeout(function(){injectAlert('<div class="alert-item live-injected"><div class="alert-dot red"></div><div class="alert-meta"><div class="alert-title">CoreSteel Wholesale <span style="background:#dc2626;color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;">⚡ LIVE</span></div><div class="alert-desc">Sanctions match — OFAC SDN list · Manual review required</div></div><span class="alert-badge badge-red">Critical</span></div>');},3000);
+  setTimeout(function(){injectAlert('<div class="alert-item live-injected"><div class="alert-dot amber"></div><div class="alert-meta"><div class="alert-title">Nexus Tile &amp; Stone <span style="background:#d97706;color:white;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;">⚡ LIVE</span></div><div class="alert-desc">New CCJ £14,200 filed — terms under review</div></div><span class="alert-badge badge-amber">Warning</span></div>');},5000);
+}
+
+// ── SCENE NAVIGATION ─────────────────────────────────────────
+var journeyScenes = ['howto','config','import','assign','enrich','portal','table','monitor'];
+var journeyNext   = {howto:'config',config:'import',import:'assign',assign:'enrich',enrich:'portal',portal:'table',table:'monitor',monitor:'closing'};
+var journeyLabel  = {howto:'Configure Trust Levels →',config:'Import Buyers →',import:'Assign Trust Levels →',assign:'Start Assessment →',enrich:'See Buyer Portal →',portal:'Go to Dashboard →',table:'Set Up Monitoring →',monitor:'See Summary →'};
+
+function goToScene(name) {
+  var scenes=document.querySelectorAll('.scene');
+  for(var i=0;i<scenes.length;i++) scenes[i].classList.remove('active');
+  var t=document.getElementById('scene-'+name);
+  if(t){t.classList.add('active');window.scrollTo(0,0);}
+  var bar=document.getElementById('sharedJourneyBar'),nxtBtn=document.getElementById('journeyNextBtn');
+  if(!bar) return;
+  if(name==='splash'||name==='closing'||name==='buyer-profile'){bar.style.display='none';return;}
+  bar.style.display='flex';
+  var ai=journeyScenes.indexOf(name);
+  for(var i=0;i<journeyScenes.length;i++){
+    var btn=document.getElementById('jstep-'+journeyScenes[i]); if(!btn) continue;
+    btn.className='journey-step';
+    if(i<ai) btn.classList.add('done');
+    else if(i===ai) btn.classList.add('active');
+  }
+  if(journeyNext[name]){nxtBtn.textContent=journeyLabel[name]||'Next →';nxtBtn.onclick=function(n){return function(){goToScene(n);};}(journeyNext[name]);nxtBtn.style.display='';}
+  else nxtBtn.style.display='none';
+  if(name==='table'){renderBuyerTable();setTimeout(animateNumbers,200);}
+  if(name==='engine'){var r=document.getElementById('engineResult');if(r){r.style.opacity='0';setTimeout(function(){r.style.opacity='1';},2500);}}
+  if(name==='config'){setTimeout(function(){selectTemplate(activeTplIndex||0);},80);}
+  if(name==='assign'){renderAssignRows();}
+  if(name==='enrich'){startEnrichAnimation();}
+  if(name==='monitor'){startMonitorAnimation();}
+}
+
+// ── FILTER CHIPS ─────────────────────────────────────────────
+document.addEventListener('click',function(e){
+  if(e.target.matches('.filter-chip')){
+    var chips=document.querySelectorAll('.filter-chip');
+    for(var i=0;i<chips.length;i++) chips[i].classList.remove('active');
+    e.target.classList.add('active');
+  }
+});
+
+// ── BUYER PROFILE ─────────────────────────────────────────────
+function openBuyerProfile(idx) {
+  var b = buyers[idx];
+  var tl = tlColorMap[scoreToLevel(b.trustScore)] || tlColorMap.low;
+
+  document.getElementById('bp-tb-name').textContent = b.name;
+  var tbTl = document.getElementById('bp-tb-tl');
+  tbTl.textContent = tl.emoji + ' ' + tl.label;
+  tbTl.style.background = tl.bg; tbTl.style.color = tl.color;
+
+  var av = document.getElementById('bp-hero-av');
+  av.textContent = b.initials; av.style.background = b.color;
+  document.getElementById('bp-hero-name').textContent = b.name;
+  document.getElementById('bp-hero-meta').textContent = b.domain + ' · United States · Corporation';
+
+  var tlValMap = { maximum:'+ Full DD', high:'+ Credit Insights', moderate:'Verification + KYC', low:'KYB' };
+  var level = scoreToLevel(b.trustScore);
+  var tagsHtml = '<span class="bp-tag bp-tg" style="background:'+tl.bg+';color:'+tl.color+';">'+tl.emoji+' '+tl.label+'</span>';
+  if(b.buyerStatus==='approved') tagsHtml += '<span class="bp-tag bp-tg">✓ Approved</span>';
+  else tagsHtml += '<span class="bp-tag bp-ta">⏳ '+b.buyerStatus+'</span>';
+  if(b.terms&&b.terms!=='—') tagsHtml += '<span class="bp-tag bp-tv">'+b.terms+'</span>';
+  if(b.limit&&b.limit!=='—') tagsHtml += '<span class="bp-tag bp-tv">Limit: '+b.limit+'</span>';
+  if(b.insured) tagsHtml += '<span class="bp-tag bp-tg">✓ Insured</span>';
+  tagsHtml += '<span class="bp-tag bp-tv">'+tlValMap[level]+'</span>';
+  document.getElementById('bp-hero-tags').innerHTML = tagsHtml;
+
+  document.getElementById('bp-ai-text').innerHTML = '<strong>AI Summary:</strong> '+b.name+' ('+b.domain+') — Trust Score <strong>'+b.trustScore+'/100 ('+tl.label+')</strong>. Assessment: '+b.assessmentStatus+'. Net Terms: '+(b.terms!=='—'?b.terms:'N/A')+'. Credit Limit: '+(b.limit!=='—'?b.limit:'N/A')+(b.creditUsed&&b.creditUsed!=='—'?' (used '+b.creditUsed+')':'')+'. '+(b.insured?'Credit insurance active.':'No credit insurance.')+' '+(b.monitor?'Monitoring enabled.':'Monitoring not enabled.');
+
+  var sc = document.getElementById('bp-score-val');
+  sc.textContent = b.trustScore > 0 ? b.trustScore : '—';
+  sc.style.color = tl.color;
+  document.getElementById('bp-score-bar-fill').style.width = b.trustScore + '%';
+  document.getElementById('bp-score-bar-fill').style.background = tl.color;
+  document.getElementById('bp-score-label').textContent = tl.label;
+  document.getElementById('bp-terms-val').textContent = b.terms !== '—' ? b.terms : 'N/A';
+  document.getElementById('bp-limit-val').textContent = b.limit !== '—' ? b.limit : 'N/A';
+
+  document.getElementById('bp-cl-terms').textContent = b.terms !== '—' ? b.terms + ' days' : 'N/A';
+  document.getElementById('bp-cl-limit').textContent = b.limit !== '—' ? b.limit : 'N/A';
+  document.getElementById('bp-cl-used').textContent = b.creditUsed && b.creditUsed !== '—' ? b.creditUsed : '—';
+  var clStatus = document.getElementById('bp-cl-status');
+  clStatus.textContent = b.buyerStatus === 'approved' ? '✓ Approved' : '⏳ ' + b.buyerStatus;
+  clStatus.className = 'bp-spill ' + (b.buyerStatus === 'approved' ? 'bp-son' : 'bp-swarn');
+
+  var cbarFill = document.getElementById('bp-cbar-fill');
+  if(b.creditUsed && b.creditUsed !== '—' && b.limit && b.limit !== '—'){
+    var used = parseFloat(b.creditUsed.replace(/[$,]/g,''));
+    var lim  = parseFloat(b.limit.replace(/[$,]/g,''));
+    if(lim > 0) cbarFill.style.width = Math.min(Math.round((used/lim)*100), 100) + '%';
+  } else { cbarFill.style.width = '0%'; }
+  document.getElementById('bp-cbar-left').textContent = (b.creditUsed && b.creditUsed !== '—') ? b.creditUsed + ' used' : '—';
+  document.getElementById('bp-cbar-right').textContent = b.limit !== '—' ? b.limit + ' limit' : '—';
+
+  var insEl = document.getElementById('bp-ins-val');
+  insEl.textContent = b.insured ? '✓ Active' : '—';
+  insEl.style.color = b.insured ? 'var(--green)' : 'var(--muted-2)';
+
+  var pillars = [
+    {icon:'🏢',name:'Business Identity & Legitimacy',   pts:18,max:20,color:'#7c5cfc'},
+    {icon:'💰',name:'Financial Health',                  pts:24,max:30,color:'#c9a227'},
+    {icon:'📈',name:'Payment Behaviour & Credit History',pts:20,max:25,color:'#10b981'},
+    {icon:'📡',name:'Business Stability & Signals',      pts:13,max:15,color:'#3b82f6'},
+    {icon:'📦',name:'Transaction Context',               pts:8, max:10,color:'#f97316'},
+  ];
+  var pbHtml = '';
+  pillars.forEach(function(p){
+    var pct = Math.round((p.pts/p.max)*100);
+    pbHtml += '<div style="display:flex;align-items:center;gap:10px;">'
+      +'<div style="width:24px;height:24px;border-radius:7px;background:'+p.color+'1a;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">'+p.icon+'</div>'
+      +'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--ink);">'+p.name+'</div><div style="height:5px;background:var(--line);border-radius:3px;margin-top:4px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+p.color+';border-radius:3px;"></div></div></div>'
+      +'<div style="font-size:12px;font-weight:700;color:'+p.color+';flex-shrink:0;">'+p.pts+'<span style="font-size:10px;color:var(--muted);font-weight:400;">/'+p.max+'</span></div>'
+      +'</div>';
+  });
+  document.getElementById('bp-pillar-bars').innerHTML = pbHtml;
+  var tsEl = document.getElementById('bp-total-score');
+  tsEl.innerHTML = b.trustScore + ' <span style="font-size:12px;font-weight:500;color:var(--muted);">/ 100</span>';
+  tsEl.style.color = tl.color;
+
+  bpSwitchTab('summary');
+  var ct = document.getElementById('bp-comment-thread');
+  ct.innerHTML = '<div style="text-align:center;padding:22px;color:var(--muted);"><div style="font-size:22px;margin-bottom:6px;">💬</div><div style="font-size:12px;">No comments yet — add a note about '+b.name+'</div></div>';
+  document.getElementById('bp-comment-input').placeholder = 'Add a note about '+b.name+'…';
+
+  goToScene('buyer-profile');
+}
+
+function bpSwitchTab(name) {
+  document.querySelectorAll('.bp-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.bp-tc').forEach(function(c){ c.classList.remove('active'); });
+  var tabEl = document.querySelector('.bp-tab[data-tab="'+name+'"]');
+  if(tabEl) tabEl.classList.add('active');
+  var contentEl = document.getElementById('bptab-'+name);
+  if(contentEl) contentEl.classList.add('active');
+}
+
+function bpToggleSec(el) {
+  el.classList.toggle('bp-open');
+  var body = el.querySelector('.bp-sec-body');
+  if(!body) return;
+  body.style.display = el.classList.contains('bp-open') ? 'block' : 'none';
+  var chev = el.querySelector('.bp-chev');
+  if(chev) chev.textContent = el.classList.contains('bp-open') ? '▼' : '▶';
+}
+
+function bpAddComment() {
+  var inp = document.getElementById('bp-comment-input');
+  var val = inp.value.trim(); if(!val) return;
+  var thread = document.getElementById('bp-comment-thread');
+  var empty = thread.querySelector('div[style*="text-align:center"]'); if(empty) empty.remove();
+  var now = new Date();
+  var el = document.createElement('div');
+  el.style.cssText = 'display:flex;gap:8px;';
+  el.innerHTML = '<div style="width:24px;height:24px;border-radius:50%;background:#5b5bd6;color:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">AC</div>'
+    +'<div style="background:var(--surface);border:1px solid var(--line);border-radius:0 9px 9px 9px;padding:8px 11px;flex:1;">'
+    +'<div style="font-size:11px;font-weight:700;margin-bottom:1px;">Account Manager</div>'
+    +'<div style="font-size:12.5px;line-height:1.5;">'+val+'</div>'
+    +'<div style="font-size:10px;color:var(--muted-2);margin-top:2px;">Just now · '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</div>'
+    +'</div>';
+  thread.appendChild(el);
+  thread.scrollTop = thread.scrollHeight;
+  inp.value = '';
+}
+</script>
+
+<!-- ===== BUYER PROFILE STYLES ===== -->
+<style>
+#scene-buyer-profile { display:none; flex-direction:column; height:100vh; background:var(--bg); overflow:hidden; }
+#scene-buyer-profile.active { display:flex; }
+
+/* Topbar */
+.bp-topbar { height:52px; background:white; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:12px; padding:0 20px; flex-shrink:0; }
+.bp-topbar-back { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--primary); cursor:pointer; border:none; background:none; padding:6px 10px; border-radius:8px; }
+.bp-topbar-back:hover { background:var(--primary-soft); }
+.bp-topbar-title { font-size:14px; font-weight:700; color:var(--ink); flex:1; }
+.bp-topbar-tl { font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+
+/* Hero */
+.bp-hero { background:white; border-bottom:1px solid var(--line); padding:18px 24px 16px; flex-shrink:0; }
+.bp-hero-row { display:flex; align-items:center; gap:16px; margin-bottom:12px; }
+.bp-hero-av { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:white; flex-shrink:0; }
+.bp-hero-info { flex:1; min-width:0; }
+.bp-hero-name { font-size:18px; font-weight:800; color:var(--ink); line-height:1.2; }
+.bp-hero-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+.bp-hero-actions { display:flex; gap:8px; }
+.bp-hero-btn { font-size:11.5px; font-weight:700; padding:6px 14px; border-radius:8px; border:1px solid var(--line); background:white; color:var(--ink); cursor:pointer; font-family:inherit; }
+.bp-hero-btn:hover { background:var(--surface); }
+.bp-hero-tags { display:flex; flex-wrap:wrap; gap:6px; }
+.bp-tag { font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; display:inline-flex; align-items:center; gap:3px; }
+.bp-tg { background:#dcfce7; color:#15803d; }
+.bp-ta { background:#fef3c7; color:#b45309; }
+.bp-tv { background:var(--surface); color:var(--ink-2); border:1px solid var(--line); }
+
+/* AI Bar */
+.bp-ai-bar { background:#f5f3ff; border-bottom:1px solid #e9e8ff; padding:10px 24px; font-size:12.5px; color:#4c4f69; flex-shrink:0; display:flex; align-items:center; gap:8px; }
+.bp-ai-ic { font-size:16px; flex-shrink:0; }
+
+/* Score strip */
+.bp-score-strip { background:white; border-bottom:1px solid var(--line); padding:12px 24px; display:flex; align-items:center; gap:20px; flex-shrink:0; }
+.bp-score-num { font-size:32px; font-weight:900; line-height:1; }
+.bp-score-meta { flex:1; }
+.bp-score-lbl { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); }
+.bp-score-bar { height:7px; background:var(--line); border-radius:4px; margin-top:6px; overflow:hidden; }
+.bp-score-bar-fill { height:100%; border-radius:4px; transition:width .5s; }
+.bp-score-kv { text-align:center; }
+.bp-score-kv-lbl { font-size:10.5px; color:var(--muted); font-weight:500; }
+.bp-score-kv-val { font-size:14px; font-weight:800; color:var(--ink); margin-top:1px; }
+.bp-score-div { width:1px; height:36px; background:var(--line); }
+
+/* Tab bar */
+.bp-tabbar { background:white; border-bottom:2px solid var(--line); display:flex; gap:0; flex-shrink:0; padding:0 16px; overflow-x:auto; }
+.bp-tab { font-size:12.5px; font-weight:600; color:var(--muted); padding:11px 14px; cursor:pointer; border-bottom:2.5px solid transparent; margin-bottom:-2px; white-space:nowrap; transition:color .15s; }
+.bp-tab:hover { color:var(--primary); }
+.bp-tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+
+/* Tab content area */
+.bp-body { flex:1; overflow:auto; padding:20px 24px; }
+.bp-tc { display:none; }
+.bp-tc.active { display:block; }
+.bp-2col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.bp-card { background:white; border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:16px; }
+.bp-card-title { font-size:13px; font-weight:800; color:var(--ink); margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+.bp-row { display:flex; align-items:center; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--surface-2,#f4f4f8); }
+.bp-row:last-child { border-bottom:none; }
+.bp-row-lbl { font-size:12px; color:var(--muted); }
+.bp-row-val { font-size:12.5px; font-weight:700; color:var(--ink); text-align:right; }
+.bp-spill { font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
+.bp-son { background:#dcfce7; color:#15803d; }
+.bp-swarn { background:#fef3c7; color:#b45309; }
+
+/* Collapsible sections */
+.bp-sec { background:white; border:1px solid var(--line); border-radius:12px; margin-bottom:10px; overflow:hidden; cursor:pointer; }
+.bp-sec-hd { display:flex; align-items:center; justify-content:space-between; padding:13px 16px; }
+.bp-sec-hd-left { display:flex; align-items:center; gap:10px; }
+.bp-sec-ico { width:28px; height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; }
+.bp-sec-name { font-size:13px; font-weight:700; color:var(--ink); }
+.bp-sec-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+.bp-sec-right { display:flex; align-items:center; gap:10px; }
+.bp-chev { font-size:9px; color:var(--muted); }
+.bp-sec-body { display:none; border-top:1px solid var(--line); padding:14px 16px; }
+</style>
+
+<!-- ===== BUYER PROFILE SCENE ===== -->
+<div id="scene-buyer-profile">
+
+  <!-- Topbar -->
+  <div class="bp-topbar">
+    <button class="bp-topbar-back" onclick="goToScene('dashboard')">← Buyer Intelligence</button>
+    <div class="bp-topbar-title" id="bp-tb-name">Buyer Name</div>
+    <span class="bp-topbar-tl" id="bp-tb-tl"></span>
+  </div>
+
+  <!-- Hero -->
+  <div class="bp-hero">
+    <div class="bp-hero-row">
+      <div class="bp-hero-av" id="bp-hero-av">AB</div>
+      <div class="bp-hero-info">
+        <div class="bp-hero-name" id="bp-hero-name">Buyer Name</div>
+        <div class="bp-hero-meta" id="bp-hero-meta">domain.com · United States · Corporation</div>
+      </div>
+      <div class="bp-hero-actions">
+        <button class="bp-hero-btn">✏️ Edit</button>
+        <button class="bp-hero-btn" style="background:#5b5bd6;color:white;border-color:#5b5bd6;">+ Action</button>
+      </div>
+    </div>
+    <div class="bp-hero-tags" id="bp-hero-tags"></div>
+  </div>
+
+  <!-- AI Bar -->
+  <div class="bp-ai-bar">
+    <span class="bp-ai-ic">✨</span>
+    <span id="bp-ai-text"></span>
+  </div>
+
+  <!-- Score Strip -->
+  <div class="bp-score-strip">
+    <div>
+      <div class="bp-score-num" id="bp-score-val">—</div>
+      <div class="bp-score-lbl" id="bp-score-label">Trust Level</div>
+    </div>
+    <div class="bp-score-meta">
+      <div class="bp-score-bar"><div class="bp-score-bar-fill" id="bp-score-bar-fill" style="width:0%;"></div></div>
+    </div>
+    <div class="bp-score-div"></div>
+    <div class="bp-score-kv"><div class="bp-score-kv-lbl">Net Terms</div><div class="bp-score-kv-val" id="bp-terms-val">—</div></div>
+    <div class="bp-score-div"></div>
+    <div class="bp-score-kv"><div class="bp-score-kv-lbl">Credit Limit</div><div class="bp-score-kv-val" id="bp-limit-val">—</div></div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="bp-tabbar">
+    <div class="bp-tab active" data-tab="summary"   onclick="bpSwitchTab('summary')">Summary</div>
+    <div class="bp-tab"        data-tab="identity"  onclick="bpSwitchTab('identity')">Identity</div>
+    <div class="bp-tab"        data-tab="financial" onclick="bpSwitchTab('financial')">Financial</div>
+    <div class="bp-tab"        data-tab="payment"   onclick="bpSwitchTab('payment')">Payment</div>
+    <div class="bp-tab"        data-tab="stability" onclick="bpSwitchTab('stability')">Stability</div>
+    <div class="bp-tab"        data-tab="transactions" onclick="bpSwitchTab('transactions')">Transactions</div>
+    <div class="bp-tab"        data-tab="risk"      onclick="bpSwitchTab('risk')">Risk</div>
+    <div class="bp-tab"        data-tab="notes"     onclick="bpSwitchTab('notes')">Notes</div>
+  </div>
+
+  <!-- Tab Body -->
+  <div class="bp-body">
+
+    <!-- SUMMARY TAB -->
+    <div class="bp-tc active" id="bptab-summary">
+      <div class="bp-2col">
+        <!-- Trust Score Breakdown -->
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">🎯 Trust Score Breakdown</div>
+            <div id="bp-pillar-bars" style="display:flex;flex-direction:column;gap:12px;"></div>
+            <div style="border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-size:12px;font-weight:700;color:var(--ink);">Total Score</div>
+              <div style="font-size:20px;font-weight:900;" id="bp-total-score">—</div>
+            </div>
+          </div>
+          <!-- Credit Line Card -->
+          <div class="bp-card">
+            <div class="bp-card-title">💳 Credit Line</div>
+            <div class="bp-row"><span class="bp-row-lbl">Net Terms</span><span class="bp-row-val" id="bp-cl-terms">—</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Credit Limit</span><span class="bp-row-val" id="bp-cl-limit">—</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Credit Used</span><span class="bp-row-val" id="bp-cl-used">—</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Status</span><span id="bp-cl-status" class="bp-spill bp-son">—</span></div>
+            <div style="margin-top:12px;">
+              <div style="height:8px;background:var(--line);border-radius:4px;overflow:hidden;"><div id="bp-cbar-fill" style="height:100%;width:0%;background:var(--primary);border-radius:4px;transition:width .5s;"></div></div>
+              <div style="display:flex;justify-content:space-between;margin-top:5px;">
+                <span style="font-size:11px;color:var(--muted);" id="bp-cbar-left">—</span>
+                <span style="font-size:11px;color:var(--muted);" id="bp-cbar-right">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Right column -->
+        <div>
+          <!-- Quick Facts -->
+          <div class="bp-card">
+            <div class="bp-card-title">📋 Quick Facts</div>
+            <div class="bp-row"><span class="bp-row-lbl">Entity Type</span><span class="bp-row-val">Corporation</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Country</span><span class="bp-row-val">United States</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Years in Business</span><span class="bp-row-val">8 years</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Employees</span><span class="bp-row-val">50–200</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Industry</span><span class="bp-row-val">Retail / Wholesale</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Credit Insurance</span><span class="bp-row-val" id="bp-ins-val">—</span></div>
+          </div>
+          <!-- Assessment Status -->
+          <div class="bp-card">
+            <div class="bp-card-title">🔍 Assessment</div>
+            <div class="bp-row"><span class="bp-row-lbl">Status</span><span class="bp-row-val">KYB Verified</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Last Updated</span><span class="bp-row-val">Mar 28, 2026</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Next Review</span><span class="bp-row-val">Sep 2026</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Analyst</span><span class="bp-row-val">Account Manager</span></div>
+          </div>
+          <!-- Relationship -->
+          <div class="bp-card">
+            <div class="bp-card-title">🤝 Relationship</div>
+            <div class="bp-row"><span class="bp-row-lbl">Customer Since</span><span class="bp-row-val">Jan 2024</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Total Orders</span><span class="bp-row-val">14</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Total Volume</span><span class="bp-row-val">$248,000</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Open Invoices</span><span class="bp-row-val">3</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDENTITY TAB -->
+    <div class="bp-tc" id="bptab-identity">
+      <div class="bp-2col">
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">🏢 Business Details</div>
+            <div class="bp-row"><span class="bp-row-lbl">Legal Name</span><span class="bp-row-val">—</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">DBA / Trade Name</span><span class="bp-row-val">—</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">EIN / Tax ID</span><span class="bp-row-val">••-•••••••</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">State of Inc.</span><span class="bp-row-val">Delaware, USA</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Incorporation Date</span><span class="bp-row-val">Apr 2016</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Entity Type</span><span class="bp-row-val">C-Corp</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Active Status</span><span class="bp-row-val"><span class="bp-spill bp-son">Active</span></span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">📍 Address</div>
+            <div class="bp-row"><span class="bp-row-lbl">Registered</span><span class="bp-row-val">123 Main St, NY 10001</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Operating</span><span class="bp-row-val">Same as registered</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Country</span><span class="bp-row-val">United States</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">👤 Key Contacts</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface);border-radius:10px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:#5b5bd6;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">JD</div>
+                <div><div style="font-size:13px;font-weight:700;color:var(--ink);">John Doe</div><div style="font-size:11px;color:var(--muted);">CEO · john@buyer.com</div></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--surface);border-radius:10px;">
+                <div style="width:36px;height:36px;border-radius:50%;background:#10b981;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;">AS</div>
+                <div><div style="font-size:13px;font-weight:700;color:var(--ink);">Amy Smith</div><div style="font-size:11px;color:var(--muted);">CFO · amy@buyer.com</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">🌐 Online Presence</div>
+            <div class="bp-row"><span class="bp-row-lbl">Website</span><span class="bp-row-val" id="bp-hero-meta2" style="color:var(--primary);">buyer.com</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">LinkedIn</span><span class="bp-row-val">Verified</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Google My Business</span><span class="bp-row-val"><span class="bp-spill bp-son">4.3 ★</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Domain Age</span><span class="bp-row-val">9 years</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIAL TAB -->
+    <div class="bp-tc" id="bptab-financial">
+      <div class="bp-2col">
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">💰 Revenue & Scale</div>
+            <div class="bp-row"><span class="bp-row-lbl">Est. Annual Revenue</span><span class="bp-row-val">$5M–$10M</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Revenue Trend</span><span class="bp-row-val" style="color:#10b981;">↑ Growing</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Employees</span><span class="bp-row-val">50–200</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Funding Stage</span><span class="bp-row-val">Bootstrapped</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Industry</span><span class="bp-row-val">Retail / Wholesale</span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">🏦 Banking & Accounts</div>
+            <div class="bp-row"><span class="bp-row-lbl">Primary Bank</span><span class="bp-row-val">JPMorgan Chase</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Bank Account Age</span><span class="bp-row-val">7 years</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">NSF Events (12mo)</span><span class="bp-row-val" style="color:#10b981;">0</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Avg. Balance</span><span class="bp-row-val">$180,000</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">📊 Credit Profile</div>
+            <div class="bp-row"><span class="bp-row-lbl">Business Credit Score</span><span class="bp-row-val" style="color:#10b981;">720</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Score Source</span><span class="bp-row-val">Dun & Bradstreet</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Paydex Score</span><span class="bp-row-val">78</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Delinquency Risk</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Trade Lines</span><span class="bp-row-val">12 active</span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">⚠️ Liens & Judgments</div>
+            <div class="bp-row"><span class="bp-row-lbl">UCC Filings</span><span class="bp-row-val"><span class="bp-spill bp-son">None</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Tax Liens</span><span class="bp-row-val"><span class="bp-spill bp-son">None</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Judgments</span><span class="bp-row-val"><span class="bp-spill bp-son">None</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Bankruptcies</span><span class="bp-row-val"><span class="bp-spill bp-son">None</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT TAB -->
+    <div class="bp-tc" id="bptab-payment">
+      <div class="bp-2col">
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">📅 Payment Behaviour</div>
+            <div class="bp-row"><span class="bp-row-lbl">Avg. Days to Pay</span><span class="bp-row-val">Net +3 days</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">On-Time Rate</span><span class="bp-row-val" style="color:#10b981;">94%</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Late Payments (12mo)</span><span class="bp-row-val">2</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Dispute Rate</span><span class="bp-row-val">1.4%</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Chargebacks</span><span class="bp-row-val"><span class="bp-spill bp-son">0</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Preferred Method</span><span class="bp-row-val">ACH / Wire</span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">🕐 Aging Summary</div>
+            <div class="bp-row"><span class="bp-row-lbl">Current</span><span class="bp-row-val">$42,000</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">1–30 days</span><span class="bp-row-val">$8,500</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">31–60 days</span><span class="bp-row-val">$2,100</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">61–90 days</span><span class="bp-row-val" style="color:#f97316;">$0</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">90+ days</span><span class="bp-row-val" style="color:#ef4444;">$0</span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">📈 Payment Trend</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:11px;color:var(--muted);width:40px;">Q3'25</span><div style="flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;"><div style="height:100%;width:96%;background:#10b981;border-radius:3px;"></div></div><span style="font-size:11px;font-weight:700;color:#10b981;width:30px;text-align:right;">96%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:11px;color:var(--muted);width:40px;">Q4'25</span><div style="flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;"><div style="height:100%;width:91%;background:#10b981;border-radius:3px;"></div></div><span style="font-size:11px;font-weight:700;color:#10b981;width:30px;text-align:right;">91%</span></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:11px;color:var(--muted);width:40px;">Q1'26</span><div style="flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;"><div style="height:100%;width:94%;background:#10b981;border-radius:3px;"></div></div><span style="font-size:11px;font-weight:700;color:#10b981;width:30px;text-align:right;">94%</span></div>
+            </div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">🔗 Connected to Reevol</div>
+            <div class="bp-row"><span class="bp-row-lbl">Portal Access</span><span class="bp-row-val"><span class="bp-spill bp-son">Active</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Last Login</span><span class="bp-row-val">Mar 29, 2026</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Invoices via Portal</span><span class="bp-row-val">8 of 14</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Payment via Portal</span><span class="bp-row-val">5 of 8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STABILITY TAB -->
+    <div class="bp-tc" id="bptab-stability">
+      <div class="bp-2col">
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">📡 Business Signals</div>
+            <div class="bp-row"><span class="bp-row-lbl">Website Traffic Trend</span><span class="bp-row-val" style="color:#10b981;">↑ +12%</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Hiring Activity</span><span class="bp-row-val" style="color:#10b981;">Active (3 roles)</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">News Sentiment</span><span class="bp-row-val"><span class="bp-spill bp-son">Positive</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Social Media Activity</span><span class="bp-row-val">High</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">G2 / Review Score</span><span class="bp-row-val">4.4 ★</span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">📍 Operational Footprint</div>
+            <div class="bp-row"><span class="bp-row-lbl">Office Locations</span><span class="bp-row-val">2</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Warehouse / 3PL</span><span class="bp-row-val">Yes</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Supply Chain Risk</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">🛡️ Ownership & Control</div>
+            <div class="bp-row"><span class="bp-row-lbl">UBO Verified</span><span class="bp-row-val"><span class="bp-spill bp-son">Yes</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">PEP / Sanctions Check</span><span class="bp-row-val"><span class="bp-spill bp-son">Clear</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Ownership Structure</span><span class="bp-row-val">Single entity</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Key Person Risk</span><span class="bp-row-val"><span class="bp-spill bp-swarn">Medium</span></span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">📆 Longevity Indicators</div>
+            <div class="bp-row"><span class="bp-row-lbl">Years in Business</span><span class="bp-row-val">8 years</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Management Tenure</span><span class="bp-row-val">6 years avg.</span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Customer Concentration</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Supplier Diversification</span><span class="bp-row-val">High (8+ suppliers)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS TAB -->
+    <div class="bp-tc" id="bptab-transactions">
+      <div class="bp-card">
+        <div class="bp-card-title">📦 Transaction History</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <thead><tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">INV #</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Date</th>
+            <th style="text-align:right;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Amount</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Terms</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Due</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Paid</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Status</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0247</td><td>Mar 15</td><td style="text-align:right;font-weight:700;">$18,500</td><td>Net 30</td><td>Apr 14</td><td>—</td><td><span class="bp-spill bp-swarn">Open</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0231</td><td>Feb 22</td><td style="text-align:right;font-weight:700;">$9,200</td><td>Net 30</td><td>Mar 24</td><td>Mar 22</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0218</td><td>Jan 30</td><td style="text-align:right;font-weight:700;">$14,700</td><td>Net 30</td><td>Mar 01</td><td>Mar 01</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0204</td><td>Jan 05</td><td style="text-align:right;font-weight:700;">$6,300</td><td>Net 30</td><td>Feb 04</td><td>Feb 07</td><td><span class="bp-spill bp-swarn">Paid Late</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0196</td><td>Dec 10</td><td style="text-align:right;font-weight:700;">$21,000</td><td>Net 30</td><td>Jan 09</td><td>Jan 08</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RISK TAB -->
+    <div class="bp-tc" id="bptab-risk">
+      <div class="bp-2col">
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">⚠️ Risk Summary</div>
+            <div class="bp-row"><span class="bp-row-lbl">Overall Risk Rating</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Fraud Risk</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Credit Risk</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Compliance Risk</span><span class="bp-row-val"><span class="bp-spill bp-son">Low</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Concentration Risk</span><span class="bp-row-val"><span class="bp-spill bp-swarn">Medium</span></span></div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">🛡️ AML / Compliance</div>
+            <div class="bp-row"><span class="bp-row-lbl">KYB Status</span><span class="bp-row-val"><span class="bp-spill bp-son">Verified</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Sanctions (OFAC)</span><span class="bp-row-val"><span class="bp-spill bp-son">Clear</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">PEP Check</span><span class="bp-row-val"><span class="bp-spill bp-son">Clear</span></span></div>
+            <div class="bp-row"><span class="bp-row-lbl">Adverse Media</span><span class="bp-row-val"><span class="bp-spill bp-son">None</span></span></div>
+          </div>
+        </div>
+        <div>
+          <div class="bp-card">
+            <div class="bp-card-title">🚩 Risk Flags</div>
+            <div style="padding:20px;text-align:center;color:var(--muted);">
+              <div style="font-size:28px;margin-bottom:8px;">✅</div>
+              <div style="font-size:13px;font-weight:600;">No active risk flags</div>
+              <div style="font-size:11.5px;margin-top:4px;">This buyer has no unresolved compliance or credit risk flags.</div>
+            </div>
+          </div>
+          <div class="bp-card">
+            <div class="bp-card-title">📋 Risk Audit Log</div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;">
+              <div style="display:flex;gap:8px;"><span style="color:var(--muted);flex-shrink:0;">Mar 28</span><span>KYB re-verification completed — passed</span></div>
+              <div style="display:flex;gap:8px;"><span style="color:var(--muted);flex-shrink:0;">Jan 15</span><span>Credit limit increased to current level</span></div>
+              <div style="display:flex;gap:8px;"><span style="color:var(--muted);flex-shrink:0;">Oct 02</span><span>Annual review — no changes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES TAB -->
+    <div class="bp-tc" id="bptab-notes">
+      <div class="bp-card">
+        <div class="bp-card-title">💬 Team Notes</div>
+        <div id="bp-comment-thread" style="display:flex;flex-direction:column;gap:12px;min-height:80px;margin-bottom:16px;">
+          <div style="text-align:center;padding:22px;color:var(--muted);">
+            <div style="font-size:22px;margin-bottom:6px;">💬</div>
+            <div style="font-size:12px;">No comments yet — add a note about this buyer</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div style="width:32px;height:32px;border-radius:50%;background:#5b5bd6;color:white;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">AC</div>
+          <input id="bp-comment-input" type="text" placeholder="Add a note about this buyer…" style="flex:1;padding:9px 13px;border:1px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')bpAddComment()">
+          <button onclick="bpAddComment()" style="padding:9px 18px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Send</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end bp-body -->
+</div><!-- end scene-buyer-profile -->
+
+<!-- ===== ASK BUYER MODAL ===== -->
+<div id="askBuyerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:18px;padding:28px;width:440px;max-width:94vw;box-shadow:0 20px 60px rgba(0,0,0,.18);">
+    <div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:6px;">📋 Request Buyer Information</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Send a secure link to <strong id="askBuyerModalBuyerName">Buyer</strong> to collect business information needed for assessment.</div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+      <label style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;">
+        <input type="checkbox" checked style="margin-top:2px;accent-color:var(--primary);">
+        <div><div style="font-size:13px;font-weight:700;color:var(--ink);">Business Identity</div><div style="font-size:11.5px;color:var(--muted);">Legal name, address, EIN, entity type</div></div>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;">
+        <input type="checkbox" checked style="margin-top:2px;accent-color:var(--primary);">
+        <div><div style="font-size:13px;font-weight:700;color:var(--ink);">Financial Information</div><div style="font-size:11.5px;color:var(--muted);">Bank statements, revenue, trade references</div></div>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;">
+        <input type="checkbox" style="margin-top:2px;accent-color:var(--primary);">
+        <div><div style="font-size:13px;font-weight:700;color:var(--ink);">Ownership & UBO</div><div style="font-size:11.5px;color:var(--muted);">Beneficial owners, corporate structure</div></div>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;">
+        <input type="checkbox" style="margin-top:2px;accent-color:var(--primary);">
+        <div><div style="font-size:13px;font-weight:700;color:var(--ink);">Trade References</div><div style="font-size:11.5px;color:var(--muted);">2–3 supplier or vendor references</div></div>
+      </label>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;">Recipient Email</div>
+      <input type="email" placeholder="buyer@company.com" style="width:100%;padding:10px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;">
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:6px;">Personal Message (optional)</div>
+      <textarea rows="2" placeholder="Hi, we need a few details to complete your credit assessment…" style="width:100%;padding:10px 13px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;resize:none;box-sizing:border-box;"></textarea>
+    </div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="askBuyerCancel()" style="padding:10px 20px;border:1px solid var(--line);background:white;color:var(--ink);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="askBuyerConfirm()" style="padding:10px 22px;background:var(--primary);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">📤 Send Request</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
