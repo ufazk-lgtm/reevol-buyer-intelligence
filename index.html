@@ -28,6 +28,35 @@ body{font-family:var(--font-ui);background:var(--white);color:var(--ink);overflo
 @keyframes live-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.7}}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 @keyframes new-blink{0%,100%{opacity:1}50%{opacity:0}}
+/* ── COMING SOON ── */
+.cs-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;vertical-align:middle;letter-spacing:.2px;}
+.cs-section-locked{opacity:.72;pointer-events:none;position:relative;}
+.cs-section-locked::after{content:'';position:absolute;inset:0;border-radius:12px;cursor:pointer;pointer-events:all;z-index:2;}
+.cs-section-clickable{cursor:pointer;}
+.cs-tab-cs .bp-tab{color:var(--muted);}
+.bp-tab.cs-tab{color:var(--muted);}
+.bp-tab.cs-tab.active{color:var(--muted);border-bottom-color:transparent;}
+.cs-locked-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:20px;text-align:center;}
+.cs-locked-tab-icon{width:64px;height:64px;border-radius:18px;background:#fff7ed;border:2px dashed #fed7aa;display:flex;align-items:center;justify-content:center;font-size:28px;}
+.cs-locked-tab-title{font-size:17px;font-weight:800;color:var(--ink);}
+.cs-locked-tab-desc{font-size:13px;color:var(--muted);max-width:340px;line-height:1.6;}
+.cs-interest-btn{padding:11px 28px;background:#f97316;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}
+.cs-interest-btn:hover{background:#ea6c0a;}
+.cs-interest-count{font-size:12px;color:var(--muted);}
+/* Modal */
+#csModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99999;align-items:center;justify-content:center;}
+.cs-modal-box{background:white;border-radius:20px;padding:32px;width:420px;max-width:92vw;box-shadow:0 24px 70px rgba(0,0,0,.18);text-align:center;}
+.cs-modal-emoji{font-size:44px;margin-bottom:14px;}
+.cs-modal-title{font-size:19px;font-weight:800;color:var(--ink);margin-bottom:8px;}
+.cs-modal-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:22px;}
+.cs-modal-features{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;text-align:left;}
+.cs-modal-feature{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border-radius:10px;font-size:12.5px;color:var(--ink);}
+.cs-modal-count{font-size:12px;color:var(--muted);margin-bottom:16px;}
+.cs-modal-count strong{color:var(--ink);}
+.cs-modal-confirm{display:none;flex-direction:column;align-items:center;gap:8px;padding:8px 0;}
+.cs-modal-confirm-icon{font-size:40px;}
+.cs-modal-confirm-text{font-size:15px;font-weight:700;color:var(--ink);}
+.cs-modal-confirm-sub{font-size:12.5px;color:var(--muted);}
 
 /* SPLASH */
 #scene-splash{background:var(--sidebar-bg);align-items:center;justify-content:center;overflow:hidden;}
@@ -492,7 +521,7 @@ td:first-child{padding-left:20px;}
       <div class="engine-step" style="border-left:3px solid #c9a227;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#c9a227,#7a5e10);">💰</div><div class="engine-step-info"><h4>Pillar 2 — Financial Health</h4><p>Filed accounts, revenue trend, bank statements — 8 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
       <div class="engine-step" style="border-left:3px solid #10b981;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#10b981,#047857);">📈</div><div class="engine-step-info"><h4>Pillar 3 — Payment Behaviour &amp; Credit History</h4><p>Credit bureau score, CCJs, trade references — 6 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
       <div class="engine-step" style="border-left:3px solid #3b82f6;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">📡</div><div class="engine-step-info"><h4>Pillar 4 — Business Stability &amp; Operational Signals</h4><p>Employees, sector risk, ownership changes — 16 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
-      <div class="engine-step" style="border-left:3px solid #f97316;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#f97316,#c2410c);">📦</div><div class="engine-step-info"><h4>Pillar 5 — Transaction Context</h4><p>Order size vs revenue, frequency, goods risk — 5 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
+      <div class="engine-step" style="border-left:3px solid #fed7aa;opacity:.7;cursor:pointer;" onclick="showComingSoon()"><div class="engine-step-icon" style="background:linear-gradient(135deg,#f97316,#c2410c);">📦</div><div class="engine-step-info"><h4>Pillar 5 — Transaction Context &amp; Order Behaviour <span class="cs-badge">🔜 Coming Soon</span></h4><p>Order size vs revenue, frequency, goods risk — not yet available</p></div><div><span class="engine-badge-wait" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Soon</span></div></div>
       <div class="engine-step" style="border:1px dashed rgba(91,91,214,0.3);background:rgba(91,91,214,0.03);"><div class="engine-step-icon">📬</div><div class="engine-step-info"><h4>Buyer Portal — For Anything We Can't Enrich</h4><p>A secure personalised request is sent to the buyer — only as a last resort</p></div><div><span class="engine-badge-buyer">If needed</span></div></div>
     </div>
     <div class="engine-result-banner" id="engineResult" style="opacity:0;transition:opacity 0.6s ease;">
@@ -966,6 +995,16 @@ function renderReqSections() {
         + '<div style="font-size:10px;color:var(--muted);flex-shrink:0;">' + item.w + '%</div>'
         + '</div>';
     }
+    if (si === 4) {
+      html += '<div class="req-section-row cs-section-clickable" onclick="showComingSoon()" style="opacity:.75;">'
+        + '<div class="req-section-row-header" style="pointer-events:none;">'
+        + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + ' <span class="cs-badge">🔜 Coming Soon</span></div><div class="req-sect-count">Not yet available</div></div></div>'
+        + '<div style="display:flex;align-items:center;gap:10px;"><div style="text-align:right;"><div style="font-size:13px;font-weight:700;color:var(--muted);">—<span style="font-size:11px;font-weight:400;color:var(--muted);">/' + pmax + '</span></div><div style="width:70px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:2px;"><div style="height:100%;width:0%;background:var(--line);border-radius:2px;"></div></div></div>'
+        + '<div class="req-toggle off" style="background:var(--line);cursor:not-allowed;"></div>'
+        + '<span class="expand-caret" style="color:var(--muted);">▼</span></div>'
+        + '</div>'
+        + '</div>';
+    } else {
     html += '<div class="req-section-row ' + (isOpen ? 'open' : '') + '">'
       + '<div class="req-section-row-header" onclick="toggleReqSection(' + si + ')">'
       + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + '</div><div class="req-sect-count">' + checkedCount + '/' + section.items.length + ' selected</div></div></div>'
@@ -975,6 +1014,7 @@ function renderReqSections() {
       + '</div>'
       + '<div class="req-items-panel ' + (isOpen ? 'open' : '') + '">' + itemsHtml + '</div>'
       + '</div>';
+    }
   }
   container.innerHTML = html;
   updateReqSidebar();
@@ -1546,21 +1586,32 @@ function openBuyerProfile(idx) {
     {icon:'💰',name:'Financial Health',                  pts:24,max:30,color:'#c9a227'},
     {icon:'📈',name:'Payment Behaviour & Credit History',pts:20,max:25,color:'#10b981'},
     {icon:'📡',name:'Business Stability & Signals',      pts:13,max:15,color:'#3b82f6'},
-    {icon:'📦',name:'Transaction Context',               pts:8, max:10,color:'#f97316'},
+    {icon:'📦',name:'Transaction Context',               pts:0, max:10,color:'#fed7aa',comingSoon:true},
   ];
   var pbHtml = '';
   pillars.forEach(function(p){
     var pct = Math.round((p.pts/p.max)*100);
+    if (p.comingSoon) {
+      pbHtml += '<div style="display:flex;align-items:center;gap:10px;opacity:.65;cursor:pointer;" onclick="showComingSoon()">'
+        +'<div style="width:24px;height:24px;border-radius:7px;background:#fff7ed;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">'+p.icon+'</div>'
+        +'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--ink);">'+p.name+' <span class="cs-badge" style="font-size:9px;padding:1px 6px;">🔜 Soon</span></div><div style="height:5px;background:var(--line);border-radius:3px;margin-top:4px;"></div></div>'
+        +'<div style="font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;">—<span style="font-size:10px;color:var(--muted);font-weight:400;">/'+p.max+'</span></div>'
+        +'</div>';
+    } else {
     pbHtml += '<div style="display:flex;align-items:center;gap:10px;">'
       +'<div style="width:24px;height:24px;border-radius:7px;background:'+p.color+'1a;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">'+p.icon+'</div>'
       +'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--ink);">'+p.name+'</div><div style="height:5px;background:var(--line);border-radius:3px;margin-top:4px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+p.color+';border-radius:3px;"></div></div></div>'
       +'<div style="font-size:12px;font-weight:700;color:'+p.color+';flex-shrink:0;">'+p.pts+'<span style="font-size:10px;color:var(--muted);font-weight:400;">/'+p.max+'</span></div>'
       +'</div>';
+    }
   });
   document.getElementById('bp-pillar-bars').innerHTML = pbHtml;
   var tsEl = document.getElementById('bp-total-score');
   tsEl.innerHTML = b.trustScore + ' <span style="font-size:12px;font-weight:500;color:var(--muted);">/ 100</span>';
   tsEl.style.color = tl.color;
+
+  var tcEl = document.getElementById('csTabCount');
+  if (tcEl) tcEl.textContent = csInterestCount + ' sellers already interested';
 
   bpSwitchTab('summary');
   var ct = document.getElementById('bp-comment-thread');
@@ -1587,6 +1638,24 @@ function bpToggleSec(el) {
   var chev = el.querySelector('.bp-chev');
   if(chev) chev.textContent = el.classList.contains('bp-open') ? '▼' : '▶';
 }
+
+// ── COMING SOON ─────────────────────────────────────────────
+var csInterestCount = parseInt(localStorage.getItem('cs_transaction_interest') || '14');
+function showComingSoon() {
+  var m = document.getElementById('csModal');
+  m.style.display = 'flex';
+  document.getElementById('csAsk').style.display = 'flex';
+  document.getElementById('csConfirm').style.display = 'none';
+  document.getElementById('csInterestCount').textContent = csInterestCount;
+}
+function expressInterest() {
+  var already = localStorage.getItem('cs_transaction_expressed');
+  if (!already) { csInterestCount++; localStorage.setItem('cs_transaction_interest', csInterestCount); localStorage.setItem('cs_transaction_expressed', '1'); }
+  document.getElementById('csAsk').style.display = 'none';
+  document.getElementById('csConfirm').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('csModal').style.display = 'none'; }, 2200);
+}
+function closeComingSoon() { document.getElementById('csModal').style.display = 'none'; }
 
 function bpAddComment() {
   var inp = document.getElementById('bp-comment-input');
@@ -1739,7 +1808,7 @@ function bpAddComment() {
     <div class="bp-tab"        data-tab="financial" onclick="bpSwitchTab('financial')">Financial</div>
     <div class="bp-tab"        data-tab="payment"   onclick="bpSwitchTab('payment')">Payment</div>
     <div class="bp-tab"        data-tab="stability" onclick="bpSwitchTab('stability')">Stability</div>
-    <div class="bp-tab"        data-tab="transactions" onclick="bpSwitchTab('transactions')">Transactions</div>
+    <div class="bp-tab cs-tab"  data-tab="transactions" onclick="showComingSoon()">Transactions <span class="cs-badge">🔜</span></div>
     <div class="bp-tab"        data-tab="risk"      onclick="bpSwitchTab('risk')">Risk</div>
     <div class="bp-tab"        data-tab="notes"     onclick="bpSwitchTab('notes')">Notes</div>
   </div>
@@ -1974,28 +2043,25 @@ function bpAddComment() {
       </div>
     </div>
 
-    <!-- TRANSACTIONS TAB -->
+    <!-- TRANSACTIONS TAB — COMING SOON -->
     <div class="bp-tc" id="bptab-transactions">
-      <div class="bp-card">
-        <div class="bp-card-title">📦 Transaction History</div>
-        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
-          <thead><tr style="border-bottom:2px solid var(--line);">
-            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">INV #</th>
-            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Date</th>
-            <th style="text-align:right;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Amount</th>
-            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Terms</th>
-            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Due</th>
-            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Paid</th>
-            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Status</th>
-          </tr></thead>
-          <tbody>
-            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0247</td><td>Mar 15</td><td style="text-align:right;font-weight:700;">$18,500</td><td>Net 30</td><td>Apr 14</td><td>—</td><td><span class="bp-spill bp-swarn">Open</span></td></tr>
-            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0231</td><td>Feb 22</td><td style="text-align:right;font-weight:700;">$9,200</td><td>Net 30</td><td>Mar 24</td><td>Mar 22</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
-            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0218</td><td>Jan 30</td><td style="text-align:right;font-weight:700;">$14,700</td><td>Net 30</td><td>Mar 01</td><td>Mar 01</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
-            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0204</td><td>Jan 05</td><td style="text-align:right;font-weight:700;">$6,300</td><td>Net 30</td><td>Feb 04</td><td>Feb 07</td><td><span class="bp-spill bp-swarn">Paid Late</span></td></tr>
-            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0196</td><td>Dec 10</td><td style="text-align:right;font-weight:700;">$21,000</td><td>Net 30</td><td>Jan 09</td><td>Jan 08</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
-          </tbody>
-        </table>
+      <div class="cs-locked-tab" onclick="showComingSoon()" style="cursor:pointer;">
+        <div class="cs-locked-tab-icon">📦</div>
+        <div>
+          <span class="cs-badge" style="font-size:11px;padding:3px 12px;margin-bottom:10px;display:inline-block;">🔜 Coming Soon</span>
+          <div class="cs-locked-tab-title" style="margin-top:6px;">Transaction Context &amp; Order Behaviour</div>
+        </div>
+        <div class="cs-locked-tab-desc">See how this buyer's orders relate to their revenue, track order frequency and consistency, and assess goods risk — all in one place. Connected directly to your ERP.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:380px;">
+          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">📊 Order size vs. revenue</span>
+          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">🔁 Order frequency</span>
+          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">🆕 First vs. repeat order</span>
+          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">📦 Goods risk category</span>
+        </div>
+        <div>
+          <button class="cs-interest-btn" onclick="event.stopPropagation();showComingSoon()">⚡ I'm interested in this feature</button>
+          <div class="cs-interest-count" style="margin-top:8px;" id="csTabCount"></div>
+        </div>
       </div>
     </div>
 
@@ -2060,6 +2126,31 @@ function bpAddComment() {
 
   </div><!-- end bp-body -->
 </div><!-- end scene-buyer-profile -->
+
+<!-- ===== COMING SOON MODAL ===== -->
+<div id="csModal">
+  <div class="cs-modal-box">
+    <div id="csAsk" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="cs-modal-emoji">📦</div>
+      <div class="cs-modal-title">Transaction Context &amp; Order Behaviour</div>
+      <div class="cs-modal-desc">We're building a module that connects your order data to each buyer's trust profile — so you can assess risk based on actual transaction patterns, not just financial history.</div>
+      <div class="cs-modal-features">
+        <div class="cs-modal-feature"><span>📊</span> Order size relative to buyer revenue and prior orders</div>
+        <div class="cs-modal-feature"><span>🔁</span> Order frequency, consistency and first-vs-repeat signals</div>
+        <div class="cs-modal-feature"><span>📦</span> Goods and services risk classification per order</div>
+        <div class="cs-modal-feature"><span>⚡</span> Automatic score contribution — no manual input needed</div>
+      </div>
+      <div class="cs-modal-count"><strong id="csInterestCount">14</strong> sellers have already expressed interest</div>
+      <button class="cs-interest-btn" onclick="expressInterest()" style="width:100%;margin-bottom:10px;">⚡ I'm interested — notify me when it's ready</button>
+      <button onclick="closeComingSoon()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit;padding:4px;">Not now</button>
+    </div>
+    <div id="csConfirm" class="cs-modal-confirm">
+      <div class="cs-modal-confirm-icon">🎉</div>
+      <div class="cs-modal-confirm-text">You're on the list!</div>
+      <div class="cs-modal-confirm-sub">We'll reach out as soon as Transaction Context is ready.</div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== ASK BUYER MODAL ===== -->
 <div id="askBuyerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
