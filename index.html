@@ -1149,7 +1149,7 @@ function selectTemplate(idx) {
   }
   var recs = [
     { color:'#dc2626', termsEnabled:false, validationLevel:'KYB + Identity',     cost:'Basic · Instant Payment available' },
-    { color:'#d97706', termsEnabled:true,  validationLevel:'+ Credit Enrichment', cost:'Standard · Duration set per buyer' },
+    { color:'#d97706', termsEnabled:true,  validationLevel:'+ Credit Enrichment', cost:'Standard' },
     { color:'#16a34a', termsEnabled:true,  validationLevel:'+ Full DD',           cost:'Full · Max credit + insurance facilitation' }
   ];
   var rec = recs[idx];
@@ -1157,7 +1157,7 @@ function selectTemplate(idx) {
   if (!window.cfgPS[idx]) window.cfgPS[idx] = {};
   var ri = document.getElementById('cfg-rec-inner');
   var termsBadge = rec.termsEnabled
-    ? '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(22,163,74,0.06);border:1.5px solid #16a34a;border-radius:7px;"><span style="font-size:15px;">✅</span><div><div style="font-size:12px;font-weight:700;color:#16a34a;">Eligible</div><div style="font-size:10px;color:var(--muted);">Duration set per buyer in dashboard</div></div></div>'
+    ? '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(22,163,74,0.06);border:1.5px solid #16a34a;border-radius:7px;"><span style="font-size:15px;">✅</span><div><div style="font-size:12px;font-weight:700;color:#16a34a;">Eligible</div></div></div>'
     : '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(220,38,38,0.06);border:1.5px solid #dc2626;border-radius:7px;"><span style="font-size:15px;">⛔</span><div><div style="font-size:12px;font-weight:700;color:#dc2626;">Not eligible</div><div style="font-size:10px;color:var(--muted);">Instant Payment available</div></div></div>';
   if (ri) ri.innerHTML = '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0;"><div style="width:9px;height:9px;border-radius:50%;background:'+rec.color+';"></div><div style="font-size:11px;font-weight:700;color:'+rec.color+';text-transform:uppercase;letter-spacing:0.06em;">Reevol Recommendation</div></div>'
     +'<div style="display:flex;align-items:flex-end;gap:18px;flex:1;flex-wrap:wrap;">'
