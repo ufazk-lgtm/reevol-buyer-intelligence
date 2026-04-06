@@ -631,10 +631,10 @@ td:first-child{padding-left:20px;}
         <div class="portal-incentive-banner">
           <div class="portal-incentive-icon">🎁</div>
           <div>
-            <div class="portal-incentive-title">You're eligible for Net-30 Payment Terms</div>
-            <div class="portal-incentive-sub">Complete this short verification and ACME Corp will activate Net-30 terms — buy now, pay in 30 days, no upfront payment required.</div>
+            <div class="portal-incentive-title">You're eligible for Net Payment Terms</div>
+            <div class="portal-incentive-sub">Complete this short verification and ACME Corp will activate your Net Terms — buy now, pay later, no upfront payment required.</div>
           </div>
-          <div class="portal-incentive-badge">Net-30 Ready</div>
+          <div class="portal-incentive-badge">Net Terms Ready</div>
         </div>
         <div style="display:flex;gap:0;border-bottom:2px solid var(--line);margin-bottom:18px;overflow-x:auto;">
           <button onclick="portalStep(0)" id="ptab-0" style="flex:1;min-width:80px;padding:9px 6px;border:none;background:none;font-size:10.5px;font-weight:700;color:#5b5bd6;border-bottom:2px solid #5b5bd6;margin-bottom:-2px;cursor:pointer;font-family:inherit;">🏛 Identity</button>
@@ -670,8 +670,8 @@ td:first-child{padding-left:20px;}
           <div class="portal-field"><label>Estimated Monthly Order Value <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input" placeholder="e.g. $20,000 – $50,000"></div>
           <div class="portal-field"><label>Primary Goods / Services Category <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input filled" value="Building Materials &amp; Construction Supplies" readonly></div>
         </div>
-        <button class="portal-submit" onclick="showPortalSuccess()">Submit &amp; Unlock Net-30 →</button>
-        <div id="portal-success" style="display:none;margin-top:18px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:22px;text-align:center;"><div style="font-size:30px;margin-bottom:8px">✅</div><div style="font-weight:700;color:#16a34a;margin-bottom:5px">Net-30 Terms Activated!</div><div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Your Net-30 terms will be live within 1–2 business hours.</div><button onclick="goToScene('table')" style="background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;">Go to Dashboard →</button></div>
+        <button class="portal-submit" onclick="showPortalSuccess()">Submit &amp; Unlock Net Terms →</button>
+        <div id="portal-success" style="display:none;margin-top:18px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:22px;text-align:center;"><div style="font-size:30px;margin-bottom:8px">✅</div><div style="font-weight:700;color:#16a34a;margin-bottom:5px">Net Terms Activated!</div><div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Your Net Terms will be live within 1–2 business hours.</div><button onclick="goToScene('table')" style="background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;">Go to Dashboard →</button></div>
       </div>
     </div>
   </div>
@@ -1004,16 +1004,16 @@ function animateNumbers() {
 
 // ── REQUIREMENTS ─────────────────────────────────────────────
 var PILLARS = [
-  { name:'Business Identity & Legitimacy',          icon:'🏢', maxPts:20, weight:'20%', color:'#7c5cfc', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)' },
+  { name:'Business Identity & Legitimacy',          icon:'🏢', maxPts:25, weight:'25%', color:'#7c5cfc', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)' },
   { name:'Financial Health',                         icon:'💰', maxPts:30, weight:'30%', color:'#c9a227', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)' },
   { name:'Payment Behaviour & Credit History',       icon:'📈', maxPts:25, weight:'25%', color:'#10b981', gradient:'linear-gradient(135deg,#10b981,#047857)' },
-  { name:'Business Stability & Operational Signals', icon:'📡', maxPts:15, weight:'15%', color:'#3b82f6', gradient:'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
-  { name:'Transaction Context & Order Behaviour',    icon:'📦', maxPts:10, weight:'10%', color:'#f97316', gradient:'linear-gradient(135deg,#f97316,#c2410c)' }
+  { name:'Business Stability & Operational Signals', icon:'📡', maxPts:20, weight:'20%', color:'#3b82f6', gradient:'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
+  { name:'Transaction Context & Order Behaviour',    icon:'📦', maxPts:0,  weight:'0%',  color:'#f97316', gradient:'linear-gradient(135deg,#f97316,#c2410c)' }
 ];
 
 var requirementSections = [
   { name:'Business Identity & Legitimacy', icon:'🏢', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)',
-    items:[{name:'Business Registration Number',checked:true,w:18,noGo:true},{name:'Years in Operation',checked:true,w:14,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:14,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:10,noGo:false},{name:'Director / Owner KYC (ID + Selfie)',checked:true,w:14,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:12,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:10,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
+    items:[{name:'Business Registration Number',checked:true,w:16,noGo:true},{name:'Years in Operation',checked:true,w:12,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:12,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:9,noGo:false},{name:'Director / Owner KYC (ID + Selfie)',checked:true,w:13,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:11,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:9,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
   { name:'Financial Health', icon:'💰', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)',
     items:[{name:'Latest Filed Accounts / Financial Statements',checked:true,w:24,noGo:true},{name:'Revenue Trend (Growing / Stable / Declining)',checked:true,w:17,noGo:false},{name:'Profit Margin / Gross Margin',checked:true,w:13,noGo:false},{name:'Bank Statements (3–6 months)',checked:true,w:20,noGo:false},{name:'Outstanding Debt or Liabilities',checked:true,w:13,noGo:false},{name:'Evidence of Consistent Cash Flow',checked:true,w:13,noGo:false}]},
   { name:'Payment Behaviour & Credit History', icon:'📈', gradient:'linear-gradient(135deg,#10b981,#047857)',
@@ -1649,11 +1649,11 @@ function openBuyerProfile(idx) {
   insEl.style.color = b.insured ? 'var(--green)' : 'var(--muted-2)';
 
   var pillars = [
-    {icon:'🏢',name:'Business Identity & Legitimacy',   pts:18,max:20,color:'#7c5cfc'},
+    {icon:'🏢',name:'Business Identity & Legitimacy',   pts:22,max:25,color:'#7c5cfc'},
     {icon:'💰',name:'Financial Health',                  pts:24,max:30,color:'#c9a227'},
     {icon:'📈',name:'Payment Behaviour & Credit History',pts:20,max:25,color:'#10b981'},
-    {icon:'📡',name:'Business Stability & Signals',      pts:13,max:15,color:'#3b82f6'},
-    {icon:'📦',name:'Transaction Context',               pts:0, max:10,color:'#fed7aa',comingSoon:true},
+    {icon:'📡',name:'Business Stability & Signals',      pts:17,max:20,color:'#3b82f6'},
+    {icon:'📦',name:'Transaction Context',               pts:0, max:0, color:'#fed7aa',comingSoon:true},
   ];
   var pbHtml = '';
   pillars.forEach(function(p){
