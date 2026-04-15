@@ -514,40 +514,6 @@ td:first-child{padding-left:20px;}
 </div>
 
 <!-- ASSIGN -->
-<div id="scene-assign" class="scene">
-  <div style="max-width:900px;margin:0 auto;padding:56px 40px 0;">
-    <div style="text-align:center;margin-bottom:36px;">
-      <div class="howto-eyebrow" style="color:var(--gold);font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;">Step Three — Assign Trust Levels</div>
-      <h2 style="font-size:34px;font-weight:700;color:var(--ink);margin-bottom:8px;">Assign a Trust Level to Each Buyer</h2>
-      <p style="font-size:15px;color:var(--muted);">Net terms eligibility is set by trust level. Duration is configured per buyer in the dashboard.</p>
-    </div>
-    <div style="background:rgba(91,91,214,0.04);border:1px solid rgba(91,91,214,0.15);border-radius:10px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-      <span style="font-size:12px;color:var(--muted);">🤖 AI will analyze and confirm scores — this is your initial assignment.</span>
-      <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
-        <span style="font-size:12px;font-weight:600;color:var(--ink);">Assign all to:</span>
-        <select onchange="assignAllTl(this.value)" id="assign-all-select" style="padding:5px 10px;border:1.5px solid var(--line);border-radius:7px;font-size:12px;font-weight:600;color:var(--ink);background:white;font-family:inherit;cursor:pointer;outline:none;">
-          <option value="">— select —</option>
-          <option value="introduced">🔴 Introduced</option>
-          <option value="qualified">🟡 Qualified</option>
-          <option value="established">🟢 Established</option>
-        </select>
-      </div>
-    </div>
-    <div style="background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:24px;">
-      <div style="padding:12px 22px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:2fr 1.4fr 1fr 80px;gap:12px;">
-        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Buyer</div>
-        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Trust Level</div>
-        <div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Net Terms Eligibility</div>
-        <div></div>
-      </div>
-      <div id="assign-buyer-rows"></div>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;background:white;border:1px solid var(--line);border-radius:12px;padding:18px 24px;">
-      <div><div style="font-size:14px;font-weight:700;color:var(--ink);">Ready to start Buyer Intelligence?</div><div style="font-size:12px;color:var(--muted);margin-top:2px;">Assessment starts immediately.</div></div>
-      <button onclick="startAssessment()" style="background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">⚡ Process Buyer Intelligence</button>
-    </div>
-  </div>
-</div>
 
 <!-- ENGINE (kept but not in journey) -->
 <div id="scene-engine" class="scene">
