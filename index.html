@@ -343,9 +343,9 @@ td:first-child{padding-left:20px;}
       <div style="padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);">
         <div style="font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;">Configure in order ›</div>
         <div style="display:flex;align-items:center;gap:8px;flex:1;">
-          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Introduced</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div></div>
-          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Qualified</div><div style="font-size:9.5px;color:var(--muted);">25–74 pts</div></div>
-          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Established</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div></div>
+          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Introduced</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div><div id="dtl-toggle-introduced" onclick="event.stopPropagation();setDefaultTrustLevel('introduced')" style="margin-top:5px;font-size:9px;font-weight:700;color:#dc2626;cursor:pointer;letter-spacing:0.02em;">● Default</div></div>
+          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Qualified</div><div style="font-size:9.5px;color:var(--muted);">25–74 pts</div><div id="dtl-toggle-qualified" onclick="event.stopPropagation();setDefaultTrustLevel('qualified')" style="margin-top:5px;font-size:9px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0.5;letter-spacing:0.02em;">○ default</div></div>
+          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Established</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div><div id="dtl-toggle-established" onclick="event.stopPropagation();setDefaultTrustLevel('established')" style="margin-top:5px;font-size:9px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0.5;letter-spacing:0.02em;">○ default</div></div>
         </div>
         <div id="cfg-next-btn"><button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Profile →</button></div>
       </div>
@@ -380,22 +380,12 @@ td:first-child{padding-left:20px;}
         <div class="req-stat-row"><div class="req-stat-label">Active Requirements</div><div class="req-stat-val" id="sidebarTotal">—</div></div>
         <div class="req-stat-row"><div class="req-stat-label">Auto-Enriched</div><div class="req-stat-val" style="color:#4ade80;">~80%</div></div>
 
-        <button class="req-save-btn" onclick="goToScene('import')" style="margin-top:10px;">Save &amp; Activate →</button>
+        <div style="height:1px;background:rgba(255,255,255,0.07);margin:10px 0;"></div>
+        <div style="font-size:10.5px;color:rgba(255,255,255,0.35);line-height:1.5;">Set the default entry level below, then save to activate your configuration.</div>
       </div>
     </div>
   </div>
 
-  <!-- DEFAULT TRUST LEVEL — bottom strip -->
-  <div style="max-width:900px;margin:24px auto 0;padding:0 32px 60px;">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;background:white;border:1px solid var(--line);border-radius:12px;">
-      <span style="font-size:13px;color:var(--muted);">New buyers start at</span>
-      <div style="display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;">
-        <button id="dtl-introduced" onclick="setDefaultTrustLevel('introduced')" style="padding:7px 18px;border:none;background:#111827;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;">Introduced</button>
-        <button id="dtl-qualified"  onclick="setDefaultTrustLevel('qualified')"  style="padding:7px 18px;border:none;border-left:1px solid var(--line);background:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s;">Qualified</button>
-        <button id="dtl-established" onclick="setDefaultTrustLevel('established')" style="padding:7px 18px;border:none;border-left:1px solid var(--line);background:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s;">Established</button>
-      </div>
-    </div>
-  </div>
 
 </div>
 
@@ -416,8 +406,7 @@ td:first-child{padding-left:20px;}
       </div>
     </div>
     <div id="import-method-block" style="display:none;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;">
-        <div id="import-card-erp" class="import-card" onclick="selectImportMethod('erp')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#7c5cfc,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">🔗</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">ERP Integration</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Sync from SAP, Xero, QuickBooks or any ERP.</div></div>
+      <div style="margin-bottom:14px;">
         <div id="import-card-manual" class="import-card" onclick="selectImportMethod('manual')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#5b5bd6,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">🔍</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">Search &amp; Select Buyers</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Select from your existing buyers or add new ones.</div></div>
       </div>
       <div style="text-align:center;margin-bottom:28px;">
@@ -453,7 +442,7 @@ td:first-child{padding-left:20px;}
       <!-- SEARCH & SELECT UI -->
       <div id="manual-entry-row" style="display:none;margin-bottom:20px;">
         <!-- Search bar -->
-        <div style="position:relative;margin-bottom:12px;">
+        <div id="bim-search-row" style="position:relative;margin-bottom:12px;">
           <svg style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;" width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <input id="bim-search" type="text" placeholder="Search your existing buyers…" oninput="bimSearchFilter()" style="width:100%;padding:10px 14px 10px 36px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;transition:border-color 0.15s;" onfocus="this.style.borderColor='#5b5bd6'" onblur="this.style.borderColor='var(--line)'">
         </div>
@@ -479,13 +468,24 @@ td:first-child{padding-left:20px;}
             <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
               <div style="flex:2;min-width:140px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Company Name *</div><input type="text" id="bim-new-name" placeholder="e.g. Harbor Build Supply Co." style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')bimAddNewBuyer()"></div>
               <div style="flex:1;min-width:110px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Country *</div><input type="text" id="bim-new-country" placeholder="e.g. United States" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;"></div>
+              <div style="flex:1;min-width:120px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Reg. Number</div><input type="text" id="bim-new-reg" placeholder="e.g. 12345678" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;"></div>
               <button onclick="bimAddNewBuyer()" style="background:#5b5bd6;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Add</button>
             </div>
           </div>
         </div>
+        <!-- Inline trust level picker -->
+        <div id="bim-tl-inline" style="display:none;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px;background:white;">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;">Assign a trust level to these buyers</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-bottom:12px;">AI will confirm scores later — set the starting level now. You can change per buyer on the next step.</div>
+          <div style="display:flex;gap:8px;">
+            <div id="bim-tl-introduced" onclick="bimSelectTl('introduced')" style="flex:1;padding:10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;transition:all 0.15s;"><div style="font-size:15px;margin-bottom:3px;">🔴</div><div style="font-size:11px;font-weight:700;color:var(--muted);">Introduced</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px;">0–24 pts</div></div>
+            <div id="bim-tl-qualified"   onclick="bimSelectTl('qualified')"   style="flex:1;padding:10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;transition:all 0.15s;"><div style="font-size:15px;margin-bottom:3px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--muted);">Qualified</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px;">25–74 pts</div></div>
+            <div id="bim-tl-established" onclick="bimSelectTl('established')" style="flex:1;padding:10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;transition:all 0.15s;"><div style="font-size:15px;margin-bottom:3px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--muted);">Established</div><div style="font-size:9.5px;color:var(--muted);margin-top:1px;">75–100 pts</div></div>
+          </div>
+        </div>
         <!-- CTA -->
         <div style="display:flex;justify-content:flex-end;">
-          <button id="bim-confirm-btn" onclick="bimConfirmSelected()" disabled style="display:inline-flex;align-items:center;gap:8px;background:#5b5bd6;color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:inherit;opacity:0.45;transition:all 0.2s;">Add 0 buyers to BIM →</button>
+          <button id="bim-confirm-btn" onclick="bimConfirmSelected()" disabled style="display:inline-flex;align-items:center;gap:8px;background:#5b5bd6;color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:inherit;opacity:0.45;transition:all 0.2s;">Start with 0 buyers →</button>
         </div>
       </div>
       <div id="import-result" style="display:none;opacity:0;transition:opacity 0.4s ease;">
@@ -507,6 +507,18 @@ td:first-child{padding-left:20px;}
       <div class="howto-eyebrow" style="color:var(--gold);font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;">Step Three — Assign Trust Levels</div>
       <h2 style="font-size:34px;font-weight:700;color:var(--ink);margin-bottom:8px;">Assign a Trust Level to Each Buyer</h2>
       <p style="font-size:15px;color:var(--muted);">Net terms eligibility is set by trust level. Duration is configured per buyer in the dashboard.</p>
+    </div>
+    <div style="background:rgba(91,91,214,0.04);border:1px solid rgba(91,91,214,0.15);border-radius:10px;padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <span style="font-size:12px;color:var(--muted);">🤖 AI will analyze and confirm scores — this is your initial assignment.</span>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;font-weight:600;color:var(--ink);">Assign all to:</span>
+        <select onchange="assignAllTl(this.value)" id="assign-all-select" style="padding:5px 10px;border:1.5px solid var(--line);border-radius:7px;font-size:12px;font-weight:600;color:var(--ink);background:white;font-family:inherit;cursor:pointer;outline:none;">
+          <option value="">— select —</option>
+          <option value="introduced">🔴 Introduced</option>
+          <option value="qualified">🟡 Qualified</option>
+          <option value="established">🟢 Established</option>
+        </select>
+      </div>
     </div>
     <div style="background:white;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:24px;">
       <div style="padding:12px 22px;background:var(--surface);border-bottom:1px solid var(--line);display:grid;grid-template-columns:2fr 1.4fr 1fr 80px;gap:12px;">
@@ -732,7 +744,7 @@ td:first-child{padding-left:20px;}
   <div class="table-wrap">
     <div class="table-scroll">
       <table>
-        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>BUYER STATUS</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th><th></th></tr></thead>
+        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>BUYER STATUS</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th></tr></thead>
         <tbody id="buyerTableBody"></tbody>
       </table>
     </div>
@@ -846,7 +858,7 @@ var buyers = [
   { name:"Pacific Lumber Co.",      domain:"pacificlumber.net",      color:"#0891b2", initials:"PL", trustScore:61, assignedLevel:"qualified",   assessmentStatus:"completed",  buyerStatus:"pending-review",    terms:"Net-30", termsDueDays:2,    limit:"$28,000",  creditUsed:"$0",      creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
   { name:"Ironclad Fasteners Inc.", domain:"ironcladfasteners.com",  color:"#dc2626", initials:"IF", trustScore:12, assignedLevel:"introduced",  assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
   { name:"SunRise HVAC Supply",     domain:"sunrisehvac.com",        color:"#d97706", initials:"SR", trustScore:71, assignedLevel:"qualified",   assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$42,000",  creditUsed:"$12,500", creditDue:null,      insured:true,  monitor:false, portalEmail:null       },
-  { name:"Metro Plumbing Dist.",    domain:"metroplumbing.net",      color:"#0f766e", initials:"MP", trustScore:0,  assignedLevel:"introduced",  assessmentStatus:"pending",    buyerStatus:"pending-assessment",terms:"—",      termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
+  { name:"Metro Plumbing Dist.",    domain:"metroplumbing.net",      color:"#0f766e", initials:"MP", trustScore:0,  assignedLevel:null,          assessmentStatus:"pending",    buyerStatus:"pending-assessment",terms:"—",      termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:"required" },
   { name:"Delta Roofing Group",     domain:"deltaroofing.com",       color:"#5b5bd6", initials:"DR", trustScore:79, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-60", termsDueDays:null, limit:"$95,000",  creditUsed:"$47,000", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
   { name:"CoreSteel Wholesale",     domain:"coresteelwholesale.com", color:"#9f1239", initials:"CS", trustScore:8,  assignedLevel:"introduced",  assessmentStatus:"completed",  buyerStatus:"rejected",          terms:"Upfront",termsDueDays:null, limit:"—",        creditUsed:"—",       creditDue:null,      insured:false, monitor:false, portalEmail:null       },
   { name:"Skyline Glass Works",     domain:"skylineglass.com",       color:"#0369a1", initials:"SG", trustScore:54, assignedLevel:"qualified",   assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-30", termsDueDays:null, limit:"$22,000",  creditUsed:"$5,200",  creditDue:null,      insured:false, monitor:true,  portalEmail:null       },
@@ -872,11 +884,16 @@ function renderBuyerTable() {
   for (var i = 0; i < buyers.length; i++) {
     var b = buyers[i];
     var actualLevel = (b.trustScore > 0) ? scoreToLevel(b.trustScore) : b.assignedLevel;
-    var tl = tlColorMap[actualLevel] || tlColorMap.introduced;
     var warn = (i === 2 || i === 10)
       ? '<div style="margin-top:3px;font-size:11px;color:#c0132a;font-weight:500;">⚠ Didn\'t meet target score</div>'
       : '';
-    var tlCell = '<div><span style="display:inline-flex;align-items:center;gap:5px;background:' + tl.bg + ';color:' + tl.color + ';font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">' + tl.emoji + ' ' + tl.label + '</span>' + warn + '</div>';
+    var tlCell;
+    if (!actualLevel) {
+      tlCell = '<div><span style="display:inline-flex;align-items:center;gap:5px;background:var(--surface);color:var(--muted);font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;border:1px solid var(--line);">— Not assigned</span></div>';
+    } else {
+      var tl = tlColorMap[actualLevel] || tlColorMap.introduced;
+      tlCell = '<div><span style="display:inline-flex;align-items:center;gap:5px;background:' + tl.bg + ';color:' + tl.color + ';font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px;">' + tl.emoji + ' ' + tl.label + '</span>' + warn + '</div>';
+    }
 
     var scoreCell = b.trustScore > 0
       ? '<div style="display:flex;align-items:center;gap:7px;"><div style="width:48px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + b.trustScore + '%;background:' + tl.color + ';border-radius:2px;"></div></div><span style="font-size:12.5px;font-weight:700;color:' + tl.color + ';">' + b.trustScore + '</span><span style="font-size:10.5px;color:var(--muted);">/100</span></div>'
@@ -906,9 +923,6 @@ function renderBuyerTable() {
       ? '<button onclick="askBuyerInfo(' + i + ')" style="font-size:10.5px;font-weight:700;color:white;background:#d97706;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;">📋 Ask Buyer Info</button>'
       : '<span style="font-size:10.5px;color:var(--muted);">—</span>';
 
-    var actHtml = (b.buyerStatus !== 'approved' && b.buyerStatus !== 'rejected')
-      ? '<button onclick="approveBuyer(' + i + ')" style="font-size:10px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:inherit;">Approve</button><button onclick="rejectBuyer(' + i + ')" style="font-size:10px;font-weight:600;color:#dc2626;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:5px;padding:3px 8px;cursor:pointer;font-family:inherit;">Reject</button>'
-      : '';
 
     var rh = (i === 2 || i === 10) ? 'background:rgba(220,38,38,0.02);' : (b.portalEmail === 'required' ? 'background:rgba(217,119,6,0.03);' : '');
 
@@ -926,7 +940,6 @@ function renderBuyerTable() {
       + '<td><div style="font-size:11px;color:var(--muted);white-space:nowrap;">' + buyerMeta[i][0] + '</div></td>'
       + '<td><div style="font-size:11px;color:var(--muted);white-space:nowrap;">' + buyerMeta[i][1] + '</div></td>'
       + '<td><div style="font-size:11px;color:var(--muted);white-space:nowrap;">' + buyerMeta[i][2] + '</div></td>'
-      + '<td><div style="display:flex;flex-direction:column;gap:4px;">' + actHtml + '</div></td>'
       + '</tr>';
   }
   tbody.innerHTML = html;
@@ -1126,6 +1139,7 @@ var confirmedProfiles = {};
 
 function selectTemplate(idx) {
   activeTplIndex = idx;
+
   var tpl = tlTemplates[idx];
   for (var s=0;s<requirementSections.length;s++) for (var i=0;i<requirementSections[s].items.length;i++) requirementSections[s].items[i].checked = true;
   for (var u=0;u<tpl.unchecked.length;u++) {
@@ -1140,7 +1154,7 @@ function selectTemplate(idx) {
   var names = ['Introduced','Qualified','Established'];
   for (var i=0;i<3;i++) {
     var el = document.getElementById('cfg-step-'+i); if(!el) continue;
-    var nd = el.querySelector('div:nth-child(2)'), sub = el.querySelector('div:last-child');
+    var nd = el.querySelector('div:nth-child(2)'), sub = el.querySelector('div:nth-child(3)');
     if (i === idx) { el.style.opacity='1'; el.style.border='2px solid '+cfgColors[i]; el.style.background='rgba(0,0,0,0.02)'; if(nd){nd.textContent=(confirmedProfiles[i]?'✓ ':'')+names[i];nd.style.color=cfgColors[i];} if(sub)sub.style.color=cfgColors[i]; }
     else if (confirmedProfiles[i]) { el.style.opacity='1'; el.style.border='2px solid transparent'; el.style.background='rgba(22,163,74,0.05)'; if(nd){nd.textContent='✓ '+names[i];nd.style.color='#16a34a';} if(sub)sub.style.color='#16a34a'; }
     else { el.style.opacity='0.45'; el.style.border='2px solid var(--line)'; el.style.background='white'; if(nd){nd.textContent=names[i];nd.style.color='var(--ink)';} if(sub)sub.style.color='var(--muted)'; }
@@ -1164,7 +1178,7 @@ function selectTemplate(idx) {
     +'</div><div style="align-self:flex-start;font-size:11px;color:var(--muted);white-space:nowrap;">'+rec.cost+'</div>';
   var nb = document.getElementById('cfg-next-btn');
   if (nb) nb.innerHTML = idx < 2
-    ? '<button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Template →</button>'
+    ? '<button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Profile →</button>'
     : '<button onclick="confirmedProfiles[2]=true;goToScene(\'import\')" style="background:#16a34a;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">All Profiles Ready →</button>';
   var tn = document.getElementById('tplTitleLabel'); if(tn) tn.textContent = tpl.name;
   var sb = document.getElementById('sidebarTplName'); if(sb) sb.textContent = tpl.name;
@@ -1182,24 +1196,70 @@ var manualBuyers = [];
 var defaultTrustLevel = 'introduced';
 function setDefaultTrustLevel(level) {
   defaultTrustLevel = level;
+  var colors = { introduced:'#dc2626', qualified:'#d97706', established:'#16a34a' };
   ['introduced','qualified','established'].forEach(function(k) {
-    var btn = document.getElementById('dtl-'+k);
-    if (!btn) return;
-    var active = k === level;
-    btn.style.background = active ? '#111827' : 'transparent';
-    btn.style.color      = active ? 'white'   : 'var(--muted)';
-    btn.style.fontWeight = active ? '600'      : '500';
+    var toggle = document.getElementById('dtl-toggle-'+k);
+    if (!toggle) return;
+    if (k === level) {
+      toggle.textContent = '● Default';
+      toggle.style.color = colors[k];
+      toggle.style.opacity = '1';
+      toggle.style.fontWeight = '700';
+    } else {
+      toggle.textContent = '○ default';
+      toggle.style.color = 'var(--muted)';
+      toggle.style.opacity = '0.5';
+      toggle.style.fontWeight = '600';
+    }
   });
+  // Legacy: update dtl-* card elements if present (import inline picker)
+  var styles = {
+    introduced: { border:'2px solid #dc2626', bg:'rgba(220,38,38,0.04)',  titleColor:'#dc2626', hintBg:'rgba(220,38,38,0.04)',  hintBorder:'rgba(220,38,38,0.15)',  hint:'Most suppliers start here — it\'s the safest entry point for buyers you don\'t yet know.' },
+    qualified:  { border:'2px solid #d97706', bg:'rgba(217,119,6,0.04)',  titleColor:'#d97706', hintBg:'rgba(217,119,6,0.04)',  hintBorder:'rgba(217,119,6,0.2)',    hint:'Use this if you pre-screen buyers before importing them — they\'ve already earned some trust.' },
+    established:{ border:'2px solid #16a34a', bg:'rgba(22,163,74,0.04)',  titleColor:'#16a34a', hintBg:'rgba(22,163,74,0.04)',  hintBorder:'rgba(22,163,74,0.2)',    hint:'Only recommended when importing buyers with a long, verified trading history you already trust.' }
+  };
+  ['introduced','qualified','established'].forEach(function(k) {
+    var card = document.getElementById('dtl-'+k);
+    if (!card) return;
+    var active = k === level;
+    var s = styles[k];
+    card.style.border   = active ? s.border         : '2px solid var(--line)';
+    card.style.background = active ? s.bg            : 'white';
+    card.style.opacity  = active ? '1'               : '0.55';
+    var titleEl = card.querySelector('div:nth-child(2)');
+    if (titleEl) titleEl.style.color = active ? s.titleColor : 'var(--ink)';
+  });
+  var hint = document.getElementById('dtl-hint');
+  var hintText = document.getElementById('dtl-hint-text');
+  var s = styles[level];
+  if (hint && s) { hint.style.background = s.hintBg; hint.style.borderColor = s.hintBorder; }
+  if (hintText && s) hintText.textContent = s.hint;
 }
 
+var currentImportMode = '';
 function selectImportMode(mode) {
+  currentImportMode = mode;
   var ms = ['targeted','bulk'];
   for (var i=0;i<ms.length;i++) { var el=document.getElementById('import-mode-'+ms[i]); if(!el) continue; el.style.borderColor=ms[i]===mode?'var(--gold)':'var(--line)'; el.style.background=ms[i]===mode?'rgba(201,162,39,0.04)':'white'; el.style.boxShadow=ms[i]===mode?'0 0 0 3px rgba(201,162,39,0.12)':'none'; }
-  document.getElementById('import-method-block').style.display='block';
   var r=document.getElementById('import-result'); if(r){r.style.display='none';r.style.opacity='0';}
   var mr=document.getElementById('manual-entry-row'); if(mr) mr.style.display='none';
-  var csvUpload=document.getElementById('csv-upload-zone'); if(csvUpload) csvUpload.style.display='none';
-  bimSelectedIds={}; bimNewBuyerPool=[]; bimAddNewOpen=false;
+  bimSelectedIds={}; bimNewBuyerPool=[]; bimAddNewOpen=false; bimSelectedTl='';
+
+  var mb = document.getElementById('import-method-block'); if(mb) mb.style.display='block';
+  var manualCard = document.getElementById('import-card-manual');
+  var csvBtnWrap = document.getElementById('import-card-csv'); if(csvBtnWrap) csvBtnWrap = csvBtnWrap.parentElement;
+  var csvZone = document.getElementById('csv-upload-zone');
+
+  if (mode === 'bulk') {
+    // Skip method selection — show CSV upload directly
+    if (manualCard && manualCard.parentElement) manualCard.parentElement.style.display = 'none';
+    if (csvBtnWrap) csvBtnWrap.style.display = 'none';
+    if (csvZone) csvZone.style.display = 'block';
+  } else {
+    if (manualCard && manualCard.parentElement) manualCard.parentElement.style.display = '';
+    if (csvBtnWrap) csvBtnWrap.style.display = '';
+    if (csvZone) csvZone.style.display = 'none';
+  }
 }
 function askBuyerInfo(i) {
   event.stopPropagation();
@@ -1234,6 +1294,7 @@ var existingBuyerPool = [
 var bimSelectedIds = {};
 var bimNewBuyerPool = [];
 var bimAddNewOpen = false;
+var bimSelectedTl = '';
 
 function bimGetFilteredPool() {
   var q = (document.getElementById('bim-search')||{value:''}).value.toLowerCase().trim();
@@ -1271,11 +1332,32 @@ function bimSyncSelectAll(list) {
   bimUpdateCta();
 }
 
+function bimSelectTl(tl) {
+  bimSelectedTl = tl;
+  var tls = ['introduced','qualified','established'];
+  var colors = {introduced:'#dc2626', qualified:'#d97706', established:'#16a34a'};
+  var bgs = {introduced:'rgba(220,38,38,0.06)', qualified:'rgba(217,119,6,0.06)', established:'rgba(22,163,74,0.06)'};
+  for (var i=0;i<tls.length;i++) {
+    var el = document.getElementById('bim-tl-'+tls[i]); if(!el) continue;
+    var lbl = el.querySelector('div:nth-child(2)');
+    if (tls[i]===tl) {
+      el.style.borderColor=colors[tl]; el.style.background=bgs[tl];
+      if(lbl) lbl.style.color=colors[tl];
+    } else {
+      el.style.borderColor='var(--line)'; el.style.background='white';
+      if(lbl) lbl.style.color='var(--muted)';
+    }
+  }
+  bimUpdateCta();
+}
+
 function bimUpdateCta() {
   var count = Object.keys(bimSelectedIds).filter(function(k){ return bimSelectedIds[k]; }).length;
   var btn = document.getElementById('bim-confirm-btn'); if(!btn) return;
   var countEl = document.getElementById('bim-selected-count'); if(countEl) countEl.textContent = count + ' selected';
-  btn.textContent = count ? 'Add '+count+' buyer'+(count!==1?'s':'')+' to BIM \u2192' : 'Add 0 buyers to BIM \u2192';
+  var tlInline = document.getElementById('bim-tl-inline');
+  if (tlInline) tlInline.style.display = count > 0 ? 'block' : 'none';
+  btn.textContent = count ? 'Start with '+count+' buyer'+(count!==1?'s':'')+' \u2192' : 'Start with 0 buyers \u2192';
   btn.disabled = count === 0;
   btn.style.opacity = count ? '1' : '0.45';
   btn.style.cursor = count ? 'pointer' : 'not-allowed';
@@ -1310,25 +1392,40 @@ function bimToggleAddNew() {
 function bimAddNewBuyer() {
   var nameEl = document.getElementById('bim-new-name');
   var countryEl = document.getElementById('bim-new-country');
+  var regEl = document.getElementById('bim-new-reg');
   var name = nameEl ? nameEl.value.trim() : '';
   var country = countryEl ? countryEl.value.trim() : 'Unknown';
+  var reg = regEl ? regEl.value.trim() : '';
   if (!name) { if(nameEl){nameEl.style.borderColor='var(--rose)';setTimeout(function(){nameEl.style.borderColor='';},1200);} return; }
   var colors=['#f97316','#16a34a','#7c5cfc','#0891b2','#d97706','#5b5bd6','#059669','#dc2626'];
   var ini=''; var parts=name.split(' '); for(var i=0;i<parts.length&&ini.length<2;i++) if(parts[i]) ini+=parts[i][0].toUpperCase();
   var id = 'new-'+Date.now();
-  var buyer = {id:id, initials:ini, color:colors[bimNewBuyerPool.length%colors.length], name:name, country:country||'Unknown', flag:'🌐', domain:name.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,12)+'.com', isNew:true};
+  var buyer = {id:id, initials:ini, color:colors[bimNewBuyerPool.length%colors.length], name:name, country:country||'Unknown', flag:'🌐', domain:name.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,12)+'.com', regNumber:reg, isNew:true};
   bimNewBuyerPool.push(buyer);
   bimSelectedIds[id] = true;
   if(nameEl) nameEl.value='';
   if(countryEl) countryEl.value='';
+  if(regEl) regEl.value='';
   bimToggleAddNew();
   bimRenderList();
 }
 
 function bimConfirmSelected() {
-  var selectedIds = Object.keys(bimSelectedIds).filter(function(k){ return bimSelectedIds[k]; });
   var pool = existingBuyerPool.concat(bimNewBuyerPool);
   var selected = pool.filter(function(b){ return bimSelectedIds[b.id]; });
+
+  // Trust level picked inline — populate assignBuyers and skip assign scene
+  if (bimSelectedTl) {
+    var termsDays = {introduced:'0', qualified:'30', established:'90'};
+    assignBuyers = selected.map(function(b){
+      return {initials:b.initials, color:b.color, name:b.name, domain:b.domain, tl:bimSelectedTl, terms:termsDays[bimSelectedTl]||'0'};
+    });
+    renderAssignRows();
+    startAssessment();
+    return;
+  }
+
+  // No TL selected — show result panel and go to assign scene
   var c = document.getElementById('import-buyer-rows');
   var h = '';
   for(var i=0;i<selected.length;i++){
@@ -1346,7 +1443,7 @@ function bimConfirmSelected() {
 }
 
 function selectImportMethod(method) {
-  var cards=['erp','manual'];
+  var cards=['manual'];
   for(var i=0;i<cards.length;i++){var c=document.getElementById('import-card-'+cards[i]);if(!c)continue;c.style.borderColor='var(--line)';c.style.boxShadow='none';c.style.background='white';}
   var csvLink=document.getElementById('import-card-csv'); if(csvLink){csvLink.style.color='var(--muted)';}
   var mr=document.getElementById('manual-entry-row'); if(mr) mr.style.display='none';
@@ -1363,7 +1460,17 @@ function selectImportMethod(method) {
   if(card){card.style.borderColor='var(--gold)';card.style.boxShadow='0 0 0 3px rgba(201,162,39,0.12)';card.style.background='rgba(201,162,39,0.02)';}
 
   if (method === 'manual') {
-    if(mr) { mr.style.display='block'; bimRenderList(); }
+    if(mr) { mr.style.display='block'; }
+    // Bulk mode: hide search, pre-select all
+    var searchRow = document.getElementById('bim-search-row');
+    if (currentImportMode === 'bulk') {
+      if(searchRow) searchRow.style.display='none';
+      var pool = existingBuyerPool.concat(bimNewBuyerPool);
+      pool.forEach(function(b){ bimSelectedIds[b.id]=true; });
+    } else {
+      if(searchRow) searchRow.style.display='';
+    }
+    bimRenderList();
     return;
   }
 
@@ -1477,6 +1584,14 @@ function onAssignTlChange(idx,val) {
   assignBuyers[idx].tl=val;
   var sel=document.getElementById('assign-tl-'+idx); if(sel){sel.style.borderColor=opt.color;sel.style.color=opt.color;}
   var te=document.getElementById('assign-terms-'+idx); if(te){te.innerHTML=val==='introduced'?'<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#dc2626;background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.18);padding:5px 10px;border-radius:6px;">⛔ Not eligible</span>':'<span style="display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:#16a34a;background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.18);padding:5px 10px;border-radius:6px;">✅ Eligible</span>';}
+}
+function assignAllTl(val) {
+  if (!val) return;
+  for (var i=0; i<assignBuyers.length; i++) {
+    assignBuyers[i].tl = val;
+    onAssignTlChange(i, val);
+  }
+  var sel = document.getElementById('assign-all-select'); if(sel) sel.value='';
 }
 function startAssessment() {
   var btn=document.querySelector('[onclick="startAssessment()"]');
