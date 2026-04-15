@@ -498,7 +498,7 @@ td:first-child{padding-left:20px;}
         </div>
         <!-- CTA -->
         <div style="display:flex;justify-content:flex-end;">
-          <button id="bim-confirm-btn" onclick="bimConfirmSelected()" disabled style="display:inline-flex;align-items:center;gap:8px;background:#5b5bd6;color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:inherit;opacity:0.45;transition:all 0.2s;">Start with 0 buyers →</button>
+          <button id="bim-confirm-btn" onclick="bimConfirmSelected()" disabled style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:inherit;opacity:0.35;transition:all 0.2s;box-shadow:0 2px 12px rgba(10,13,20,0.18);">⚡ Start AI Assessment — 0 buyers</button>
         </div>
       </div>
       <div id="import-result" style="display:none;opacity:0;transition:opacity 0.4s ease;">
@@ -507,7 +507,7 @@ td:first-child{padding-left:20px;}
           <div style="padding:10px 18px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;gap:14px;"><div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;flex:1;">Company</div><div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;width:110px;">Country</div><div style="font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;width:80px;">Status</div></div>
           <div id="import-buyer-rows"></div>
         </div>
-        <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button onclick="goToScene('assign')" style="background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Assign Trust Levels →</button></div>
+        <div style="margin-top:20px;display:flex;justify-content:flex-end;"><button onclick="startAssessment()" style="display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 12px rgba(10,13,20,0.18);">⚡ Start AI Assessment</button></div>
       </div>
     </div>
   </div>
@@ -819,7 +819,6 @@ td:first-child{padding-left:20px;}
     <span class="journey-sep">›</span>
     <button class="journey-step" id="jstep-import" onclick="goToScene('import')">③ Import</button>
     <span class="journey-sep">›</span>
-    <button class="journey-step" id="jstep-assign" onclick="goToScene('assign')">④ Assign Levels</button>
     <span class="journey-sep">›</span>
     <button class="journey-step" id="jstep-enrich" onclick="goToScene('enrich')">⑤ Enrichment</button>
     <span class="journey-sep">›</span>
@@ -1373,7 +1372,7 @@ function bimUpdateCta() {
   var countEl = document.getElementById('bim-selected-count'); if(countEl) countEl.textContent = count + ' selected';
   var tlInline = document.getElementById('bim-tl-inline');
   if (tlInline) tlInline.style.display = count > 0 ? 'block' : 'none';
-  btn.textContent = count ? 'Start with '+count+' buyer'+(count!==1?'s':'')+' \u2192' : 'Start with 0 buyers \u2192';
+  btn.textContent = count ? '\u26a1 Start AI Assessment \u2014 '+count+' buyer'+(count!==1?'s':'') : '\u26a1 Start AI Assessment \u2014 0 buyers';
   btn.disabled = count === 0;
   btn.style.opacity = count ? '1' : '0.45';
   btn.style.cursor = count ? 'pointer' : 'not-allowed';
