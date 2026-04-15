@@ -725,8 +725,41 @@ td:first-child{padding-left:20px;}
 <div id="scene-table" class="scene">
   <nav class="demo-nav">
     <div class="nav-brand"><div class="nav-brand-mark">R</div>Reevol<span class="nav-pill">● Buyer Business Intelligence</span></div>
-    <div class="nav-actions"><button class="nav-btn" onclick="goToScene('config')">Trust Config</button><div class="nav-user">AC</div></div>
+    <div class="nav-actions"><button class="nav-btn" id="empty-dash-toggle" onclick="toggleEmptyDash()">⬜ Empty State</button><button class="nav-btn" onclick="goToScene('config')">Trust Config</button><div class="nav-user">AC</div></div>
   </nav>
+  <!-- EMPTY STATE -->
+  <div id="dash-empty-state" style="display:none;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px;text-align:center;min-height:60vh;">
+    <div style="width:72px;height:72px;border-radius:20px;background:rgba(91,91,214,0.08);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:24px;">🏢</div>
+    <h2 style="font-size:22px;font-weight:800;color:var(--ink);margin:0 0 10px;">No buyers yet</h2>
+    <p style="font-size:14px;color:var(--muted);max-width:420px;margin:0 0 36px;line-height:1.6;">Set up your trust policy and import your first buyers to start building your buyer intelligence registry.</p>
+    <div style="display:flex;align-items:center;gap:0;margin-bottom:40px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:#5b5bd6;color:white;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">1</div>
+        <div style="font-size:11px;font-weight:700;color:var(--ink);">Configure</div>
+        <div style="font-size:10px;color:var(--muted);">Set trust policy</div>
+      </div>
+      <div style="width:48px;height:2px;background:var(--line);margin-bottom:24px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">2</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);">Import</div>
+        <div style="font-size:10px;color:var(--muted);">Add your buyers</div>
+      </div>
+      <div style="width:48px;height:2px;background:var(--line);margin-bottom:24px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">3</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);">Enrich</div>
+        <div style="font-size:10px;color:var(--muted);">AI data pull</div>
+      </div>
+      <div style="width:48px;height:2px;background:var(--line);margin-bottom:24px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--line);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;">4</div>
+        <div style="font-size:11px;font-weight:700;color:var(--muted);">Manage</div>
+        <div style="font-size:10px;color:var(--muted);">Live registry</div>
+      </div>
+    </div>
+    <button onclick="goToScene('howto')" style="display:inline-flex;align-items:center;gap:10px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:13px 32px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 14px rgba(91,91,214,0.3);">Start Your Journey →</button>
+  </div>
+  <div id="dash-populated-state">
   <div class="table-header-zone">
     <div class="table-headline">
       <div class="table-headline-left">
@@ -764,6 +797,7 @@ td:first-child{padding-left:20px;}
   <div style="text-align:center;padding:48px 40px 80px;">
     <button onclick="goToScene('monitor')" style="display:inline-flex;align-items:center;gap:10px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 14px rgba(91,91,214,0.3);">🔔 Set Up Real-Time Monitoring →</button>
   </div>
+  </div><!-- /dash-populated-state -->
 </div>
 
 <!-- MONITOR -->
@@ -955,6 +989,14 @@ function renderBuyerTable() {
   tbody.innerHTML = html;
 }
 
+var emptyDashMode = false;
+function toggleEmptyDash() {
+  emptyDashMode = !emptyDashMode;
+  document.getElementById('dash-empty-state').style.display    = emptyDashMode ? 'flex' : 'none';
+  document.getElementById('dash-populated-state').style.display = emptyDashMode ? 'none' : 'block';
+  var btn = document.getElementById('empty-dash-toggle');
+  if (btn) { btn.textContent = emptyDashMode ? '▣ Populated' : '⬜ Empty State'; btn.style.background = emptyDashMode ? 'var(--ink)' : ''; btn.style.color = emptyDashMode ? 'white' : ''; }
+}
 function toggleMonitor(i)      { event.stopPropagation(); buyers[i].monitor = !buyers[i].monitor; renderBuyerTable(); }
 function approveBuyer(i)       { event.stopPropagation(); buyers[i].buyerStatus = 'approved'; renderBuyerTable(); }
 function rejectBuyer(i)        { event.stopPropagation(); buyers[i].buyerStatus = 'rejected'; renderBuyerTable(); }
