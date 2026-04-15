@@ -338,14 +338,27 @@ td:first-child{padding-left:20px;}
     <h2>Your Credit Policy,<br>Turned Into Automated Rules</h2>
     <p>Configure once, apply to every buyer automatically.</p>
   </div>
+  <div style="max-width:900px;margin:0 auto 16px;padding:0 32px;">
+    <div style="background:white;border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;">Default starting level</div>
+      <div style="font-size:11.5px;color:var(--muted);">Where do new buyers begin before their score is assessed?</div>
+      <div style="margin-left:auto;">
+        <div id="triple-toggle" style="display:inline-flex;background:#f0f2f4;border-radius:999px;padding:3px;gap:2px;">
+          <div id="ttl-introduced" onclick="setDefaultTrustLevel('introduced')" style="padding:7px 18px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;background:#dc2626;color:white;white-space:nowrap;transition:background 0.15s,color 0.15s;">🔴 Introduced</div>
+          <div id="ttl-qualified" onclick="setDefaultTrustLevel('qualified')" style="padding:7px 18px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;transition:background 0.15s,color 0.15s;">🟡 Qualified</div>
+          <div id="ttl-established" onclick="setDefaultTrustLevel('established')" style="padding:7px 18px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;transition:background 0.15s,color 0.15s;">🟢 Established</div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div style="max-width:900px;margin:0 auto 24px;padding:0 32px;">
     <div style="background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;">
       <div style="padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);">
         <div style="font-size:12px;font-weight:600;color:var(--muted);white-space:nowrap;">Configure in order ›</div>
         <div style="display:flex;align-items:center;gap:8px;flex:1;">
-          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Introduced</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div><div id="dtl-toggle-introduced" onclick="event.stopPropagation();setDefaultTrustLevel('introduced')" style="margin-top:5px;font-size:9px;font-weight:700;color:#dc2626;cursor:pointer;letter-spacing:0.02em;">● Default</div></div>
-          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Qualified</div><div style="font-size:9.5px;color:var(--muted);">25–74 pts</div><div id="dtl-toggle-qualified" onclick="event.stopPropagation();setDefaultTrustLevel('qualified')" style="margin-top:5px;font-size:9px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0.5;letter-spacing:0.02em;">○ default</div></div>
-          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Established</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div><div id="dtl-toggle-established" onclick="event.stopPropagation();setDefaultTrustLevel('established')" style="margin-top:5px;font-size:9px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0.5;letter-spacing:0.02em;">○ default</div></div>
+          <div id="cfg-step-0" onclick="selectTemplate(0)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid #dc2626;background:rgba(220,38,38,0.06);cursor:pointer;text-align:center;"><div style="font-size:15px;margin-bottom:2px;">🔴</div><div style="font-size:11px;font-weight:700;color:#dc2626;">Introduced</div><div style="font-size:9.5px;color:var(--muted);">0–24 pts</div></div>
+          <div id="cfg-step-1" onclick="selectTemplate(1)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟡</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Qualified</div><div style="font-size:9.5px;color:var(--muted);">25–74 pts</div></div>
+          <div id="cfg-step-2" onclick="selectTemplate(2)" style="flex:1;padding:9px 10px;border-radius:8px;border:2px solid var(--line);background:white;cursor:pointer;text-align:center;opacity:0.55;"><div style="font-size:15px;margin-bottom:2px;">🟢</div><div style="font-size:11px;font-weight:700;color:var(--ink);">Established</div><div style="font-size:9.5px;color:var(--muted);">75–100 pts</div></div>
         </div>
         <div id="cfg-next-btn"><button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Profile →</button></div>
       </div>
@@ -1198,18 +1211,16 @@ function setDefaultTrustLevel(level) {
   defaultTrustLevel = level;
   var colors = { introduced:'#dc2626', qualified:'#d97706', established:'#16a34a' };
   ['introduced','qualified','established'].forEach(function(k) {
-    var toggle = document.getElementById('dtl-toggle-'+k);
-    if (!toggle) return;
+    var seg = document.getElementById('ttl-'+k);
+    if (!seg) return;
     if (k === level) {
-      toggle.textContent = '● Default';
-      toggle.style.color = colors[k];
-      toggle.style.opacity = '1';
-      toggle.style.fontWeight = '700';
+      seg.style.background = colors[k];
+      seg.style.color = 'white';
+      seg.style.fontWeight = '700';
     } else {
-      toggle.textContent = '○ default';
-      toggle.style.color = 'var(--muted)';
-      toggle.style.opacity = '0.5';
-      toggle.style.fontWeight = '600';
+      seg.style.background = 'transparent';
+      seg.style.color = 'var(--muted)';
+      seg.style.fontWeight = '600';
     }
   });
   // Legacy: update dtl-* card elements if present (import inline picker)
