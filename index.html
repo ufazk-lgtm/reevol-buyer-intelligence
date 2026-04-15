@@ -750,14 +750,12 @@ td:first-child{padding-left:20px;}
       <button class="filter-chip">🟢 Established</button>
       <button class="filter-chip">🟡 Qualified</button>
       <button class="filter-chip">🔴 Introduced</button>
-      <button class="filter-chip">✓ Approved</button>
-      <button class="filter-chip">⏳ Pending</button>
     </div>
   </div>
   <div class="table-wrap">
     <div class="table-scroll">
       <table>
-        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>BUYER STATUS</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th></tr></thead>
+        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th></tr></thead>
         <tbody id="buyerTableBody"></tbody>
       </table>
     </div>
@@ -944,7 +942,6 @@ function renderBuyerTable() {
       + '<td>' + tlCell + '</td>'
       + '<td>' + scoreCell + '</td>'
       + '<td>' + (assessMap[b.assessmentStatus] || '—') + '</td>'
-      + '<td>' + (statusMap[b.buyerStatus] || '—') + '</td>'
       + '<td>' + termsCell + '</td>'
       + '<td>' + limitCell + '</td>'
       + '<td>' + insCell + '</td>'
