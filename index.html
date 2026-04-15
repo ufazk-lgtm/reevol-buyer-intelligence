@@ -28,35 +28,6 @@ body{font-family:var(--font-ui);background:var(--white);color:var(--ink);overflo
 @keyframes live-pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.4);opacity:0.7}}
 @keyframes msgIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 @keyframes new-blink{0%,100%{opacity:1}50%{opacity:0}}
-/* ── COMING SOON ── */
-.cs-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;vertical-align:middle;letter-spacing:.2px;}
-.cs-section-locked{opacity:.72;pointer-events:none;position:relative;}
-.cs-section-locked::after{content:'';position:absolute;inset:0;border-radius:12px;cursor:pointer;pointer-events:all;z-index:2;}
-.cs-section-clickable{cursor:pointer;}
-.cs-tab-cs .bp-tab{color:var(--muted);}
-.bp-tab.cs-tab{color:var(--muted);}
-.bp-tab.cs-tab.active{color:var(--muted);border-bottom-color:transparent;}
-.cs-locked-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:20px;text-align:center;}
-.cs-locked-tab-icon{width:64px;height:64px;border-radius:18px;background:#fff7ed;border:2px dashed #fed7aa;display:flex;align-items:center;justify-content:center;font-size:28px;}
-.cs-locked-tab-title{font-size:17px;font-weight:800;color:var(--ink);}
-.cs-locked-tab-desc{font-size:13px;color:var(--muted);max-width:340px;line-height:1.6;}
-.cs-interest-btn{padding:11px 28px;background:#f97316;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}
-.cs-interest-btn:hover{background:#ea6c0a;}
-.cs-interest-count{font-size:12px;color:var(--muted);}
-/* Modal */
-#csModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99999;align-items:center;justify-content:center;}
-.cs-modal-box{background:white;border-radius:20px;padding:32px;width:420px;max-width:92vw;box-shadow:0 24px 70px rgba(0,0,0,.18);text-align:center;}
-.cs-modal-emoji{font-size:44px;margin-bottom:14px;}
-.cs-modal-title{font-size:19px;font-weight:800;color:var(--ink);margin-bottom:8px;}
-.cs-modal-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:22px;}
-.cs-modal-features{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;text-align:left;}
-.cs-modal-feature{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surface);border-radius:10px;font-size:12.5px;color:var(--ink);}
-.cs-modal-count{font-size:12px;color:var(--muted);margin-bottom:16px;}
-.cs-modal-count strong{color:var(--ink);}
-.cs-modal-confirm{display:none;flex-direction:column;align-items:center;gap:8px;padding:8px 0;}
-.cs-modal-confirm-icon{font-size:40px;}
-.cs-modal-confirm-text{font-size:15px;font-weight:700;color:var(--ink);}
-.cs-modal-confirm-sub{font-size:12.5px;color:var(--muted);}
 
 /* SPLASH */
 #scene-splash{background:var(--sidebar-bg);align-items:center;justify-content:center;overflow:hidden;}
@@ -356,9 +327,7 @@ td:first-child{padding-left:20px;}
       <div class="howto-step" onclick="goToScene('enrich')"><div class="howto-step-num">Step 02</div><div class="howto-step-icon">🔍</div><h3>Calibrating the framework and your buyers</h3><p>Upload your existing buyers and we automatically query multiple data vendors to enrich their profiles.</p><div class="howto-step-arrow">›</div></div>
       <div class="howto-step" onclick="goToScene('table')"><div class="howto-step-num">Step 03</div><div class="howto-step-icon">📊</div><h3>Manage your buyers' credit</h3><p>Every buyer gets a complete profile, trust level, approval status, risk score, and net terms eligibility.</p></div>
     </div>
-    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;">
     <button class="howto-cta" onclick="goToScene('config')">Walk Me Through It →</button>
-    </div>
   </div>
 </div>
 
@@ -384,6 +353,7 @@ td:first-child{padding-left:20px;}
     </div>
   </div>
   <div id="cfg-recommendation" style="display:none;"></div>
+
   <div class="req-preview" id="reqPreview">
     <span id="liveTrustScore" style="display:none;">0</span>
     <span id="liveTrustBar" style="display:none;"></span>
@@ -409,10 +379,24 @@ td:first-child{padding-left:20px;}
         <div id="sidebarPillarBreakdown" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;"></div>
         <div class="req-stat-row"><div class="req-stat-label">Active Requirements</div><div class="req-stat-val" id="sidebarTotal">—</div></div>
         <div class="req-stat-row"><div class="req-stat-label">Auto-Enriched</div><div class="req-stat-val" style="color:#4ade80;">~80%</div></div>
-        <button class="req-save-btn" onclick="goToScene('import')">Save &amp; Activate →</button>
+
+        <button class="req-save-btn" onclick="goToScene('import')" style="margin-top:10px;">Save &amp; Activate →</button>
       </div>
     </div>
   </div>
+
+  <!-- DEFAULT TRUST LEVEL — bottom strip -->
+  <div style="max-width:900px;margin:24px auto 0;padding:0 32px 60px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;background:white;border:1px solid var(--line);border-radius:12px;">
+      <span style="font-size:13px;color:var(--muted);">New buyers start at</span>
+      <div style="display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;">
+        <button id="dtl-introduced" onclick="setDefaultTrustLevel('introduced')" style="padding:7px 18px;border:none;background:#111827;color:white;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.15s;">Introduced</button>
+        <button id="dtl-qualified"  onclick="setDefaultTrustLevel('qualified')"  style="padding:7px 18px;border:none;border-left:1px solid var(--line);background:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s;">Qualified</button>
+        <button id="dtl-established" onclick="setDefaultTrustLevel('established')" style="padding:7px 18px;border:none;border-left:1px solid var(--line);background:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;transition:all 0.15s;">Established</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- IMPORT -->
@@ -432,10 +416,12 @@ td:first-child{padding-left:20px;}
       </div>
     </div>
     <div id="import-method-block" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;">
         <div id="import-card-erp" class="import-card" onclick="selectImportMethod('erp')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#7c5cfc,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">🔗</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">ERP Integration</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Sync from SAP, Xero, QuickBooks or any ERP.</div></div>
-        <div id="import-card-csv" class="import-card" onclick="selectImportMethod('csv')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#10b981,#047857);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">📂</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">CSV / Excel Upload</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Upload a spreadsheet with your buyer list.</div></div>
-        <div id="import-card-manual" class="import-card" onclick="selectImportMethod('manual')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#c9a227,#7a5e10);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">✏️</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">Manual Entry</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Add buyers one by one.</div></div>
+        <div id="import-card-manual" class="import-card" onclick="selectImportMethod('manual')"><div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#5b5bd6,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;">🔍</div><div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;">Search &amp; Select Buyers</div><div style="font-size:12.5px;color:var(--muted);line-height:1.5;">Select from your existing buyers or add new ones.</div></div>
+      </div>
+      <div style="text-align:center;margin-bottom:28px;">
+        <button id="import-card-csv" onclick="selectImportMethod('csv')" style="background:none;border:none;font-size:12.5px;color:var(--muted);cursor:pointer;font-family:inherit;padding:4px 10px;border-radius:6px;transition:color 0.15s;" onmouseover="this.style.color='#5b5bd6'" onmouseout="this.style.color='var(--muted)'">or import via CSV / Excel ↗</button>
       </div>
 
       <!-- CSV UPLOAD ZONE -->
@@ -464,10 +450,43 @@ td:first-child{padding-left:20px;}
           <div style="font-size:12px;color:var(--muted);">Need a template? <a href="#" style="color:#5b5bd6;font-weight:600;text-decoration:none;" onclick="return false;">Download the Reevol CSV template →</a></div>
         </div>
       </div>
-      <div id="manual-entry-row" style="display:none;background:white;border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:20px;flex-wrap:wrap;gap:10px;align-items:flex-end;">
-        <div style="flex:2;min-width:140px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Company Name *</div><input type="text" id="manual-buyer-input" placeholder="e.g. Harbor Build Supply Co." style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')addManualBuyer()"></div>
-        <div style="flex:1;min-width:110px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Country *</div><input type="text" id="manual-buyer-country" placeholder="e.g. United States" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;"></div>
-        <button onclick="addManualBuyer()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Add Buyer</button>
+      <!-- SEARCH & SELECT UI -->
+      <div id="manual-entry-row" style="display:none;margin-bottom:20px;">
+        <!-- Search bar -->
+        <div style="position:relative;margin-bottom:12px;">
+          <svg style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;" width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input id="bim-search" type="text" placeholder="Search your existing buyers…" oninput="bimSearchFilter()" style="width:100%;padding:10px 14px 10px 36px;border:1.5px solid var(--line);border-radius:10px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;transition:border-color 0.15s;" onfocus="this.style.borderColor='#5b5bd6'" onblur="this.style.borderColor='var(--line)'">
+        </div>
+        <!-- Buyer list -->
+        <div style="background:white;border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px;">
+          <!-- Select-all header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);">
+            <label style="display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;">
+              <input type="checkbox" id="bim-select-all" onchange="bimToggleSelectAll()" style="width:15px;height:15px;accent-color:#5b5bd6;cursor:pointer;">
+              <span style="font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;">Select All</span>
+            </label>
+            <span id="bim-selected-count" style="font-size:12px;font-weight:600;color:var(--muted);background:var(--surface-2);padding:2px 10px;border-radius:20px;border:1px solid var(--line);">0 selected</span>
+          </div>
+          <!-- Buyer rows -->
+          <div id="bim-buyer-list" style="max-height:260px;overflow-y:auto;"></div>
+        </div>
+        <!-- Add new buyer -->
+        <div style="border:1px dashed var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px;">
+          <button onclick="bimToggleAddNew()" style="width:100%;background:none;border:none;padding:13px 18px;text-align:left;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:9px;color:var(--muted);font-size:13px;font-weight:600;transition:background 0.15s;" onmouseover="this.style.background='var(--surface)'" onmouseout="this.style.background='none'">
+            <span id="bim-add-new-chevron" style="font-size:10px;">▶</span> Add a new buyer
+          </button>
+          <div id="bim-add-new-form" style="display:none;padding:0 18px 16px;display:none;">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
+              <div style="flex:2;min-width:140px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Company Name *</div><input type="text" id="bim-new-name" placeholder="e.g. Harbor Build Supply Co." style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;" onkeydown="if(event.key==='Enter')bimAddNewBuyer()"></div>
+              <div style="flex:1;min-width:110px;"><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.07em;">Country *</div><input type="text" id="bim-new-country" placeholder="e.g. United States" style="width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:13px;font-family:inherit;outline:none;"></div>
+              <button onclick="bimAddNewBuyer()" style="background:#5b5bd6;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Add</button>
+            </div>
+          </div>
+        </div>
+        <!-- CTA -->
+        <div style="display:flex;justify-content:flex-end;">
+          <button id="bim-confirm-btn" onclick="bimConfirmSelected()" disabled style="display:inline-flex;align-items:center;gap:8px;background:#5b5bd6;color:white;border:none;border-radius:10px;padding:12px 26px;font-size:14px;font-weight:700;cursor:not-allowed;font-family:inherit;opacity:0.45;transition:all 0.2s;">Add 0 buyers to BIM →</button>
+        </div>
       </div>
       <div id="import-result" style="display:none;opacity:0;transition:opacity 0.4s ease;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div><div style="font-size:17px;font-weight:700;color:var(--ink);">Buyers Ready for Import</div><div style="font-size:13px;color:var(--muted);margin-top:2px;" id="import-result-subtitle">0 buyers ready</div></div><span id="import-method-badge" style="background:var(--amber-pale);color:var(--amber);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:0.07em;"></span></div>
@@ -523,7 +542,7 @@ td:first-child{padding-left:20px;}
       <div class="engine-step" style="border-left:3px solid #c9a227;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#c9a227,#7a5e10);">💰</div><div class="engine-step-info"><h4>Pillar 2 — Financial Health</h4><p>Filed accounts, revenue trend, bank statements — 8 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
       <div class="engine-step" style="border-left:3px solid #10b981;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#10b981,#047857);">📈</div><div class="engine-step-info"><h4>Pillar 3 — Payment Behaviour &amp; Credit History</h4><p>Credit bureau score, CCJs, trade references — 6 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
       <div class="engine-step" style="border-left:3px solid #3b82f6;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8);">📡</div><div class="engine-step-info"><h4>Pillar 4 — Business Stability &amp; Operational Signals</h4><p>Employees, sector risk, ownership changes — 16 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
-      <div class="engine-step" style="border-left:3px solid #fed7aa;opacity:.7;cursor:pointer;" onclick="showComingSoon()"><div class="engine-step-icon" style="background:linear-gradient(135deg,#f97316,#c2410c);">📦</div><div class="engine-step-info"><h4>Pillar 5 — Transaction Context &amp; Order Behaviour <span class="cs-badge">🔜 Coming Soon</span></h4><p>Order size vs revenue, frequency, goods risk — not yet available</p></div><div><span class="engine-badge-wait" style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;">Soon</span></div></div>
+      <div class="engine-step" style="border-left:3px solid #f97316;"><div class="engine-step-icon" style="background:linear-gradient(135deg,#f97316,#c2410c);">📦</div><div class="engine-step-info"><h4>Pillar 5 — Transaction Context</h4><p>Order size vs revenue, frequency, goods risk — 5 requirements</p></div><div><span class="engine-badge-wait">Queued</span></div></div>
       <div class="engine-step" style="border:1px dashed rgba(91,91,214,0.3);background:rgba(91,91,214,0.03);"><div class="engine-step-icon">📬</div><div class="engine-step-info"><h4>Buyer Portal — For Anything We Can't Enrich</h4><p>A secure personalised request is sent to the buyer — only as a last resort</p></div><div><span class="engine-badge-buyer">If needed</span></div></div>
     </div>
     <div class="engine-result-banner" id="engineResult" style="opacity:0;transition:opacity 0.6s ease;">
@@ -631,8 +650,8 @@ td:first-child{padding-left:20px;}
         <div class="portal-incentive-banner">
           <div class="portal-incentive-icon">🎁</div>
           <div>
-            <div class="portal-incentive-title">You're eligible for Net Payment Terms</div>
-            <div class="portal-incentive-sub">Complete this short verification and ACME Corp will activate your Net Terms — buy now, pay later, no upfront payment required.</div>
+            <div class="portal-incentive-title">You're eligible for net payment terms</div>
+            <div class="portal-incentive-sub">Complete this short verification and ACME Corp will activate net terms — buy now, pay later. Your supplier sets the payment duration.</div>
           </div>
           <div class="portal-incentive-badge">Net Terms Ready</div>
         </div>
@@ -671,7 +690,7 @@ td:first-child{padding-left:20px;}
           <div class="portal-field"><label>Primary Goods / Services Category <span style="color:var(--muted);font-weight:400;font-size:11px;">(optional)</span></label><input type="text" class="portal-input filled" value="Building Materials &amp; Construction Supplies" readonly></div>
         </div>
         <button class="portal-submit" onclick="showPortalSuccess()">Submit &amp; Unlock Net Terms →</button>
-        <div id="portal-success" style="display:none;margin-top:18px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:22px;text-align:center;"><div style="font-size:30px;margin-bottom:8px">✅</div><div style="font-weight:700;color:#16a34a;margin-bottom:5px">Net Terms Activated!</div><div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Your Net Terms will be live within 1–2 business hours.</div><button onclick="goToScene('table')" style="background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;">Go to Dashboard →</button></div>
+        <div id="portal-success" style="display:none;margin-top:18px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:22px;text-align:center;"><div style="font-size:30px;margin-bottom:8px">✅</div><div style="font-weight:700;color:#16a34a;margin-bottom:5px">Net Terms Activated!</div><div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Your net terms will be live within 1–2 business hours.</div><button onclick="goToScene('table')" style="background:#5b5bd6;color:white;font-family:inherit;font-size:13px;font-weight:600;padding:11px 24px;border-radius:8px;border:none;cursor:pointer;">Go to Dashboard →</button></div>
       </div>
     </div>
   </div>
@@ -681,49 +700,8 @@ td:first-child{padding-left:20px;}
 <div id="scene-table" class="scene">
   <nav class="demo-nav">
     <div class="nav-brand"><div class="nav-brand-mark">R</div>Reevol<span class="nav-pill">● Buyer Business Intelligence</span></div>
-    <div class="nav-actions">
-      <button class="nav-btn" onclick="emptyDashMode=!emptyDashMode;renderBuyerTable();" style="font-size:11px;opacity:.6;" title="Toggle empty state for demo">⬜ Empty State</button>
-      <button class="nav-btn" onclick="goToScene('config')">Trust Config</button>
-      <div class="nav-user">AC</div>
-    </div>
+    <div class="nav-actions"><button class="nav-btn" onclick="goToScene('config')">Trust Config</button><div class="nav-user">AC</div></div>
   </nav>
-
-  <!-- EMPTY STATE — shown when no buyers/config yet -->
-  <div id="dashEmptyState" style="display:none;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:60px 24px;text-align:center;">
-    <div style="width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,#5b5bd6,#7c5cfc);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:28px;box-shadow:0 8px 32px rgba(91,91,214,0.22);">🧭</div>
-    <div style="font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#5b5bd6;margin-bottom:10px;">Getting Started</div>
-    <h2 style="font-size:28px;font-weight:900;color:var(--ink);line-height:1.2;max-width:460px;margin-bottom:14px;">No buyers yet — let's set you up</h2>
-    <p style="font-size:14px;color:var(--muted);max-width:400px;line-height:1.7;margin-bottom:36px;">Before adding buyers, you'll configure your trust framework — so every buyer gets assessed consistently and automatically from day one.</p>
-    <!-- Mini journey preview -->
-    <div style="display:flex;align-items:center;gap:0;margin-bottom:40px;max-width:560px;width:100%;">
-      <div style="flex:1;background:white;border:1px solid var(--line);border-radius:12px 0 0 12px;padding:16px 14px;text-align:center;border-right:none;">
-        <div style="font-size:20px;margin-bottom:6px;">⚙️</div>
-        <div style="font-size:11.5px;font-weight:700;color:var(--ink);">Configure Trust Levels</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:3px;">Set your framework & templates</div>
-      </div>
-      <div style="color:var(--muted);font-size:14px;padding:0 2px;background:white;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;align-self:stretch;display:flex;align-items:center;">›</div>
-      <div style="flex:1;background:white;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 14px;text-align:center;">
-        <div style="font-size:20px;margin-bottom:6px;">📥</div>
-        <div style="font-size:11.5px;font-weight:700;color:var(--ink);">Import Buyers</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:3px;">Upload your buyer list</div>
-      </div>
-      <div style="color:var(--muted);font-size:14px;padding:0 2px;background:white;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;align-self:stretch;display:flex;align-items:center;">›</div>
-      <div style="flex:1;background:white;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 14px;text-align:center;">
-        <div style="font-size:20px;margin-bottom:6px;">🔍</div>
-        <div style="font-size:11.5px;font-weight:700;color:var(--ink);">Enrich & Assess</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:3px;">Automatic trust scoring</div>
-      </div>
-      <div style="color:var(--muted);font-size:14px;padding:0 2px;background:white;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;align-self:stretch;display:flex;align-items:center;">›</div>
-      <div style="flex:1;background:white;border:1px solid var(--line);border-radius:0 12px 12px 0;padding:16px 14px;text-align:center;border-left:none;">
-        <div style="font-size:20px;margin-bottom:6px;">📊</div>
-        <div style="font-size:11.5px;font-weight:700;color:var(--ink);">Manage Buyers</div>
-        <div style="font-size:10.5px;color:var(--muted);margin-top:3px;">Back here — fully loaded</div>
-      </div>
-    </div>
-    <button onclick="goToScene('howto')" style="padding:14px 36px;background:#5b5bd6;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 4px 18px rgba(91,91,214,0.3);">Start Your Journey →</button>
-    <div style="margin-top:12px;font-size:12px;color:var(--muted);">Takes about 5 minutes · Everything can be changed later</div>
-  </div>
-
   <div class="table-header-zone">
     <div class="table-headline">
       <div class="table-headline-left">
@@ -734,14 +712,14 @@ td:first-child{padding-left:20px;}
         <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>New Buyer
       </button>
     </div>
-    <div id="dashKpiStrip" class="kpi-strip">
+    <div class="kpi-strip">
       <div class="kpi-card"><div class="kpi-label">Total Buyers</div><div class="kpi-value anim-num" data-target="142">0</div><div class="kpi-sub">Active in system</div></div>
       <div class="kpi-card"><div class="kpi-label">Approved</div><div class="kpi-value anim-num" data-target="97" style="color:#16a34a">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:#16a34a"></span>68% approval rate</div></div>
       <div class="kpi-card"><div class="kpi-label">Net Terms Enabled</div><div class="kpi-value anim-num" data-target="63" style="color:var(--teal)">0</div><div class="kpi-sub">Across trust tiers</div></div>
       <div class="kpi-card"><div class="kpi-label">Insured</div><div class="kpi-value anim-num" data-target="58" style="color:var(--violet)">0</div><div class="kpi-sub">Credit insurance active</div></div>
       <div class="kpi-card"><div class="kpi-label">Pending Review</div><div class="kpi-value anim-num" data-target="18" style="color:var(--amber)">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:var(--amber)"></span>Awaiting your review</div></div>
     </div>
-    <div id="dashFilterStrip" class="filter-strip">
+    <div class="filter-strip">
       <div class="search-box"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" opacity="0.4"><circle cx="7" cy="7" r="5" stroke="#0a0d14" stroke-width="1.5"/><path d="M11 11l3 3" stroke="#0a0d14" stroke-width="1.5" stroke-linecap="round"/></svg><input type="text" placeholder="Search buyers..."/></div>
       <button class="filter-chip active">All Buyers</button>
       <button class="filter-chip">🟢 Established</button>
@@ -751,7 +729,7 @@ td:first-child{padding-left:20px;}
       <button class="filter-chip">⏳ Pending</button>
     </div>
   </div>
-  <div id="dashTableWrap" class="table-wrap">
+  <div class="table-wrap">
     <div class="table-scroll">
       <table>
         <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>BUYER STATUS</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th><th></th></tr></thead>
@@ -760,11 +738,10 @@ td:first-child{padding-left:20px;}
     </div>
     <div class="table-footer"><div class="table-footer-left">Showing 12 of 142 buyers</div><div class="table-footer-right"><button class="page-btn">←</button><button class="page-btn active">1</button><button class="page-btn">2</button><button class="page-btn">3</button><button class="page-btn">→</button></div></div>
   </div>
-  <div id="dashMonitorCta" style="text-align:center;padding:48px 40px 80px;">
+  <div style="text-align:center;padding:48px 40px 80px;">
     <button onclick="goToScene('monitor')" style="display:inline-flex;align-items:center;gap:10px;background:#5b5bd6;color:white;font-family:var(--font-ui);font-size:14px;font-weight:600;padding:14px 36px;border-radius:8px;border:none;cursor:pointer;box-shadow:0 2px 14px rgba(91,91,214,0.3);">🔔 Set Up Real-Time Monitoring →</button>
   </div>
 </div>
-
 
 <!-- MONITOR -->
 <div id="scene-monitor" class="scene" style="background:var(--surface);">
@@ -862,8 +839,6 @@ var buyerMeta = [
   ['Feb 14, 2025','Mar 14, 2025','Li Wei']
 ];
 
-var emptyDashMode = false;
-
 var buyers = [
   { name:"Harbor Build Supply Co.", domain:"harborbuild.com",        color:"#f97316", initials:"HB", trustScore:83, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:null, limit:"$120,000", creditUsed:"$34,200", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
   { name:"GreenFields Materials",   domain:"greenfields.io",         color:"#16a34a", initials:"GF", trustScore:92, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:7,    limit:"$150,000", creditUsed:"$91,000", creditDue:"$12,400", insured:true,  monitor:true,  portalEmail:null       },
@@ -882,27 +857,6 @@ var buyers = [
 // ── RENDER TABLE ─────────────────────────────────────────────
 function renderBuyerTable() {
   var tbody = document.getElementById('buyerTableBody');
-  var emptyState = document.getElementById('dashEmptyState');
-  var tableWrap  = document.getElementById('dashTableWrap');
-  var kpiStrip   = document.getElementById('dashKpiStrip');
-  var filterStrip= document.getElementById('dashFilterStrip');
-  var tableFooter= document.querySelector('.table-footer');
-  var monCta     = document.getElementById('dashMonitorCta');
-  if (emptyDashMode) {
-    if (emptyState)  emptyState.style.display  = 'flex';
-    if (tableWrap)   tableWrap.style.display   = 'none';
-    if (kpiStrip)    kpiStrip.style.display    = 'none';
-    if (filterStrip) filterStrip.style.display = 'none';
-    if (tableFooter) tableFooter.style.display = 'none';
-    if (monCta)      monCta.style.display      = 'none';
-    return;
-  }
-  if (emptyState)  emptyState.style.display  = 'none';
-  if (tableWrap)   tableWrap.style.display   = '';
-  if (kpiStrip)    kpiStrip.style.display    = '';
-  if (filterStrip) filterStrip.style.display = '';
-  if (tableFooter) tableFooter.style.display = '';
-  if (monCta)      monCta.style.display      = '';
   var assessMap = {
     'pending':     '<span style="background:rgba(217,119,6,0.08);color:#d97706;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;">⏳ Pending</span>',
     'in-progress': '<span style="background:rgba(59,130,246,0.08);color:#3b82f6;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;">🔄 In Progress</span>',
@@ -1008,20 +962,20 @@ var PILLARS = [
   { name:'Financial Health',                         icon:'💰', maxPts:30, weight:'30%', color:'#c9a227', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)' },
   { name:'Payment Behaviour & Credit History',       icon:'📈', maxPts:25, weight:'25%', color:'#10b981', gradient:'linear-gradient(135deg,#10b981,#047857)' },
   { name:'Business Stability & Operational Signals', icon:'📡', maxPts:20, weight:'20%', color:'#3b82f6', gradient:'linear-gradient(135deg,#3b82f6,#1d4ed8)' },
-  { name:'Transaction Context & Order Behaviour',    icon:'📦', maxPts:0,  weight:'0%',  color:'#f97316', gradient:'linear-gradient(135deg,#f97316,#c2410c)' }
+  { name:'Transaction Context & Order Behaviour',    icon:'📦', maxPts:10, weight:'10%', color:'#f97316', gradient:'linear-gradient(135deg,#f97316,#c2410c)', comingSoon:true }
 ];
 
 var requirementSections = [
   { name:'Business Identity & Legitimacy', icon:'🏢', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)',
-    items:[{name:'Business Registration Number',checked:true,w:16,noGo:true},{name:'Years in Operation',checked:true,w:12,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:12,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:9,noGo:false},{name:'Director / Owner KYC (ID + Selfie)',checked:true,w:13,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:11,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:9,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
+    items:[{name:'Business Registration Number',checked:true,w:18,noGo:true},{name:'Years in Operation',checked:true,w:14,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:14,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:10,noGo:false},{name:'Director / Owner KYC (ID + Selfie)',checked:true,w:14,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:12,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:10,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
   { name:'Financial Health', icon:'💰', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)',
     items:[{name:'Latest Filed Accounts / Financial Statements',checked:true,w:24,noGo:true},{name:'Revenue Trend (Growing / Stable / Declining)',checked:true,w:17,noGo:false},{name:'Profit Margin / Gross Margin',checked:true,w:13,noGo:false},{name:'Bank Statements (3–6 months)',checked:true,w:20,noGo:false},{name:'Outstanding Debt or Liabilities',checked:true,w:13,noGo:false},{name:'Evidence of Consistent Cash Flow',checked:true,w:13,noGo:false}]},
   { name:'Payment Behaviour & Credit History', icon:'📈', gradient:'linear-gradient(135deg,#10b981,#047857)',
     items:[{name:'Credit Bureau Score (CreditSafe / Experian / D&B)',checked:true,w:28,noGo:true},{name:'County Court Judgements (CCJs) / Disputes',checked:true,w:20,noGo:false},{name:'Trade References from Suppliers',checked:true,w:20,noGo:false},{name:'Payment History on Reevol Platform',checked:true,w:20,noGo:false},{name:'Days Beyond Terms (DBT) Average',checked:true,w:12,noGo:false}]},
   { name:'Business Stability & Operational Signals', icon:'📡', gradient:'linear-gradient(135deg,#3b82f6,#1d4ed8)',
     items:[{name:'Number of Employees',checked:true,w:20,noGo:false},{name:'Industry Sector Risk Classification',checked:true,w:20,noGo:false},{name:'Existing Supplier / Customer Relationships',checked:true,w:20,noGo:false},{name:'Social Proof (Reviews, Partnerships, Press)',checked:true,w:20,noGo:false},{name:'Ownership Changes in Last 12 Months',checked:true,w:20,noGo:false}]},
-  { name:'Transaction Context & Order Behaviour', icon:'📦', gradient:'linear-gradient(135deg,#f97316,#c2410c)',
-    items:[{name:'Order Size Relative to Buyer Revenue',checked:true,w:25,noGo:false},{name:'Order Size Relative to Prior Orders',checked:true,w:17,noGo:false},{name:'First vs. Repeat Order on Platform',checked:true,w:25,noGo:false},{name:'Order Frequency & Consistency',checked:true,w:17,noGo:false},{name:'Goods / Services Risk Category',checked:true,w:16,noGo:false}]}
+  { name:'Transaction Context & Order Behaviour', icon:'📦', gradient:'linear-gradient(135deg,#f97316,#c2410c)', comingSoon:true,
+    items:[{name:'Order Size Relative to Buyer Revenue',checked:false,w:25,noGo:false},{name:'Order Size Relative to Prior Orders',checked:false,w:17,noGo:false},{name:'First vs. Repeat Order on Platform',checked:false,w:25,noGo:false},{name:'Order Frequency & Consistency',checked:false,w:17,noGo:false},{name:'Goods / Services Risk Category',checked:false,w:16,noGo:false}]}
 ];
 
 function getPillarScore(si) {
@@ -1032,7 +986,10 @@ function getPillarScore(si) {
 }
 function calcTrustScore() {
   var total = 0;
-  for (var i = 0; i < PILLARS.length; i++) total += getPillarScore(i);
+  for (var i = 0; i < PILLARS.length; i++) {
+    if (PILLARS[i].comingSoon) continue;
+    total += getPillarScore(i);
+  }
   return Math.round(total);
 }
 function getTLBand(score) {
@@ -1047,6 +1004,43 @@ function renderReqSections() {
   var html = '';
   for (var si = 0; si < requirementSections.length; si++) {
     var section = requirementSections[si];
+
+    if (PILLARS[si].comingSoon) {
+      var isOpen = section._open || false;
+      var csItemsHtml = '';
+      for (var ii = 0; ii < section.items.length; ii++) {
+        csItemsHtml += '<div style="display:flex;align-items:center;gap:10px;padding:9px 20px;opacity:0.45;pointer-events:none;">'
+          + '<div style="width:16px;height:16px;border-radius:4px;border:1.5px dashed var(--muted);flex-shrink:0;"></div>'
+          + '<div style="font-size:13px;color:var(--muted);">' + section.items[ii].name + '</div>'
+          + '<div style="margin-left:auto;font-size:10px;color:var(--muted);">' + section.items[ii].w + '%</div>'
+          + '</div>';
+      }
+      html += '<div class="req-section-row ' + (isOpen ? 'open' : '') + '" style="opacity:1;">'
+        + '<div class="req-section-row-header" onclick="toggleReqSection(' + si + ')" style="cursor:pointer;">'
+        + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + ';opacity:0.6;">' + section.icon + '</div>'
+        + '<div><div class="req-sect-name" style="color:var(--muted);">' + section.name + '</div>'
+        + '<div class="req-sect-count">Not included in score yet</div></div></div>'
+        + '<div style="display:flex;align-items:center;gap:8px;">'
+        + '<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;white-space:nowrap;">Coming Soon</span>'
+        + '<span class="expand-caret" style="color:var(--muted);">▼</span></div>'
+        + '</div>'
+        + '<div class="req-items-panel ' + (isOpen ? 'open' : '') + '">'
+        + '<div style="margin:14px 20px;padding:14px 16px;background:linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,191,36,0.04));border:1.5px dashed rgba(249,115,22,0.3);border-radius:10px;">'
+        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+        + '<div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#f97316,#c2410c);display:flex;align-items:center;justify-content:center;font-size:14px;">📦</div>'
+        + '<div><div style="font-size:13px;font-weight:700;color:var(--ink);">Transaction Context & Order Behaviour</div>'
+        + '<div style="font-size:11.5px;color:var(--muted);">Will add up to <strong>10 pts</strong> to the Trust Score once live</div></div></div>'
+        + '<div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px;">This pillar uses order-level signals — size, frequency, goods category, and first-order risk — to refine the score for buyers you are actively transacting with. Currently in final testing.</div>'
+        + csItemsHtml
+        + '<div style="margin-top:12px;padding-top:12px;border-top:1px dashed rgba(249,115,22,0.2);display:flex;align-items:center;justify-content:space-between;">'
+        + '<span style="font-size:11.5px;color:var(--muted);">Want early access?</span>'
+        + '<button onclick="bimCsNotifyMe()" style="font-size:12px;font-weight:700;color:#c2410c;background:#fff7ed;border:1px solid #fed7aa;border-radius:7px;padding:6px 14px;cursor:pointer;font-family:inherit;">Notify Me When Live →</button>'
+        + '</div></div>'
+        + '</div>'
+        + '</div>';
+      continue;
+    }
+
     var checkedCount = 0;
     for (var ii = 0; ii < section.items.length; ii++) if (section.items[ii].checked) checkedCount++;
     var isOpen = section._open || false;
@@ -1062,16 +1056,6 @@ function renderReqSections() {
         + '<div style="font-size:10px;color:var(--muted);flex-shrink:0;">' + item.w + '%</div>'
         + '</div>';
     }
-    if (si === 4) {
-      html += '<div class="req-section-row cs-section-clickable" onclick="showComingSoon()" style="opacity:.75;">'
-        + '<div class="req-section-row-header" style="pointer-events:none;">'
-        + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + ' <span class="cs-badge">🔜 Coming Soon</span></div><div class="req-sect-count">Not yet available</div></div></div>'
-        + '<div style="display:flex;align-items:center;gap:10px;"><div style="text-align:right;"><div style="font-size:13px;font-weight:700;color:var(--muted);">—<span style="font-size:11px;font-weight:400;color:var(--muted);">/' + pmax + '</span></div><div style="width:70px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:2px;"><div style="height:100%;width:0%;background:var(--line);border-radius:2px;"></div></div></div>'
-        + '<div class="req-toggle off" style="background:var(--line);cursor:not-allowed;"></div>'
-        + '<span class="expand-caret" style="color:var(--muted);">▼</span></div>'
-        + '</div>'
-        + '</div>';
-    } else {
     html += '<div class="req-section-row ' + (isOpen ? 'open' : '') + '">'
       + '<div class="req-section-row-header" onclick="toggleReqSection(' + si + ')">'
       + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + '</div><div class="req-sect-count">' + checkedCount + '/' + section.items.length + ' selected</div></div></div>'
@@ -1081,10 +1065,18 @@ function renderReqSections() {
       + '</div>'
       + '<div class="req-items-panel ' + (isOpen ? 'open' : '') + '">' + itemsHtml + '</div>'
       + '</div>';
-    }
   }
   container.innerHTML = html;
   updateReqSidebar();
+}
+
+function bimCsNotifyMe() {
+  var btn = event.target;
+  btn.textContent = '✓ You\'re on the list!';
+  btn.style.background = 'rgba(22,163,74,0.08)';
+  btn.style.color = '#16a34a';
+  btn.style.borderColor = 'rgba(22,163,74,0.2)';
+  btn.disabled = true;
 }
 
 function toggleReqSection(si) { requirementSections[si]._open = !requirementSections[si]._open; renderReqSections(); }
@@ -1102,14 +1094,20 @@ function updateReqSidebar() {
   e = document.getElementById('sidebarScoreBar'); if(e){e.style.width=sc+'%';e.style.background=band.color;}
   e = document.getElementById('sidebarScoreLabel'); if(e){e.textContent=band.emoji+' '+band.label;e.style.color=band.color;}
   e = document.getElementById('sidebarTotal'); if(e) e.textContent=total;
-  e = document.getElementById('reqCountLabel'); if(e) e.textContent=total+' requirements across 5 pillars';
+  e = document.getElementById('reqCountLabel'); if(e) e.textContent=total+' requirements across 4 active pillars';
   var bd = document.getElementById('sidebarPillarBreakdown');
   if (bd) {
     var bhtml = '';
+    var shortNames = ['Identity','Financial','Payment','Business','Transaction'];
     for (var si=0;si<requirementSections.length;si++) {
+      if (PILLARS[si].comingSoon) {
+        bhtml += '<div style="opacity:0.45;"><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:10.5px;color:rgba(255,255,255,0.6);">'+requirementSections[si].icon+' '+shortNames[si]+'</span><span style="font-size:9px;font-weight:700;color:#fb923c;background:rgba(249,115,22,0.15);padding:1px 6px;border-radius:10px;">Soon</span></div><div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;"><div style="height:100%;width:0%;background:'+PILLARS[si].color+';border-radius:2px;border:1px dashed rgba(249,115,22,0.4);"></div></div></div>';
+        continue;
+      }
       var ps=Math.round(getPillarScore(si)), pmax=PILLARS[si].maxPts, pct=Math.round((ps/pmax)*100);
-      bhtml += '<div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:10.5px;color:rgba(255,255,255,0.6);">'+requirementSections[si].icon+' '+['Identity','Financial','Payment','Business','Transaction'][si]+'</span><span style="font-size:10.5px;font-weight:700;color:white;">'+ps+'<span style="color:rgba(255,255,255,0.35);font-weight:400;">/'+pmax+'</span></span></div><div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+PILLARS[si].color+';border-radius:2px;transition:width 0.4s;"></div></div></div>';
+      bhtml += '<div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span style="font-size:10.5px;color:rgba(255,255,255,0.6);">'+requirementSections[si].icon+' '+shortNames[si]+'</span><span style="font-size:10.5px;font-weight:700;color:white;">'+ps+'<span style="color:rgba(255,255,255,0.35);font-weight:400;">/'+pmax+'</span></span></div><div style="height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+PILLARS[si].color+';border-radius:2px;transition:width 0.4s;"></div></div></div>';
     }
+    bhtml += '<div style="margin-top:6px;padding:5px 8px;border-radius:7px;border:1px dashed rgba(249,115,22,0.25);background:rgba(249,115,22,0.06);font-size:10px;color:rgba(255,255,255,0.35);">📦 Transaction Context pillar coming soon</div>';
     bd.innerHTML = bhtml;
   }
 }
@@ -1149,7 +1147,7 @@ function selectTemplate(idx) {
   }
   var recs = [
     { color:'#dc2626', termsEnabled:false, validationLevel:'KYB + Identity',     cost:'Basic · Instant Payment available' },
-    { color:'#d97706', termsEnabled:true,  validationLevel:'+ Credit Enrichment', cost:'Standard' },
+    { color:'#d97706', termsEnabled:true,  validationLevel:'+ Credit Enrichment', cost:'Standard · Duration set per buyer' },
     { color:'#16a34a', termsEnabled:true,  validationLevel:'+ Full DD',           cost:'Full · Max credit + insurance facilitation' }
   ];
   var rec = recs[idx];
@@ -1157,7 +1155,7 @@ function selectTemplate(idx) {
   if (!window.cfgPS[idx]) window.cfgPS[idx] = {};
   var ri = document.getElementById('cfg-rec-inner');
   var termsBadge = rec.termsEnabled
-    ? '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(22,163,74,0.06);border:1.5px solid #16a34a;border-radius:7px;"><span style="font-size:15px;">✅</span><div><div style="font-size:12px;font-weight:700;color:#16a34a;">Eligible</div></div></div>'
+    ? '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(22,163,74,0.06);border:1.5px solid #16a34a;border-radius:7px;"><span style="font-size:15px;">✅</span><div><div style="font-size:12px;font-weight:700;color:#16a34a;">Eligible</div><div style="font-size:10px;color:var(--muted);">Duration set per buyer in dashboard</div></div></div>'
     : '<div style="display:flex;align-items:center;gap:8px;padding:7px 12px;background:rgba(220,38,38,0.06);border:1.5px solid #dc2626;border-radius:7px;"><span style="font-size:15px;">⛔</span><div><div style="font-size:12px;font-weight:700;color:#dc2626;">Not eligible</div><div style="font-size:10px;color:var(--muted);">Instant Payment available</div></div></div>';
   if (ri) ri.innerHTML = '<div style="display:flex;align-items:center;gap:7px;flex-shrink:0;"><div style="width:9px;height:9px;border-radius:50%;background:'+rec.color+';"></div><div style="font-size:11px;font-weight:700;color:'+rec.color+';text-transform:uppercase;letter-spacing:0.06em;">Reevol Recommendation</div></div>'
     +'<div style="display:flex;align-items:flex-end;gap:18px;flex:1;flex-wrap:wrap;">'
@@ -1181,12 +1179,27 @@ var importSamples = {
 };
 var manualBuyers = [];
 
+var defaultTrustLevel = 'introduced';
+function setDefaultTrustLevel(level) {
+  defaultTrustLevel = level;
+  ['introduced','qualified','established'].forEach(function(k) {
+    var btn = document.getElementById('dtl-'+k);
+    if (!btn) return;
+    var active = k === level;
+    btn.style.background = active ? '#111827' : 'transparent';
+    btn.style.color      = active ? 'white'   : 'var(--muted)';
+    btn.style.fontWeight = active ? '600'      : '500';
+  });
+}
+
 function selectImportMode(mode) {
   var ms = ['targeted','bulk'];
   for (var i=0;i<ms.length;i++) { var el=document.getElementById('import-mode-'+ms[i]); if(!el) continue; el.style.borderColor=ms[i]===mode?'var(--gold)':'var(--line)'; el.style.background=ms[i]===mode?'rgba(201,162,39,0.04)':'white'; el.style.boxShadow=ms[i]===mode?'0 0 0 3px rgba(201,162,39,0.12)':'none'; }
   document.getElementById('import-method-block').style.display='block';
   var r=document.getElementById('import-result'); if(r){r.style.display='none';r.style.opacity='0';}
   var mr=document.getElementById('manual-entry-row'); if(mr) mr.style.display='none';
+  var csvUpload=document.getElementById('csv-upload-zone'); if(csvUpload) csvUpload.style.display='none';
+  bimSelectedIds={}; bimNewBuyerPool=[]; bimAddNewOpen=false;
 }
 function askBuyerInfo(i) {
   event.stopPropagation();
@@ -1205,36 +1218,161 @@ function askBuyerCancel() {
   document.getElementById('askBuyerModal').style.display = 'none';
 }
 
-function selectImportMethod(method) {
-  var cards=['erp','csv','manual'];
-  for(var i=0;i<cards.length;i++){var c=document.getElementById('import-card-'+cards[i]);if(!c)continue;c.style.borderColor='var(--line)';c.style.boxShadow='none';c.style.background='white';}
-  var card=document.getElementById('import-card-'+method); if(card){card.style.borderColor='var(--gold)';card.style.boxShadow='0 0 0 3px rgba(201,162,39,0.12)';card.style.background='rgba(201,162,39,0.02)';}
+/* --- existing buyer pool for search & select --- */
+var existingBuyerPool = [
+  {id:'b1', initials:'HB', color:'#7c5cfc', name:'Harbor Build Supply Co.', country:'United States', flag:'🇺🇸', domain:'harborbuild.com', isNew:false},
+  {id:'b2', initials:'TF', color:'#0891b2', name:'TechFusion Trading Ltd', country:'United Kingdom', flag:'🇬🇧', domain:'techfusion.co.uk', isNew:false},
+  {id:'b3', initials:'RG', color:'#d97706', name:'Retailink GmbH', country:'Germany', flag:'🇩🇪', domain:'retailink.de', isNew:false},
+  {id:'b4', initials:'OP', color:'#16a34a', name:'Oceanic Retail Partners', country:'Australia', flag:'🇦🇺', domain:'oceanicretail.au', isNew:false},
+  {id:'b5', initials:'MC', color:'#f97316', name:'Magnolia Commerce Inc.', country:'United States', flag:'🇺🇸', domain:'magnoliacommerce.com', isNew:false},
+  {id:'b6', initials:'EB', color:'#5b5bd6', name:'Eastbridge Supply Group', country:'Canada', flag:'🇨🇦', domain:'eastbridgesupply.ca', isNew:false},
+  {id:'b7', initials:'NT', color:'#059669', name:'Nordic Trade Solutions AB', country:'Sweden', flag:'🇸🇪', domain:'nordictradesolutions.se', isNew:false},
+  {id:'b8', initials:'PR', color:'#dc2626', name:'Pacific Rim Distributors', country:'Japan', flag:'🇯🇵', domain:'pacificrim.jp', isNew:false},
+  {id:'b9', initials:'GC', color:'#7c5cfc', name:'Gulf Commerce LLC', country:'UAE', flag:'🇦🇪', domain:'gulfcommerce.ae', isNew:false},
+  {id:'b10', initials:'AP', color:'#0891b2', name:'Atlantic Pro Supply', country:'United States', flag:'🇺🇸', domain:'atlanticpro.com', isNew:false},
+];
+var bimSelectedIds = {};
+var bimNewBuyerPool = [];
+var bimAddNewOpen = false;
 
+function bimGetFilteredPool() {
+  var q = (document.getElementById('bim-search')||{value:''}).value.toLowerCase().trim();
+  var pool = existingBuyerPool.concat(bimNewBuyerPool);
+  if (!q) return pool;
+  return pool.filter(function(b){ return b.name.toLowerCase().indexOf(q)!==-1 || b.country.toLowerCase().indexOf(q)!==-1 || b.domain.toLowerCase().indexOf(q)!==-1; });
+}
+
+function bimRenderList() {
+  var list = bimGetFilteredPool();
+  var container = document.getElementById('bim-buyer-list'); if(!container) return;
+  if (!list.length) { container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">No buyers match your search.</div>'; return; }
+  var h = '';
+  for (var i=0;i<list.length;i++) {
+    var b = list[i];
+    var checked = bimSelectedIds[b.id] ? 'checked' : '';
+    var newBadge = b.isNew ? '<span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:rgba(91,91,214,0.1);color:#5b5bd6;margin-left:6px;">New</span>' : '';
+    h += '<label style="display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer;transition:background 0.1s;" onmouseover="this.style.background=\'var(--surface)\'" onmouseout="this.style.background=\'\'">'+
+      '<input type="checkbox" data-id="'+b.id+'" '+checked+' onchange="bimToggleBuyer(\''+b.id+'\')" style="width:15px;height:15px;accent-color:#5b5bd6;cursor:pointer;flex-shrink:0;">'+
+      '<div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">'+b.initials+'</div>'+
+      '<div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:var(--ink);">'+b.name+newBadge+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div>'+
+      '<div style="font-size:12px;color:var(--muted);white-space:nowrap;">'+b.flag+' '+b.country+'</div>'+
+    '</label>';
+  }
+  container.innerHTML = h;
+  bimSyncSelectAll(list);
+}
+
+function bimSyncSelectAll(list) {
+  var saEl = document.getElementById('bim-select-all'); if(!saEl) return;
+  var all = list || bimGetFilteredPool();
+  var allChecked = all.length > 0 && all.every(function(b){ return bimSelectedIds[b.id]; });
+  saEl.checked = allChecked;
+  saEl.indeterminate = !allChecked && all.some(function(b){ return bimSelectedIds[b.id]; });
+  bimUpdateCta();
+}
+
+function bimUpdateCta() {
+  var count = Object.keys(bimSelectedIds).filter(function(k){ return bimSelectedIds[k]; }).length;
+  var btn = document.getElementById('bim-confirm-btn'); if(!btn) return;
+  var countEl = document.getElementById('bim-selected-count'); if(countEl) countEl.textContent = count + ' selected';
+  btn.textContent = count ? 'Add '+count+' buyer'+(count!==1?'s':'')+' to BIM \u2192' : 'Add 0 buyers to BIM \u2192';
+  btn.disabled = count === 0;
+  btn.style.opacity = count ? '1' : '0.45';
+  btn.style.cursor = count ? 'pointer' : 'not-allowed';
+}
+
+function bimToggleBuyer(id) {
+  bimSelectedIds[id] = !bimSelectedIds[id];
+  if (!bimSelectedIds[id]) delete bimSelectedIds[id];
+  bimSyncSelectAll();
+  bimRenderList();
+}
+
+function bimToggleSelectAll() {
+  var sa = document.getElementById('bim-select-all');
+  var list = bimGetFilteredPool();
+  if (sa.checked) { list.forEach(function(b){ bimSelectedIds[b.id]=true; }); }
+  else { list.forEach(function(b){ delete bimSelectedIds[b.id]; }); }
+  bimRenderList();
+}
+
+function bimSearchFilter() { bimRenderList(); }
+
+function bimToggleAddNew() {
+  bimAddNewOpen = !bimAddNewOpen;
+  var form = document.getElementById('bim-add-new-form');
+  var chev = document.getElementById('bim-add-new-chevron');
+  if (form) form.style.display = bimAddNewOpen ? 'block' : 'none';
+  if (chev) chev.textContent = bimAddNewOpen ? '▼' : '▶';
+  if (bimAddNewOpen) { setTimeout(function(){ var n=document.getElementById('bim-new-name');if(n)n.focus(); },50); }
+}
+
+function bimAddNewBuyer() {
+  var nameEl = document.getElementById('bim-new-name');
+  var countryEl = document.getElementById('bim-new-country');
+  var name = nameEl ? nameEl.value.trim() : '';
+  var country = countryEl ? countryEl.value.trim() : 'Unknown';
+  if (!name) { if(nameEl){nameEl.style.borderColor='var(--rose)';setTimeout(function(){nameEl.style.borderColor='';},1200);} return; }
+  var colors=['#f97316','#16a34a','#7c5cfc','#0891b2','#d97706','#5b5bd6','#059669','#dc2626'];
+  var ini=''; var parts=name.split(' '); for(var i=0;i<parts.length&&ini.length<2;i++) if(parts[i]) ini+=parts[i][0].toUpperCase();
+  var id = 'new-'+Date.now();
+  var buyer = {id:id, initials:ini, color:colors[bimNewBuyerPool.length%colors.length], name:name, country:country||'Unknown', flag:'🌐', domain:name.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,12)+'.com', isNew:true};
+  bimNewBuyerPool.push(buyer);
+  bimSelectedIds[id] = true;
+  if(nameEl) nameEl.value='';
+  if(countryEl) countryEl.value='';
+  bimToggleAddNew();
+  bimRenderList();
+}
+
+function bimConfirmSelected() {
+  var selectedIds = Object.keys(bimSelectedIds).filter(function(k){ return bimSelectedIds[k]; });
+  var pool = existingBuyerPool.concat(bimNewBuyerPool);
+  var selected = pool.filter(function(b){ return bimSelectedIds[b.id]; });
+  var c = document.getElementById('import-buyer-rows');
+  var h = '';
+  for(var i=0;i<selected.length;i++){
+    var b=selected[i];
+    var newTag = b.isNew ? '<span style="background:rgba(91,91,214,0.1);color:#5b5bd6;font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">New</span>' : '<span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Existing</span>';
+    h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">'+b.flag+' '+b.country+'</div>'+newTag+'</div>';
+  }
+  c.innerHTML = h || '<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px;">No buyers selected.</div>';
+  var badge = document.getElementById('import-method-badge'); if(badge) badge.textContent = 'Search & Select';
+  var sub = document.getElementById('import-result-subtitle'); if(sub) sub.textContent = selected.length+' buyer'+(selected.length!==1?'s':'')+' ready';
+  document.getElementById('manual-entry-row').style.display = 'none';
+  var result = document.getElementById('import-result');
+  result.style.display = 'block';
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ result.style.opacity='1'; }); });
+}
+
+function selectImportMethod(method) {
+  var cards=['erp','manual'];
+  for(var i=0;i<cards.length;i++){var c=document.getElementById('import-card-'+cards[i]);if(!c)continue;c.style.borderColor='var(--line)';c.style.boxShadow='none';c.style.background='white';}
+  var csvLink=document.getElementById('import-card-csv'); if(csvLink){csvLink.style.color='var(--muted)';}
   var mr=document.getElementById('manual-entry-row'); if(mr) mr.style.display='none';
   var result=document.getElementById('import-result'); if(result){result.style.display='none';result.style.opacity='0';}
   var csvUpload=document.getElementById('csv-upload-zone'); if(csvUpload) csvUpload.style.display='none';
 
   if (method === 'csv') {
+    if(csvLink){csvLink.style.color='#5b5bd6';}
     document.getElementById('csv-upload-zone').style.display = 'block';
     return;
   }
 
+  var card=document.getElementById('import-card-'+method);
+  if(card){card.style.borderColor='var(--gold)';card.style.boxShadow='0 0 0 3px rgba(201,162,39,0.12)';card.style.background='rgba(201,162,39,0.02)';}
+
   if (method === 'manual') {
-    if(mr) mr.style.display='flex';
-    var list = manualBuyers;
-    var c=document.getElementById('import-buyer-rows');
-    if(!list.length){c.innerHTML='<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px;">No buyers added yet.</div>';}
-    else{var h='';for(var i=0;i<list.length;i++){var b=list[i];h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">🇺🇸 United States</div><span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Imported</span></div>';}c.innerHTML=h;}
-    var badge=document.getElementById('import-method-badge'); if(badge) badge.textContent='Manual Entry';
-    var sub=document.getElementById('import-result-subtitle'); if(sub) sub.textContent=list.length+' buyer'+(list.length!==1?'s':'')+' ready';
-    result.style.display='block'; requestAnimationFrame(function(){requestAnimationFrame(function(){result.style.opacity='1';});});
+    if(mr) { mr.style.display='block'; bimRenderList(); }
     return;
   }
 
-  var list = importSamples[method] || [];
+  /* ERP */
+  var list = importSamples['erp'] || [];
   var c=document.getElementById('import-buyer-rows');
-  if(!list.length){c.innerHTML='<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px;">No buyers added yet.</div>';}
-  else{var h='';for(var i=0;i<list.length;i++){var b=list[i];h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">🇺🇸 United States</div><span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Imported</span></div>';}c.innerHTML=h;}
+  var h='';
+  for(var i=0;i<list.length;i++){var b=list[i];h+='<div style="display:grid;grid-template-columns:2fr 1fr 80px;align-items:center;gap:12px;padding:11px 18px;border-bottom:1px solid var(--line);"><div style="display:flex;align-items:center;gap:10px;"><div style="width:30px;height:30px;border-radius:8px;background:'+b.color+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+b.initials+'</div><div><div style="font-size:13px;font-weight:600;">'+b.name+'</div><div style="font-size:11px;color:var(--muted);">'+b.domain+'</div></div></div><div style="font-size:12px;color:var(--muted);">🇺🇸 United States</div><span style="background:var(--amber-pale);color:var(--amber);font-size:10px;font-weight:600;padding:2px 7px;border-radius:5px;">Imported</span></div>';}
+  c.innerHTML=h||'<div style="padding:22px;text-align:center;color:var(--muted);font-size:13px;">No buyers found.</div>';
   var badge=document.getElementById('import-method-badge'); if(badge) badge.textContent='ERP Sync';
   var sub=document.getElementById('import-result-subtitle'); if(sub) sub.textContent=list.length+' buyer'+(list.length!==1?'s':'')+' ready';
   result.style.display='block'; requestAnimationFrame(function(){requestAnimationFrame(function(){result.style.opacity='1';});});
@@ -1301,14 +1439,6 @@ function csvHandleFileChange(input) {
     document.getElementById('csv-drop-label').textContent = '📄 ' + input.files[0].name;
     document.getElementById('csv-drop-sublabel').textContent = (input.files[0].size / 1024).toFixed(1) + ' KB — ready to import';
   }
-}
-function addManualBuyer() {
-  var inp=document.getElementById('manual-buyer-input'), val=inp.value.trim(); if(!val) return;
-  var colors=['#f97316','#16a34a','#7c5cfc','#0891b2','#d97706','#5b5bd6'];
-  var ini=''; var parts=val.split(' '); for(var i=0;i<parts.length&&ini.length<2;i++) if(parts[i]) ini+=parts[i][0].toUpperCase();
-  manualBuyers.push({initials:ini,color:colors[manualBuyers.length%colors.length],name:val,domain:val.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,12)+'.com'});
-  inp.value=''; var cc=document.getElementById('manual-buyer-country'); if(cc) cc.value='';
-  selectImportMethod('manual');
 }
 
 // ── ASSIGN ───────────────────────────────────────────────────
@@ -1649,36 +1779,33 @@ function openBuyerProfile(idx) {
   insEl.style.color = b.insured ? 'var(--green)' : 'var(--muted-2)';
 
   var pillars = [
-    {icon:'🏢',name:'Business Identity & Legitimacy',   pts:22,max:25,color:'#7c5cfc'},
-    {icon:'💰',name:'Financial Health',                  pts:24,max:30,color:'#c9a227'},
-    {icon:'📈',name:'Payment Behaviour & Credit History',pts:20,max:25,color:'#10b981'},
-    {icon:'📡',name:'Business Stability & Signals',      pts:17,max:20,color:'#3b82f6'},
-    {icon:'📦',name:'Transaction Context',               pts:0, max:0, color:'#fed7aa',comingSoon:true},
+    {icon:'🏢',name:'Business Identity & Legitimacy',   pts:22,max:25,color:'#7c5cfc',comingSoon:false},
+    {icon:'💰',name:'Financial Health',                  pts:24,max:30,color:'#c9a227',comingSoon:false},
+    {icon:'📈',name:'Payment Behaviour & Credit History',pts:20,max:25,color:'#10b981',comingSoon:false},
+    {icon:'📡',name:'Business Stability & Signals',      pts:16,max:20,color:'#3b82f6',comingSoon:false},
+    {icon:'📦',name:'Transaction Context',               pts:0, max:10,color:'#f97316',comingSoon:true},
   ];
   var pbHtml = '';
   pillars.forEach(function(p){
-    var pct = Math.round((p.pts/p.max)*100);
     if (p.comingSoon) {
-      pbHtml += '<div style="display:flex;align-items:center;gap:10px;opacity:.65;cursor:pointer;" onclick="showComingSoon()">'
-        +'<div style="width:24px;height:24px;border-radius:7px;background:#fff7ed;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">'+p.icon+'</div>'
-        +'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--ink);">'+p.name+' <span class="cs-badge" style="font-size:9px;padding:1px 6px;">🔜 Soon</span></div><div style="height:5px;background:var(--line);border-radius:3px;margin-top:4px;"></div></div>'
-        +'<div style="font-size:12px;font-weight:700;color:var(--muted);flex-shrink:0;">—<span style="font-size:10px;color:var(--muted);font-weight:400;">/'+p.max+'</span></div>'
+      pbHtml += '<div style="display:flex;align-items:center;gap:10px;opacity:0.5;">'
+        +'<div style="width:24px;height:24px;border-radius:7px;background:'+p.color+'1a;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">'+p.icon+'</div>'
+        +'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--muted);">'+p.name+'</div><div style="height:5px;background:var(--line);border-radius:3px;margin-top:4px;overflow:hidden;border:1px dashed rgba(249,115,22,0.3);"></div></div>'
+        +'<div style="font-size:10px;font-weight:700;color:#c2410c;background:#fff7ed;padding:2px 7px;border-radius:10px;border:1px solid #fed7aa;white-space:nowrap;">Soon</div>'
         +'</div>';
-    } else {
+      return;
+    }
+    var pct = Math.round((p.pts/p.max)*100);
     pbHtml += '<div style="display:flex;align-items:center;gap:10px;">'
       +'<div style="width:24px;height:24px;border-radius:7px;background:'+p.color+'1a;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">'+p.icon+'</div>'
       +'<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--ink);">'+p.name+'</div><div style="height:5px;background:var(--line);border-radius:3px;margin-top:4px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:'+p.color+';border-radius:3px;"></div></div></div>'
       +'<div style="font-size:12px;font-weight:700;color:'+p.color+';flex-shrink:0;">'+p.pts+'<span style="font-size:10px;color:var(--muted);font-weight:400;">/'+p.max+'</span></div>'
       +'</div>';
-    }
   });
   document.getElementById('bp-pillar-bars').innerHTML = pbHtml;
   var tsEl = document.getElementById('bp-total-score');
   tsEl.innerHTML = b.trustScore + ' <span style="font-size:12px;font-weight:500;color:var(--muted);">/ 100</span>';
   tsEl.style.color = tl.color;
-
-  var tcEl = document.getElementById('csTabCount');
-  if (tcEl) tcEl.textContent = csInterestCount + ' sellers already interested';
 
   bpSwitchTab('summary');
   var ct = document.getElementById('bp-comment-thread');
@@ -1705,24 +1832,6 @@ function bpToggleSec(el) {
   var chev = el.querySelector('.bp-chev');
   if(chev) chev.textContent = el.classList.contains('bp-open') ? '▼' : '▶';
 }
-
-// ── COMING SOON ─────────────────────────────────────────────
-var csInterestCount = parseInt(localStorage.getItem('cs_transaction_interest') || '14');
-function showComingSoon() {
-  var m = document.getElementById('csModal');
-  m.style.display = 'flex';
-  document.getElementById('csAsk').style.display = 'flex';
-  document.getElementById('csConfirm').style.display = 'none';
-  document.getElementById('csInterestCount').textContent = csInterestCount;
-}
-function expressInterest() {
-  var already = localStorage.getItem('cs_transaction_expressed');
-  if (!already) { csInterestCount++; localStorage.setItem('cs_transaction_interest', csInterestCount); localStorage.setItem('cs_transaction_expressed', '1'); }
-  document.getElementById('csAsk').style.display = 'none';
-  document.getElementById('csConfirm').style.display = 'flex';
-  setTimeout(function(){ document.getElementById('csModal').style.display = 'none'; }, 2200);
-}
-function closeComingSoon() { document.getElementById('csModal').style.display = 'none'; }
 
 function bpAddComment() {
   var inp = document.getElementById('bp-comment-input');
@@ -1875,7 +1984,7 @@ function bpAddComment() {
     <div class="bp-tab"        data-tab="financial" onclick="bpSwitchTab('financial')">Financial</div>
     <div class="bp-tab"        data-tab="payment"   onclick="bpSwitchTab('payment')">Payment</div>
     <div class="bp-tab"        data-tab="stability" onclick="bpSwitchTab('stability')">Stability</div>
-    <div class="bp-tab cs-tab"  data-tab="transactions" onclick="showComingSoon()">Transactions <span class="cs-badge">🔜</span></div>
+    <div class="bp-tab"        data-tab="transactions" onclick="bpSwitchTab('transactions')">Transactions</div>
     <div class="bp-tab"        data-tab="risk"      onclick="bpSwitchTab('risk')">Risk</div>
     <div class="bp-tab"        data-tab="notes"     onclick="bpSwitchTab('notes')">Notes</div>
   </div>
@@ -2110,25 +2219,28 @@ function bpAddComment() {
       </div>
     </div>
 
-    <!-- TRANSACTIONS TAB — COMING SOON -->
+    <!-- TRANSACTIONS TAB -->
     <div class="bp-tc" id="bptab-transactions">
-      <div class="cs-locked-tab" onclick="showComingSoon()" style="cursor:pointer;">
-        <div class="cs-locked-tab-icon">📦</div>
-        <div>
-          <span class="cs-badge" style="font-size:11px;padding:3px 12px;margin-bottom:10px;display:inline-block;">🔜 Coming Soon</span>
-          <div class="cs-locked-tab-title" style="margin-top:6px;">Transaction Context &amp; Order Behaviour</div>
-        </div>
-        <div class="cs-locked-tab-desc">See how this buyer's orders relate to their revenue, track order frequency and consistency, and assess goods risk — all in one place. Connected directly to your ERP.</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:380px;">
-          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">📊 Order size vs. revenue</span>
-          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">🔁 Order frequency</span>
-          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">🆕 First vs. repeat order</span>
-          <span style="font-size:11.5px;padding:5px 12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;color:var(--ink-2);">📦 Goods risk category</span>
-        </div>
-        <div>
-          <button class="cs-interest-btn" onclick="event.stopPropagation();showComingSoon()">⚡ I'm interested in this feature</button>
-          <div class="cs-interest-count" style="margin-top:8px;" id="csTabCount"></div>
-        </div>
+      <div class="bp-card">
+        <div class="bp-card-title">📦 Transaction History</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;">
+          <thead><tr style="border-bottom:2px solid var(--line);">
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">INV #</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Date</th>
+            <th style="text-align:right;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Amount</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Terms</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Due</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Paid</th>
+            <th style="text-align:left;padding:8px 6px;font-size:11px;color:var(--muted);font-weight:700;">Status</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0247</td><td>Mar 15</td><td style="text-align:right;font-weight:700;">$18,500</td><td>Net 30</td><td>Apr 14</td><td>—</td><td><span class="bp-spill bp-swarn">Open</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0231</td><td>Feb 22</td><td style="text-align:right;font-weight:700;">$9,200</td><td>Net 30</td><td>Mar 24</td><td>Mar 22</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0218</td><td>Jan 30</td><td style="text-align:right;font-weight:700;">$14,700</td><td>Net 30</td><td>Mar 01</td><td>Mar 01</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0204</td><td>Jan 05</td><td style="text-align:right;font-weight:700;">$6,300</td><td>Net 30</td><td>Feb 04</td><td>Feb 07</td><td><span class="bp-spill bp-swarn">Paid Late</span></td></tr>
+            <tr style="border-bottom:1px solid var(--surface);"><td style="padding:9px 6px;">INV-0196</td><td>Dec 10</td><td style="text-align:right;font-weight:700;">$21,000</td><td>Net 30</td><td>Jan 09</td><td>Jan 08</td><td><span class="bp-spill bp-son">Paid</span></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
@@ -2193,31 +2305,6 @@ function bpAddComment() {
 
   </div><!-- end bp-body -->
 </div><!-- end scene-buyer-profile -->
-
-<!-- ===== COMING SOON MODAL ===== -->
-<div id="csModal">
-  <div class="cs-modal-box">
-    <div id="csAsk" style="display:flex;flex-direction:column;align-items:center;">
-      <div class="cs-modal-emoji">📦</div>
-      <div class="cs-modal-title">Transaction Context &amp; Order Behaviour</div>
-      <div class="cs-modal-desc">We're building a module that connects your order data to each buyer's trust profile — so you can assess risk based on actual transaction patterns, not just financial history.</div>
-      <div class="cs-modal-features">
-        <div class="cs-modal-feature"><span>📊</span> Order size relative to buyer revenue and prior orders</div>
-        <div class="cs-modal-feature"><span>🔁</span> Order frequency, consistency and first-vs-repeat signals</div>
-        <div class="cs-modal-feature"><span>📦</span> Goods and services risk classification per order</div>
-        <div class="cs-modal-feature"><span>⚡</span> Automatic score contribution — no manual input needed</div>
-      </div>
-      <div class="cs-modal-count"><strong id="csInterestCount">14</strong> sellers have already expressed interest</div>
-      <button class="cs-interest-btn" onclick="expressInterest()" style="width:100%;margin-bottom:10px;">⚡ I'm interested — notify me when it's ready</button>
-      <button onclick="closeComingSoon()" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;font-family:inherit;padding:4px;">Not now</button>
-    </div>
-    <div id="csConfirm" class="cs-modal-confirm">
-      <div class="cs-modal-confirm-icon">🎉</div>
-      <div class="cs-modal-confirm-text">You're on the list!</div>
-      <div class="cs-modal-confirm-sub">We'll reach out as soon as Transaction Context is ready.</div>
-    </div>
-  </div>
-</div>
 
 <!-- ===== ASK BUYER MODAL ===== -->
 <div id="askBuyerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;">
