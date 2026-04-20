@@ -334,9 +334,9 @@ td:first-child{padding-left:20px;}
 <!-- CONFIG -->
 <div id="scene-config" class="scene">
   <div class="scene-header">
-    <div class="howto-eyebrow" style="color:var(--gold)">Step One — Trust Level Configuration</div>
-    <h2>Your Credit Policy,<br>Turned Into Automated Rules</h2>
-    <p>Configure once, apply to every buyer automatically.</p>
+    <div class="howto-eyebrow" style="color:var(--gold)">Step One — Trust Level Setup</div>
+    <h2>Define Your Buyers'<br>Trust Levels</h2>
+    <p>Set the data pillars Reevol will collect and assess for each trust level — configured once, applied to every buyer automatically.</p>
   </div>
   <div style="max-width:900px;margin:0 auto 16px;padding:0 32px;">
     <div style="background:white;border:1px solid var(--line);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:14px;">
@@ -351,6 +351,16 @@ td:first-child{padding-left:20px;}
       </div>
     </div>
   </div>
+  <div style="max-width:900px;margin:0 auto 14px;padding:0 32px;">
+    <div style="text-align:center;">
+      <button onclick="applyRecommendedPolicy()" style="background:var(--ink);color:white;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:10px;box-shadow:0 2px 12px rgba(0,0,0,0.15);transition:background 0.2s;" onmouseover="this.style.background='#1f2937'" onmouseout="this.style.background='var(--ink)'">Start from Reevol's Baseline →</button>
+      <div id="rec-policy-confirm" style="display:none;margin-top:8px;font-size:12px;color:#16a34a;font-weight:600;">✓ Reevol's recommended policy applied to all 3 levels</div>
+      <div style="margin-top:10px;">
+        <span id="baseline-toggle-link" onclick="toggleBaselinePanel()" style="font-size:12px;color:var(--muted);cursor:pointer;border-bottom:1px dashed var(--subtle);">Why this methodology? ↓</span>
+      </div>
+      <div id="baseline-panel" style="display:none;margin-top:8px;text-align:left;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--muted);line-height:1.6;max-width:520px;margin-left:auto;margin-right:auto;">Reevol's baseline covers the data points most reliably predictive of payment risk for cross-border B2B buyers — where public registries differ, data is frequently outdated, and legitimacy is difficult to verify remotely. Each pillar reflects what Reevol can collect automatically across 40+ countries and data vendors.</div>
+    </div>
+  </div>
   <div style="max-width:900px;margin:0 auto 24px;padding:0 32px;">
     <div style="background:white;border:1px solid var(--line);border-radius:14px;overflow:hidden;">
       <div style="padding:14px 18px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);">
@@ -362,6 +372,7 @@ td:first-child{padding-left:20px;}
         </div>
         <div id="cfg-next-btn"><button onclick="advanceCfgTemplate()" style="background:var(--ink);color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">Next Profile →</button></div>
       </div>
+      <div id="cfg-delta-note" style="display:none;padding:6px 0 0 4px;font-size:12px;color:var(--muted);font-style:italic;"></div>
       <div id="cfg-rec-inner" style="padding:14px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:#fafafa;"></div>
     </div>
   </div>
@@ -387,6 +398,7 @@ td:first-child{padding-left:20px;}
           <div style="font-size:11px;color:rgba(255,255,255,0.35);">/100</div>
           <div style="height:5px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin:8px 0 4px;"><div id="sidebarScoreBar" style="height:100%;border-radius:3px;background:#dc2626;width:0%;transition:width 0.4s ease,background 0.35s;"></div></div>
           <div id="sidebarScoreLabel" style="font-size:12px;font-weight:700;color:#dc2626;transition:color 0.35s;">🔴 Introduced</div>
+          <div id="sidebarOutcomeLine" style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:6px;line-height:1.5;">Buyers who don't reach this score on Introduced will be flagged for your review.</div>
         </div>
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.3);margin-bottom:6px;">Score by Pillar</div>
         <div id="sidebarPillarBreakdown" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px;"></div>
@@ -1031,6 +1043,26 @@ function renderReqSections() {
   var container = document.getElementById('reqSectionsContainer');
   if (!container) return;
   var html = '';
+  // Policy ownership label
+  if (baselineSnapshot !== null) {
+    var isModified = false;
+    outerLoop: for (var s=0; s<requirementSections.length; s++) {
+      for (var i=0; i<requirementSections[s].items.length; i++) {
+        var bKey = s+','+i;
+        if (baselineSnapshot[bKey] !== undefined && requirementSections[s].items[i].checked !== baselineSnapshot[bKey]) { isModified = true; break outerLoop; }
+      }
+    }
+    if (isModified) {
+      html += '<div style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:10px;">'
+        + 'Modified from Reevol\u2019s baseline <span style="color:var(--subtle);">\u00b7</span>'
+        + '<span onclick="selectTemplate(activeTplIndex)" style="color:#5b5bd6;cursor:pointer;text-decoration:underline;">Reset</span>'
+        + '</div>';
+    }
+  }
+  // No-go banner
+  html += '<div style="background:rgba(220,38,38,0.04);border:1px solid rgba(220,38,38,0.15);border-radius:8px;padding:10px 16px;font-size:12.5px;color:#991b1b;margin-bottom:12px;">'
+    + '\u26d4 Items marked <span style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#dc2626;color:white;font-size:7px;font-weight:800;vertical-align:middle;margin:0 2px;">!</span> are automatic rejection triggers \u2014 if a buyer fails any of these checks, they are rejected regardless of their score.'
+    + '</div>';
   for (var si = 0; si < requirementSections.length; si++) {
     var section = requirementSections[si];
 
@@ -1076,18 +1108,24 @@ function renderReqSections() {
     var ps = Math.round(getPillarScore(si));
     var pmax = PILLARS[si].maxPts;
     var pct = Math.round((ps / pmax) * 100);
+    var uncheckedCount = section.items.length - checkedCount;
     var itemsHtml = '';
     for (var ii = 0; ii < section.items.length; ii++) {
       var item = section.items[ii];
+      var noGoTitle = item.noGo ? ' title="Auto-reject trigger — buyer is rejected regardless of score if this check fails"' : '';
       itemsHtml += '<div class="req-item-row ' + (item.checked ? 'checked' : '') + '" onclick="toggleReqItem(' + si + ',' + ii + ')">'
         + '<div class="req-item-cb">' + (item.checked ? '✓' : '') + '</div>'
-        + '<div class="req-item-label">' + item.name + (item.noGo ? '<span onclick="toggleNoGo(' + si + ',' + ii + ',event)" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#dc2626;color:white;font-size:7px;font-weight:800;margin-left:5px;vertical-align:middle;cursor:pointer;">!</span>' : '') + '</div>'
+        + '<div class="req-item-label">' + item.name + (item.noGo ? '<span onclick="toggleNoGo(' + si + ',' + ii + ',event)"' + noGoTitle + ' style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#dc2626;color:white;font-size:7px;font-weight:800;margin-left:5px;vertical-align:middle;cursor:pointer;">!</span>' : '') + '</div>'
         + '<div style="font-size:10px;color:var(--muted);flex-shrink:0;">' + item.w + '%</div>'
-        + '</div>';
+        + '</div>'
+        + (!item.checked ? '<div style="font-size:11px;color:var(--muted-2);padding:0 20px 6px 46px;">This data point will not be collected for buyers at this level.</div>' : '');
     }
+    var subCount = checkedCount === section.items.length
+      ? checkedCount + '/' + section.items.length + ' collected'
+      : checkedCount + '/' + section.items.length + ' collected · <span style="color:var(--muted-2);">' + uncheckedCount + ' excluded</span>';
     html += '<div class="req-section-row ' + (isOpen ? 'open' : '') + '">'
       + '<div class="req-section-row-header" onclick="toggleReqSection(' + si + ')">'
-      + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + '</div><div class="req-sect-count">' + checkedCount + '/' + section.items.length + ' selected</div></div></div>'
+      + '<div class="req-section-left"><div class="req-sect-icon" style="background:' + section.gradient + '">' + section.icon + '</div><div><div class="req-sect-name">' + section.name + '</div><div class="req-sect-count">' + subCount + '</div></div></div>'
       + '<div style="display:flex;align-items:center;gap:10px;"><div style="text-align:right;"><div style="font-size:13px;font-weight:700;color:var(--ink);">' + ps + '<span style="font-size:11px;font-weight:400;color:var(--muted);">/' + pmax + '</span></div><div style="width:70px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-top:2px;"><div style="height:100%;width:' + pct + '%;background:' + PILLARS[si].color + ';border-radius:2px;transition:width 0.4s;"></div></div></div>'
       + '<div class="req-toggle ' + (checkedCount > 0 ? '' : 'off') + '" style="background:' + (checkedCount > 0 ? '#5b5bd6' : 'var(--line)') + ';" onclick="event.stopPropagation();toggleReqSectionAll(' + si + ')"></div>'
       + '<span class="expand-caret">▼</span></div>'
@@ -1152,6 +1190,32 @@ var tlTemplates = [
 
 var activeTplIndex = 0;
 var confirmedProfiles = {};
+var baselineSnapshot = null;
+
+function toggleBaselinePanel() {
+  var panel = document.getElementById('baseline-panel');
+  var link = document.getElementById('baseline-toggle-link');
+  if (!panel || !link) return;
+  var open = panel.style.display === 'block';
+  panel.style.display = open ? 'none' : 'block';
+  link.textContent = open ? 'Why this methodology? \u2193' : 'Why this methodology? \u2191';
+}
+
+function countTplChecked(tplIdx) {
+  var tpl = tlTemplates[tplIdx];
+  var count = 0;
+  for (var s=0; s<requirementSections.length; s++) {
+    if (PILLARS[s].comingSoon) continue;
+    for (var i=0; i<requirementSections[s].items.length; i++) {
+      var isUnchecked = false;
+      for (var u=0; u<tpl.unchecked.length; u++) {
+        if (requirementSections[s].items[i].name === tpl.unchecked[u]) { isUnchecked = true; break; }
+      }
+      if (!isUnchecked) count++;
+    }
+  }
+  return count;
+}
 
 function selectTemplate(idx) {
   activeTplIndex = idx;
@@ -1165,6 +1229,9 @@ function selectTemplate(idx) {
       }
     }
   }
+  // Snapshot baseline for modification detection
+  baselineSnapshot = {};
+  for (var s=0;s<requirementSections.length;s++) for (var i=0;i<requirementSections[s].items.length;i++) baselineSnapshot[s+','+i] = requirementSections[s].items[i].checked;
   renderReqSections();
   var cfgColors = ['#dc2626','#d97706','#16a34a'];
   var names = ['Introduced','Qualified','Established'];
@@ -1198,8 +1265,32 @@ function selectTemplate(idx) {
     : '<button onclick="confirmedProfiles[2]=true;goToScene(\'import\')" style="background:#16a34a;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;">All Profiles Ready →</button>';
   var tn = document.getElementById('tplTitleLabel'); if(tn) tn.textContent = tpl.name;
   var sb = document.getElementById('sidebarTplName'); if(sb) sb.textContent = tpl.name;
+  // Delta note — delta = how many fewer unchecked items vs previous level
+  var deltaNote = document.getElementById('cfg-delta-note');
+  if (deltaNote) {
+    if (idx === 0) {
+      deltaNote.style.display = 'none';
+    } else {
+      var delta = tlTemplates[idx - 1].unchecked.length - tlTemplates[idx].unchecked.length;
+      var prevNames = ['Introduced','Qualified','Established'];
+      deltaNote.textContent = 'Requires ' + delta + ' additional data point' + (delta !== 1 ? 's' : '') + ' beyond ' + prevNames[idx - 1];
+      deltaNote.style.display = 'block';
+    }
+  }
+  // Sidebar outcome line
+  var outcomeLine = document.getElementById('sidebarOutcomeLine');
+  if (outcomeLine) {
+    var levelNames = ['Introduced','Qualified','Established'];
+    outcomeLine.textContent = "Buyers who don\u2019t reach this score on " + levelNames[idx] + " will be flagged for your review.";
+  }
 }
 function advanceCfgTemplate() { confirmedProfiles[activeTplIndex] = true; if (activeTplIndex < 2) selectTemplate(activeTplIndex + 1); }
+function applyRecommendedPolicy() {
+  confirmedProfiles[0] = true; confirmedProfiles[1] = true; confirmedProfiles[2] = true;
+  var msg = document.getElementById('rec-policy-confirm');
+  if (msg) msg.style.display = 'block';
+  setTimeout(function() { goToScene('import'); }, 1500);
+}
 
 // ── IMPORT ───────────────────────────────────────────────────
 var importSamples = {
