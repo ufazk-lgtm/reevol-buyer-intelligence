@@ -750,7 +750,7 @@ td:first-child{padding-left:20px;}
     </div>
     <div class="kpi-strip">
       <div class="kpi-card"><div class="kpi-label">Total Buyers</div><div class="kpi-value anim-num" data-target="142">0</div><div class="kpi-sub">Active in system</div></div>
-      <div class="kpi-card"><div class="kpi-label">Approved</div><div class="kpi-value anim-num" data-target="97" style="color:#16a34a">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:#16a34a"></span>68% approval rate</div></div>
+      <div class="kpi-card"><div class="kpi-label">Required Actions</div><div class="kpi-value anim-num" data-target="8" style="color:#dc2626">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:#dc2626"></span>Buyers needing attention</div></div>
       <div class="kpi-card"><div class="kpi-label">Net Terms Enabled</div><div class="kpi-value anim-num" data-target="63" style="color:var(--teal)">0</div><div class="kpi-sub">Across trust tiers</div></div>
       <div class="kpi-card"><div class="kpi-label">Insured</div><div class="kpi-value anim-num" data-target="58" style="color:var(--violet)">0</div><div class="kpi-sub">Credit insurance active</div></div>
       <div class="kpi-card"><div class="kpi-label">Pending Review</div><div class="kpi-value anim-num" data-target="18" style="color:var(--amber)">0</div><div class="kpi-sub"><span class="kpi-dot" style="background:var(--amber)"></span>Awaiting your review</div></div>
@@ -766,7 +766,7 @@ td:first-child{padding-left:20px;}
   <div class="table-wrap">
     <div class="table-scroll">
       <table>
-        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th></tr></thead>
+        <thead><tr><th>BUYER</th><th>TRUST LEVEL</th><th>TRUST SCORE</th><th>ASSESSMENT</th><th>REQUIRED ACTIONS</th><th>NET TERMS</th><th>CREDIT LIMIT / USED</th><th>INSURANCE</th><th>MONITOR</th><th>MISSING INFO</th><th>CREATED</th><th>MODIFIED</th><th>CREATED BY</th></tr></thead>
         <tbody id="buyerTableBody"></tbody>
       </table>
     </div>
@@ -872,6 +872,21 @@ var buyerMeta = [
   ['Feb 14, 2025','Mar 14, 2025','Li Wei']
 ];
 
+var buyerRequiredActions = [
+  [],                                                                                                                                                                                        // 0  Harbor Build
+  [{ sev:'critical', desc:'Payment overdue — $12,400 past due on Net-90',             time:'1d ago',  cta:'Chase Payment'    }],                                                           // 1  GreenFields
+  [{ sev:'warning',  desc:'Portal invite not sent — buyer info incomplete',            time:'3d ago',  cta:'Send Invite'      }],                                                           // 2  Nexus Tile
+  [{ sev:'warning',  desc:'Trust score review pending — decision due in 2 days',       time:'2d ago',  cta:'Review Now'       }],                                                           // 3  Pacific Lumber
+  [{ sev:'critical', desc:'OFAC SDN list match — manual review required',              time:'5h ago',  cta:'Review Case'      }],                                                           // 4  Ironclad
+  [],                                                                                                                                                                                        // 5  SunRise
+  [{ sev:'warning',  desc:'Buyer info not collected — portal not activated',           time:'5d ago',  cta:'Send Invite'      }],                                                           // 6  Metro Plumbing
+  [],                                                                                                                                                                                        // 7  Delta Roofing
+  [{ sev:'critical', desc:'Fraud flag detected — regulatory violation on file',        time:'2d ago',  cta:'Review Case'      }],                                                           // 8  CoreSteel
+  [],                                                                                                                                                                                        // 9  Skyline Glass
+  [{ sev:'warning',  desc:'Portal invite not sent — assessment blocked',               time:'1d ago',  cta:'Send Invite'      }, { sev:'warning', desc:'Score below Qualified threshold — did not meet target', time:'4h ago', cta:'View Assessment' }], // 10 Rockwall
+  [{ sev:'critical', desc:'Credit limit at 100% — $80,000 fully utilised',            time:'6h ago',  cta:'Adjust Limit'     }, { sev:'critical', desc:'Payment due today — Net-60 terms expiring',           time:'3h ago', cta:'Send Reminder'    }]  // 11 AllStar
+];
+
 var buyers = [
   { name:"Harbor Build Supply Co.", domain:"harborbuild.com",        color:"#f97316", initials:"HB", trustScore:83, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:null, limit:"$120,000", creditUsed:"$34,200", creditDue:null,      insured:true,  monitor:true,  portalEmail:null       },
   { name:"GreenFields Materials",   domain:"greenfields.io",         color:"#16a34a", initials:"GF", trustScore:92, assignedLevel:"established", assessmentStatus:"completed",  buyerStatus:"approved",          terms:"Net-90", termsDueDays:7,    limit:"$150,000", creditUsed:"$91,000", creditDue:"$12,400", insured:true,  monitor:true,  portalEmail:null       },
@@ -944,14 +959,35 @@ function renderBuyerTable() {
       ? '<button onclick="askBuyerInfo(' + i + ')" style="font-size:10.5px;font-weight:700;color:white;background:#d97706;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:inherit;">📋 Ask Buyer Info</button>'
       : '<span style="font-size:10.5px;color:var(--muted);">—</span>';
 
+    // Required actions cell
+    var actions = buyerRequiredActions[i] || [];
+    var highSev = 'none';
+    for (var a=0; a<actions.length; a++) { if (actions[a].sev==='critical'){highSev='critical';break;} if(actions[a].sev==='warning')highSev='warning'; }
+    var actionsCell;
+    if (actions.length === 0) {
+      actionsCell = '<span style="font-size:11px;color:var(--muted-2);">—</span>';
+    } else {
+      var pillBg  = highSev==='critical' ? 'rgba(220,38,38,0.06)'  : 'rgba(217,119,6,0.06)';
+      var pillBdr = highSev==='critical' ? 'rgba(220,38,38,0.2)'   : 'rgba(217,119,6,0.2)';
+      var dotC    = highSev==='critical' ? '#dc2626'               : '#d97706';
+      var n = actions.length;
+      actionsCell = '<div onmouseenter="showActionsPopover('+i+',this)" onmouseleave="scheduleClosePopover()" style="display:inline-flex;align-items:center;gap:6px;background:'+pillBg+';border:1px solid '+pillBdr+';border-radius:20px;padding:4px 10px;cursor:default;white-space:nowrap;">'
+        + '<span style="display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;background:'+dotC+';color:white;font-size:9px;font-weight:800;flex-shrink:0;">'+n+'</span>'
+        + '<span style="font-size:11.5px;font-weight:600;color:var(--ink);">'+n+' required action'+(n>1?'s':'')+'</span>'
+        + '<span style="font-size:10px;color:var(--muted);">›</span>'
+        + '</div>';
+    }
 
-    var rh = (i === 2 || i === 10) ? 'background:rgba(220,38,38,0.02);' : (b.portalEmail === 'required' ? 'background:rgba(217,119,6,0.03);' : '');
+    // Row accent: severity-driven left border + background
+    var accentShadow = highSev==='critical' ? 'box-shadow:inset 3px 0 0 #dc2626;' : highSev==='warning' ? 'box-shadow:inset 3px 0 0 #d97706;' : '';
+    var accentBg     = highSev==='critical' ? 'background:rgba(220,38,38,0.025);'  : highSev==='warning' ? 'background:rgba(217,119,6,0.02);'  : (b.portalEmail==='required' ? 'background:rgba(217,119,6,0.03);' : '');
 
-    html += '<tr style="' + rh + 'cursor:pointer;" onclick="openBuyerProfile(' + i + ')">'
+    html += '<tr style="' + accentBg + accentShadow + 'cursor:pointer;" onclick="openBuyerProfile(' + i + ')">'
       + '<td><div class="buyer-cell"><div class="buyer-avatar" style="background:' + b.color + '">' + b.initials + '</div><div><div class="buyer-name">' + b.name + '</div><div class="buyer-domain">' + b.domain + '</div></div></div></td>'
       + '<td>' + tlCell + '</td>'
       + '<td>' + scoreCell + '</td>'
       + '<td>' + (assessMap[b.assessmentStatus] || '—') + '</td>'
+      + '<td>' + actionsCell + '</td>'
       + '<td>' + termsCell + '</td>'
       + '<td>' + limitCell + '</td>'
       + '<td>' + insCell + '</td>'
@@ -978,6 +1014,49 @@ function approveBuyer(i)       { event.stopPropagation(); buyers[i].buyerStatus 
 function rejectBuyer(i)        { event.stopPropagation(); buyers[i].buyerStatus = 'rejected'; renderBuyerTable(); }
 function approvePortalEmail(i) { event.stopPropagation(); buyers[i].portalEmail = 'sent'; renderBuyerTable(); }
 function editTerms(i)          { event.stopPropagation(); var v = prompt('Edit Net Terms for ' + buyers[i].name + ':', buyers[i].terms); if (v !== null) { buyers[i].terms = v; renderBuyerTable(); } }
+
+// ── REQUIRED ACTIONS POPOVER ─────────────────────────────────
+var _raTimer = null;
+function showActionsPopover(buyerIdx, pill) {
+  clearTimeout(_raTimer);
+  var actions = buyerRequiredActions[buyerIdx];
+  if (!actions || actions.length === 0) return;
+  var pop = document.getElementById('ra-popover');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.id = 'ra-popover';
+    pop.style.cssText = 'position:fixed;z-index:9999;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,0.13);min-width:290px;max-width:350px;display:none;overflow:hidden;';
+    pop.addEventListener('mouseenter', function(){ clearTimeout(_raTimer); });
+    pop.addEventListener('mouseleave', function(){ scheduleClosePopover(); });
+    document.body.appendChild(pop);
+  }
+  var html = '';
+  for (var a=0; a<actions.length; a++) {
+    var ac = actions[a];
+    var dc = ac.sev === 'critical' ? '#dc2626' : '#d97706';
+    html += '<div style="display:flex;align-items:flex-start;gap:10px;padding:11px 14px;' + (a<actions.length-1?'border-bottom:1px solid var(--line);':'') + '">'
+      + '<div style="width:8px;height:8px;border-radius:50%;background:'+dc+';flex-shrink:0;margin-top:4px;"></div>'
+      + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:12.5px;color:var(--ink);line-height:1.4;">'+ac.desc+'</div>'
+        + '<div style="font-size:11px;color:var(--muted-2);margin-top:2px;">'+ac.time+'</div>'
+      + '</div>'
+      + '<button onclick="event.stopPropagation()" style="font-size:11px;font-weight:600;color:#5b5bd6;background:rgba(91,91,214,0.08);border:1px solid rgba(91,91,214,0.15);border-radius:6px;padding:5px 10px;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit;margin-left:6px;">'+ac.cta+'</button>'
+      + '</div>';
+  }
+  pop.innerHTML = html;
+  var r = pill.getBoundingClientRect();
+  pop.style.display = 'block';
+  var pw = pop.offsetWidth;
+  var left = Math.max(8, Math.min(r.left, window.innerWidth - pw - 12));
+  pop.style.top  = (r.bottom + 6) + 'px';
+  pop.style.left = left + 'px';
+}
+function scheduleClosePopover() {
+  _raTimer = setTimeout(function(){
+    var pop = document.getElementById('ra-popover');
+    if (pop) pop.style.display = 'none';
+  }, 120);
+}
 
 // ── ANIMATED COUNTERS ────────────────────────────────────────
 function animateNumbers() {
@@ -1008,7 +1087,7 @@ var PILLARS = [
 
 var requirementSections = [
   { name:'Business Identity & Legitimacy', icon:'🏢', gradient:'linear-gradient(135deg,#7c5cfc,#4f46e5)',
-    items:[{name:'Business Registration Number',checked:true,w:18,noGo:true},{name:'Years in Operation',checked:true,w:14,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:14,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:10,noGo:false},{name:'Director / Owner KYC (ID + Selfie)',checked:true,w:14,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:12,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:10,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
+    items:[{name:'Business Registration Number',checked:true,w:18,noGo:true},{name:'Years in Operation',checked:true,w:14,noGo:false},{name:'Registered Business Address (Verified)',checked:true,w:14,noGo:true},{name:'Active Website or Digital Presence',checked:true,w:10,noGo:false},{name:'Director/owner KYC (ID + Face recognition)',checked:true,w:14,noGo:true},{name:'Entity Sanctions Match (OFAC, EU, UN)',checked:true,w:12,noGo:true},{name:'Director & UBO Sanctions Match',checked:true,w:10,noGo:true},{name:'Operating Country Sanctioned',checked:true,w:8,noGo:true},{name:'Bankruptcy / Liquidation Proceedings',checked:true,w:6,noGo:true},{name:'Fraud Allegations & Regulatory Violations',checked:true,w:4,noGo:false}]},
   { name:'Financial Health', icon:'💰', gradient:'linear-gradient(135deg,#c9a227,#7a5e10)',
     items:[{name:'Latest Filed Accounts / Financial Statements',checked:true,w:24,noGo:true},{name:'Revenue Trend (Growing / Stable / Declining)',checked:true,w:17,noGo:false},{name:'Profit Margin / Gross Margin',checked:true,w:13,noGo:false},{name:'Bank Statements (3–6 months)',checked:true,w:20,noGo:false},{name:'Outstanding Debt or Liabilities',checked:true,w:13,noGo:false},{name:'Evidence of Consistent Cash Flow',checked:true,w:13,noGo:false}]},
   { name:'Payment Behaviour & Credit History', icon:'📈', gradient:'linear-gradient(135deg,#10b981,#047857)',
@@ -1182,7 +1261,7 @@ function updateReqSidebar() {
 // ── TRUST LEVEL TEMPLATES ────────────────────────────────────
 var tlTemplates = [
   { name:'Introduced Profile', emoji:'🔴', color:'#dc2626',
-    unchecked:['Director / Owner KYC (ID + Selfie)','Director & UBO Sanctions Match','Bankruptcy / Liquidation Proceedings','Fraud Allegations & Regulatory Violations','Latest Filed Accounts / Financial Statements','Revenue Trend (Growing / Stable / Declining)','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Evidence of Consistent Cash Flow','Credit Bureau Score (CreditSafe / Experian / D&B)','County Court Judgements (CCJs) / Disputes','Trade References from Suppliers','Payment History on Reevol Platform','Days Beyond Terms (DBT) Average','Number of Employees','Industry Sector Risk Classification','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months','Order Size Relative to Prior Orders','Order Frequency & Consistency','Goods / Services Risk Category','Order Size Relative to Buyer Revenue','First vs. Repeat Order on Platform']},
+    unchecked:['Director/owner KYC (ID + Face recognition)','Director & UBO Sanctions Match','Bankruptcy / Liquidation Proceedings','Fraud Allegations & Regulatory Violations','Latest Filed Accounts / Financial Statements','Revenue Trend (Growing / Stable / Declining)','Profit Margin / Gross Margin','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Evidence of Consistent Cash Flow','Credit Bureau Score (CreditSafe / Experian / D&B)','County Court Judgements (CCJs) / Disputes','Trade References from Suppliers','Payment History on Reevol Platform','Days Beyond Terms (DBT) Average','Number of Employees','Industry Sector Risk Classification','Existing Supplier / Customer Relationships','Social Proof (Reviews, Partnerships, Press)','Ownership Changes in Last 12 Months','Order Size Relative to Prior Orders','Order Frequency & Consistency','Goods / Services Risk Category','Order Size Relative to Buyer Revenue','First vs. Repeat Order on Platform']},
   { name:'Qualified Profile', emoji:'🟡', color:'#d97706',
     unchecked:['Latest Filed Accounts / Financial Statements','Bank Statements (3–6 months)','Outstanding Debt or Liabilities','Trade References from Suppliers','Existing Supplier / Customer Relationships','Ownership Changes in Last 12 Months','Order Size Relative to Buyer Revenue','First vs. Repeat Order on Platform']},
   { name:'Established Profile', emoji:'🟢', color:'#16a34a', unchecked:[]}
